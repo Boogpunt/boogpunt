@@ -46,6 +46,29 @@ const CARDS = [
   { category: "identity", meta: "Park Avenue / Visual Identity / 2023" },
 ];
 
+const PROJECTS = [
+  "Socialed Credentials Design",
+  "Fabrika for Royal College of Art Across RCA",
+  "Blade Typeface",
+  "Como Clinic",
+  "Alice Monde Wedding",
+  "Hanel Hair salon",
+  "Leadvault Luggage",
+  "Xray 21 Radiology",
+  "Josun Hotel and Resorts",
+  "The Miraculous Flight of the Broken Bird",
+  "SK enmove ZIC Brand Renewal",
+  "Powerplants Dialogue 01 Poster",
+  "Kiss of Life : Brand Film Logotype",
+  "1ha Web and Motion Graphics",
+  "Brooklyn Museum Website",
+  "Dorosiwa Brand Renewal",
+  "Mother Offline Brand Application",
+  "Egg Cup Ceramic Series",
+  "Park's Club Popup Store Exhibition",
+  "Monolith NFT Display Design",
+];
+
 export default function Home() {
   useEffect(() => {
     const nav          = document.querySelector(".nav");
@@ -56,15 +79,19 @@ export default function Home() {
     const spacer       = document.querySelector(".spacer");
     const filterPanel  = document.querySelector(".filter-panel");
     const filterGrid   = document.querySelector(".filter-grid");
+    const infoPanel    = document.querySelector(".info-panel");
     const projectsLink = document.querySelector('.nav-link[data-menu="projects"]');
+    const infoLink     = document.querySelector('.nav-link[data-menu="info"]');
     const navLogo      = document.querySelector(".nav-logo");
     const introFooter  = document.querySelector(".intro-footer");
     const cards        = [...document.querySelectorAll(".grid .card")];
     const discEls      = [...document.querySelectorAll(".intro-disc")];
+    const allNavLinks  = [...document.querySelectorAll(".nav-link")];
 
     const DELAY_RATIO = 0.35;
-    let gridAnim, panelAnim;
-    let panelVisible  = false;
+    let gridAnim, panelAnim, infoPanelAnim;
+    let panelVisible      = false;
+    let infoPanelVisible  = false;
     let hideTimeout;
     let discOffsets   = [-1, 0, 1];
     let discAnimating = false;
@@ -76,10 +103,11 @@ export default function Home() {
       grid.style.paddingTop    = `${navBottom}px`;
       filterPanel.style.top    = `${navBottom}px`;
       filterPanel.style.height = `${panelH}px`;
+      infoPanel.style.top      = `${navBottom}px`;
+      infoPanel.style.height   = `${panelH}px`;
 
-      if (!panelVisible) {
-        filterPanel.style.transform = `translateY(${panelH}px)`;
-      }
+      if (!panelVisible)     filterPanel.style.transform = `translateY(${panelH}px)`;
+      if (!infoPanelVisible) infoPanel.style.transform   = `translateY(${panelH}px)`;
 
       const vh = window.innerHeight;
       introEl.style.height = `${vh}px`;
@@ -146,7 +174,7 @@ export default function Home() {
     }
 
     function onScroll() {
-      if (panelVisible) return;
+      if (panelVisible || infoPanelVisible) return;
 
       const y         = window.scrollY;
       const vh        = window.innerHeight;
@@ -176,6 +204,7 @@ export default function Home() {
     }
 
     function showFilter(category) {
+      if (infoPanelVisible) hideInfo();
       populateFilterGrid(category);
       panelVisible = true;
       if (panelAnim) panelAnim.pause();
@@ -188,6 +217,24 @@ export default function Home() {
       if (panelAnim) panelAnim.pause();
       panelAnim = animate(filterPanel, {
         translateY: filterPanel.clientHeight,
+        duration: 500,
+        ease: "inOutExpo",
+      });
+      onScroll();
+    }
+
+    function showInfo() {
+      if (panelVisible) hideFilter();
+      infoPanelVisible = true;
+      if (infoPanelAnim) infoPanelAnim.pause();
+      infoPanelAnim = animate(infoPanel, { translateY: 0, duration: 700, ease: "outExpo" });
+    }
+
+    function hideInfo() {
+      infoPanelVisible = false;
+      if (infoPanelAnim) infoPanelAnim.pause();
+      infoPanelAnim = animate(infoPanel, {
+        translateY: infoPanel.clientHeight,
         duration: 500,
         ease: "inOutExpo",
       });
@@ -269,19 +316,34 @@ export default function Home() {
     };
     filterGrid.addEventListener("click", filterGridClickHandler);
 
+    // Info link
+    const infoLinkHandler = (e) => {
+      e.preventDefault();
+      const wasActive = infoLink.classList.contains("is-active") && infoPanelVisible;
+      allNavLinks.forEach((l) => l.classList.remove("is-active"));
+      if (wasActive) {
+        hideInfo();
+      } else {
+        infoLink.classList.add("is-active");
+        showInfo();
+      }
+    };
+    infoLink.addEventListener("click", infoLinkHandler);
+
     // Nav logo
     const navLogoClickHandler = (e) => {
       e.preventDefault();
       if (panelVisible) hideFilter();
+      if (infoPanelVisible) hideInfo();
+      allNavLinks.forEach((l) => l.classList.remove("is-active"));
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
     navLogo.addEventListener("click", navLogoClickHandler);
 
-    // Nav links active state
-    const navLinks = [...document.querySelectorAll(".nav-link")];
-    const navLinkHandlers = navLinks.map((link) => {
+    // Nav links active state (excluding info link which has its own handler)
+    const navLinkHandlers = allNavLinks.filter((l) => l !== infoLink).map((link) => {
       const handler = function () {
-        navLinks.forEach((l) => l.classList.remove("is-active"));
+        allNavLinks.forEach((l) => l.classList.remove("is-active"));
         this.classList.add("is-active");
       };
       link.addEventListener("click", handler);
@@ -315,12 +377,14 @@ export default function Home() {
       filterBar.removeEventListener("mouseleave", scheduleHideFilterBar);
       filterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       filterGrid.removeEventListener("click", filterGridClickHandler);
+      infoLink.removeEventListener("click", infoLinkHandler);
       navLogo.removeEventListener("click", navLogoClickHandler);
       navLinkHandlers.forEach(({ link, handler }) => link.removeEventListener("click", handler));
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
       clearTimeout(hideTimeout);
       if (gridAnim) gridAnim.pause();
       if (panelAnim) panelAnim.pause();
+      if (infoPanelAnim) infoPanelAnim.pause();
     };
   }, []);
 
@@ -331,7 +395,7 @@ export default function Home() {
         <ul className="nav-menu">
           <li><a href="#work"    className="nav-link is-active" data-menu="projects">Projects</a></li>
           <li><a href="#"        className="nav-link">Index</a></li>
-          <li><a href="#info"    className="nav-link">Info</a></li>
+          <li><a href="#info"    className="nav-link" data-menu="info">Info</a></li>
           <li><a href="#contact" className="nav-link">Contact</a></li>
         </ul>
       </nav>
@@ -387,6 +451,43 @@ export default function Home() {
 
       <div className="filter-panel">
         <div className="filter-grid"></div>
+      </div>
+
+      <div className="info-panel">
+        <div className="info-content">
+          <div className="info-row">
+            <div className="info-section">
+              <span className="info-label">Experience</span>
+              <div className="info-items">
+                <p>COV STUDIO. Lead Graphic Designer. 2024–2025</p>
+                <p>SAM PARTNERS. Brand Designer. 2022–2024</p>
+                <p>MOTHER. Graphic Designer. 2022–2022</p>
+              </div>
+            </div>
+            <div className="info-section">
+              <span className="info-label">Education</span>
+              <div className="info-items">
+                <p>Royal College of Art. MA Visual Communication</p>
+                <p>De Haagse Hogeschool. CMD Exchanged Students</p>
+                <p>University of Seoul. BA Product Design</p>
+              </div>
+            </div>
+          </div>
+          <div className="info-row">
+            <div className="info-section">
+              <span className="info-label">Projects</span>
+              <div className="info-items">
+                {PROJECTS.map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            </div>
+            <div className="info-section">
+              <span className="info-label">Achievements</span>
+              <div className="info-items">
+                <p>Global Design IT Awards Silver 2023</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <main className="grid" id="work">

@@ -272,6 +272,53 @@ body {
   padding-top: 4px;
 }
 
+/* ─── INFO PANEL ─── */
+.info-panel {
+  position: fixed;
+  left: 0; right: 0;
+  z-index: 9;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  overflow-y: auto;
+  transform: translateY(200%);
+  will-change: transform;
+}
+
+.info-content {
+  padding: 0 var(--p) 40px;
+}
+
+.info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--fg);
+  gap: 0 var(--p);
+}
+
+.info-section {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 0 16px;
+  padding: 14px 0;
+}
+
+.info-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.046em;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.info-items p {
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.046em;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
 /* ─── MOBILE ─── */
 @media (max-width: 640px) {
   .filter-bar {
