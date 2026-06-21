@@ -151,7 +151,7 @@ export default function Home() {
 
     function positionFilterBar() {
       const rect = projectsLink.getBoundingClientRect();
-      filterBar.style.top  = `${rect.bottom + 20}px`;
+      filterBar.style.top  = `${rect.bottom + 6}px`;
       filterBar.style.left = `${rect.left}px`;
     }
 
