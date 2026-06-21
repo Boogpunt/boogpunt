@@ -26,15 +26,15 @@ body {
   z-index: 100;
   display: flex;
   align-items: baseline;
-  padding: 18px 24px 16px;
+  justify-content: space-between;
+  padding: 14px 24px 12px;
   background: var(--bg);
 }
 
 .nav-logo {
-  flex: 1;
   font-family: "neue-haas-grotesk-display", sans-serif;
-  font-size: clamp(13px, 1.25vw, 24px);
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 300;
   color: var(--fg);
   transition: filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -43,16 +43,16 @@ body {
 .nav-menu {
   display: flex;
   align-items: baseline;
-  gap: clamp(16px, 2vw, 40px);
+  gap: 28px;
 }
 
 .nav-link {
   font-family: "neue-haas-grotesk-display", sans-serif;
-  font-size: clamp(13px, 1.25vw, 24px);
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 300;
   color: var(--fg);
   opacity: 0.35;
-  transition: opacity 0.3s ease, filter 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 .nav-link:hover { opacity: 0.7; }
 .nav-link.is-active { opacity: 1; }
@@ -278,21 +278,20 @@ body {
 
 .info-inner {
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 1fr 1fr;
   min-height: 100%;
 }
 
 .info-bio {
   padding: 28px 24px 40px;
-  border-right: 1px solid var(--fg);
 }
 
 .info-title {
   font-family: "neue-haas-grotesk-display", sans-serif;
-  font-size: clamp(22px, 1.875vw, 36px);
+  font-size: 13px;
   font-weight: 700;
-  line-height: 1.12;
-  margin-bottom: 28px;
+  line-height: 1.5;
+  margin-bottom: 24px;
   color: var(--fg);
 }
 
@@ -308,13 +307,13 @@ body {
 .info-table {
   display: flex;
   flex-direction: column;
+  padding: 28px 0 40px;
 }
 
 .info-entry {
   display: grid;
-  grid-template-columns: 130px 1fr;
-  border-top: 1px solid var(--fg);
-  padding: 14px 24px;
+  grid-template-columns: 110px 1fr;
+  padding: 6px 24px;
   gap: 0 16px;
 }
 
@@ -336,7 +335,7 @@ body {
 
 .info-entry--projects {
   flex: 1;
-  border-bottom: 1px solid var(--fg);
+  margin-top: 20px;
 }
 
 /* ─── MOBILE ─── */
