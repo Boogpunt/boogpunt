@@ -1,16 +1,5 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ImageKitProvider from "@/components/ImageKitProvider";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "BOOGPUNT",
@@ -19,7 +8,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="ko">
+      <head>
+        <link rel="stylesheet" href="https://use.typekit.net/ifp8ucb.css" />
+      </head>
       <body>
         <ImageKitProvider>{children}</ImageKitProvider>
       </body>

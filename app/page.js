@@ -446,17 +446,23 @@ export default function Home() {
       </div>
 
       <div className="info-panel">
-        <div className="info-content">
-          <div className="info-row">
-            <div className="info-section">
+        <div className="info-inner">
+          <div className="info-bio">
+            <h2 className="info-title">Boogpunt Studio, in Superposition Across Various Fields of Visual Communication</h2>
+            <p className="info-body">Qoon is a brand and graphic designer based in London and Seoul. Drawing from his experience across industrial design, brand design, graphic design, interior design, installation, and photography, his practice focuses on building systems that translate physical structure, context, and perception into diverse forms of visual language.</p>
+            <p className="info-body">During his MA at the Royal College of Art, he explores new materialist theory, particularly the concept of superposition, and develops it into visual systems. His work investigates how complex physical and scientific ideas can be translated into more intuitive and accessible visual structures.</p>
+            <p className="info-body">Based on this, he approaches design not as a fixed outcome, but as an interaction that shifts, adapts, and unfolds across different environments.</p>
+          </div>
+          <div className="info-table">
+            <div className="info-entry">
               <span className="info-label">Experience</span>
               <div className="info-items">
                 <p>COV STUDIO. Lead Graphic Designer. 2024–2025</p>
                 <p>SAM PARTNERS. Brand Designer. 2022–2024</p>
-                <p>MOTHER. Graphic Designer. 2022–2022</p>
+                <p>MOTHER. Graphic Designer. 2022</p>
               </div>
             </div>
-            <div className="info-section">
+            <div className="info-entry">
               <span className="info-label">Education</span>
               <div className="info-items">
                 <p>Royal College of Art. MA Visual Communication</p>
@@ -464,18 +470,23 @@ export default function Home() {
                 <p>University of Seoul. BA Product Design</p>
               </div>
             </div>
-          </div>
-          <div className="info-row">
-            <div className="info-section">
-              <span className="info-label">Projects</span>
-              <div className="info-items">
-                {PROJECTS.map((p, i) => <p key={i}>{p}</p>)}
-              </div>
-            </div>
-            <div className="info-section">
-              <span className="info-label">Achievements</span>
+            <div className="info-entry">
+              <span className="info-label">Prize</span>
               <div className="info-items">
                 <p>Global Design IT Awards Silver 2023</p>
+              </div>
+            </div>
+            <div className="info-entry">
+              <span className="info-label">Contact</span>
+              <div className="info-items">
+                <p>Qoon@boogpunt.com</p>
+                <p>@8009pt</p>
+              </div>
+            </div>
+            <div className="info-entry info-entry--projects">
+              <span className="info-label"></span>
+              <div className="info-items">
+                {PROJECTS.map((p, i) => <p key={i}>{p}</p>)}
               </div>
             </div>
           </div>
