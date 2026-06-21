@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { animate } from "animejs";
 
 const DISC_TEXT =
-  "KONONENKO ARCHITECTURAL BUREAU — VISUAL IDENTITY — 2026 · NUMINOUS AGENCY — WEB DESIGN — 2025 · ROCK'N'RAMP — MOTION & TYPOGRAPHY — 2025 · CHRISTIAN FLEMING DESIGN — WEB DESIGN — 2024 · JILI BURO — VISUAL IDENTITY — 2024 · AKOVA — BRANDING & PACKAGING — 2024 · MERIDIAN STUDIO — BRAND IDENTITY — 2024 · VOLTA TYPE — TYPE DESIGN — 2023 · OSLO COLLECTIVE — EDITORIAL — 2023 · PARK AVENUE — VISUAL IDENTITY — 2023 ·";
+  "SK ENMOVE ZIC — BRAND IDENTITY — 2023 · DOROSIWA — BRAND IDENTITY — 2023 · KISS OF LIFE — BRAND FILM — 2023 · BROKEN BIRDS — ART DIRECTION — 2023 · MONOLITH — NFT DISPLAY — 2022 · EGG CUP — CERAMIC SERIES — 2021 · YEAR OF THE RED HORSE — GRAPHIC — 2024 · BLADE TYPEFACE — TYPE DESIGN — 2023 · INVISIBLE MEMORY — EXHIBITION — 2023 · BREAK — ARCHITECTURE DEMOLITION — 2023 ·";
 
 function DiscSVG({ index }) {
   const id = `disc-ring-${index}`;
@@ -33,40 +33,32 @@ function DiscSVG({ index }) {
   );
 }
 
+const IK = "https://ik.imagekit.io/qoon/tr:w-1400,q-85/boogpunt";
+
 const CARDS = [
-  { category: "identity", meta: "Kononenko Architectural Bureau / Visual Identity / 2026" },
-  { category: "website",  meta: "Numinous Agency / Web Design / 2025" },
-  { category: "graphic",  meta: "Rock'n'Ramp / Motion · Typography / 2025" },
-  { category: "website",  meta: "Christian Fleming Design / Web Design / 2024" },
-  { category: "identity", meta: "Jili Buro / Visual Identity / 2024" },
-  { category: "graphic",  meta: "Akova / Branding · Packaging / 2024" },
-  { category: "identity", meta: "Meridian Studio / Brand Identity / 2024" },
-  { category: "editorial",meta: "Volta Type / Type Design / 2023" },
-  { category: "editorial",meta: "Oslo Collective / Editorial / 2023" },
-  { category: "identity", meta: "Park Avenue / Visual Identity / 2023" },
+  { category: "identity", meta: "SK enmove ZIC / Brand Identity / 2023",        img: `${IK}/ZIC/ZIC_0.png` },
+  { category: "graphic",  meta: "Kiss of Life / Brand Film / 2023",              img: `${IK}/KOF/KOF_1.png` },
+  { category: "identity", meta: "Dorosiwa / Brand Identity / 2023",             img: `${IK}/Dorosiwa/Dorosiwa_1.png` },
+  { category: "editorial",meta: "Blade Typeface / Type Design / 2023",           img: `${IK}/Blade_Font/Blade_Font_1.png` },
+  { category: "graphic",  meta: "Year of the Red Horse / Graphic / 2024",       img: `${IK}/Year_of_the_Red_Horse/Year_of_the_Red_Horse_1.png` },
+  { category: "graphic",  meta: "Broken Birds / Art Direction / 2023",           img: `${IK}/BrokenBirds/BrokenBirds_1.png` },
+  { category: "graphic",  meta: "Break / Architecture Demolition / 2023",        img: `${IK}/Break___Architecture_Demolition/Break___Architecture_Demolition_1.jpg` },
+  { category: "editorial",meta: "Invisible Memory / Exhibition / 2023",          img: `${IK}/Invisible_Memory___Precious_Thing/Invisible_Memory___Precious_Thing_1.png` },
+  { category: "editorial",meta: "Egg Cup / Ceramic Series / 2021",               img: `${IK}/EggCup/EggCup_1.jpg` },
+  { category: "editorial",meta: "Monolith NFT Display / Exhibition / 2022",      img: `${IK}/Monolith/Monolith_0.png` },
 ];
 
 const PROJECTS = [
-  "Socialed Credentials Design",
-  "Fabrika for Royal College of Art Across RCA",
-  "Blade Typeface",
-  "Como Clinic",
-  "Alice Monde Wedding",
-  "Hanel Hair salon",
-  "Leadvault Luggage",
-  "Xray 21 Radiology",
-  "Josun Hotel and Resorts",
-  "The Miraculous Flight of the Broken Bird",
   "SK enmove ZIC Brand Renewal",
-  "Powerplants Dialogue 01 Poster",
-  "Kiss of Life : Brand Film Logotype",
-  "1ha Web and Motion Graphics",
-  "Brooklyn Museum Website",
   "Dorosiwa Brand Renewal",
-  "Mother Offline Brand Application",
-  "Egg Cup Ceramic Series",
-  "Park's Club Popup Store Exhibition",
+  "Kiss of Life : Brand Film Logotype",
+  "The Miraculous Flight of the Broken Bird",
   "Monolith NFT Display Design",
+  "Egg Cup Ceramic Series",
+  "Year of the Red Horse",
+  "Blade Typeface",
+  "Invisible Memory : Precious Thing",
+  "Break : Architecture Demolition",
 ];
 
 export default function Home() {
@@ -493,7 +485,7 @@ export default function Home() {
       <main className="grid" id="work">
         {CARDS.map((card, i) => (
           <article key={i} className="card" data-category={card.category}>
-            <div className="card-img"></div>
+            <img className="card-img" src={card.img} alt={card.meta} loading="lazy" />
             <p className="card-meta">{card.meta}</p>
           </article>
         ))}

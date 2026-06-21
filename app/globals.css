@@ -260,6 +260,7 @@ body {
   background: #000;
   clip-path: inset(0 round 6px);
   transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  object-fit: cover;
 }
 .card:hover .card-img { filter: blur(4px); }
 
