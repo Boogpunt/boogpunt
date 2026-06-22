@@ -15,7 +15,7 @@ body {
   background: var(--bg);
   color: var(--fg);
   font-family: "neue-haas-grotesk-text", "Helvetica Neue", sans-serif;
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.3px;
@@ -271,7 +271,7 @@ body {
 }
 
 .info-title {
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.3px;
@@ -280,7 +280,7 @@ body {
 }
 
 .info-body {
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.3px;
@@ -297,13 +297,13 @@ body {
 
 .info-entry {
   display: grid;
-  grid-template-columns: 150px 1fr;
+  grid-template-columns: 120px 1fr;
   padding: 6px 13px;
   gap: 0 16px;
 }
 
 .info-label {
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.3px;
@@ -312,7 +312,7 @@ body {
 }
 
 .info-items p {
-  font-size: 21px;
+  font-size: 16px;
   font-weight: 500;
   line-height: 1.1;
   letter-spacing: -0.3px;
