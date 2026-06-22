@@ -138,6 +138,20 @@ body {
   object-fit: cover;
 }
 
+/* Portrait mode: black bg + image at 80vh centered */
+.hover-bg[data-mode="portrait"] {
+  background: #000;
+}
+.hover-bg[data-mode="portrait"] img {
+  width: auto;
+  height: 80vh;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 /* ─── CLOCK LINES ─── */
 .clock-lines-group {
   transform-box: fill-box;

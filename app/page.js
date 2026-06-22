@@ -81,9 +81,9 @@ function DiscSVG() {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1400,q-85/boogpunt";
 
 const CATEGORY_IMAGES = {
-  Branding:     `${IK}/ZIC/ZIC_0.png`,
-  Graphic:      null,
-  Installation: null,
+  Branding:     { src: `${IK}/ZIC/ZIC_0.png`,                                      mode: "cover"    },
+  Graphic:      { src: `${IK}/Bound_in_a_spiral_dance/bsd_t_D1SKK0lpE.jpg`,        mode: "portrait" },
+  Installation: { src: `${IK}/Watching/Watching_t_Ef-caLY9R.jpg`,                  mode: "cover"    },
   Direction:    null,
 };
 
@@ -267,17 +267,19 @@ export default function Home() {
 
     // Category label hover → dissolve in background image + auto-invert text on dark bg
     const onLabelEnter = () => {
-      const src = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
-      if (src) {
-        hoverBgImg.src = src;
+      const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
+      if (entry) {
+        hoverBgImg.src = entry.src;
+        hoverBgEl.dataset.mode = entry.mode;
         hoverBgEl.classList.add("is-visible");
-        getImageBrightness(src).then((b) => {
+        getImageBrightness(entry.src).then((b) => {
           document.documentElement.classList.toggle("bg-is-dark", b < 128);
         });
       }
     };
     const onLabelLeave = () => {
       hoverBgEl.classList.remove("is-visible");
+      delete hoverBgEl.dataset.mode;
       document.documentElement.classList.remove("bg-is-dark");
     };
     const onLabelClick = () => {
