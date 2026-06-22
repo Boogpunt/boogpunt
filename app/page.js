@@ -6,18 +6,28 @@ import { animate } from "animejs";
 const CATEGORIES = ["Branding", "Graphic", "Installation", "Direction"];
 const PX_PER_STEP = 70; // px of scroll per 30° rotation step
 
-// 96 equally spaced lines. Every 24th line (k=0,24,48,72) is a category major tick
-// at 90° intervals; as the disc rotates 90° per category, each aligns with 9 o'clock.
+// 92 minor ticks (every 3.75°, skipping every 24th = category major ticks)
 const CLOCK_LINES = Array.from({ length: 96 }, (_, k) => {
+  if (k % 24 === 0) return null;
   const deg = k * 3.75 - 90;
   const rad = (deg * Math.PI) / 180;
-  const r1 = 220;
-  const r2 = k % 24 === 0 ? 207 : 212; // major ticks full length; minor ticks 40% shorter
+  const r1 = 220, r2 = 212;
   return {
     x1: +(250 + r1 * Math.cos(rad)).toFixed(1),
     y1: +(250 + r1 * Math.sin(rad)).toFixed(1),
     x2: +(250 + r2 * Math.cos(rad)).toFixed(1),
     y2: +(250 + r2 * Math.sin(rad)).toFixed(1),
+  };
+}).filter(Boolean);
+
+// 4 category pointer shapes (bgpt_pt.svg) at 90° intervals — base at circumference, tip inward
+const MAJOR_TICKS = [0, 24, 48, 72].map((k) => {
+  const deg = k * 3.75 - 90;
+  const rad = (deg * Math.PI) / 180;
+  return {
+    cx: +(250 + 220 * Math.cos(rad)).toFixed(1),
+    cy: +(250 + 220 * Math.sin(rad)).toFixed(1),
+    rotation: deg + 90,
   };
 });
 
@@ -50,9 +60,18 @@ function getImageBrightness(src) {
 function DiscSVG() {
   return (
     <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style={{ overflow: "visible" }}>
+      <defs>
+        {/* bgpt_pt.svg path, centered at x=0, base at y=0 (outer), tip at y=50 (inner) */}
+        <path id="cat-tick" d="M14.255.23l-14.26,49.77L-14.255.23c4.73-.15,9.48-.23,14.25-.23s9.53.08,14.26.23Z" />
+      </defs>
       <g className="clock-lines-group">
         {CLOCK_LINES.map((ln, i) => (
           <line key={i} className="clock-line" x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} />
+        ))}
+        {MAJOR_TICKS.map((t, i) => (
+          <g key={i} transform={`translate(${t.cx},${t.cy}) rotate(${t.rotation}) scale(0.26)`}>
+            <use href="#cat-tick" className="clock-major" />
+          </g>
         ))}
       </g>
     </svg>
