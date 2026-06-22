@@ -20,6 +20,32 @@ const CLOCK_LINES = Array.from({ length: 24 }, (_, k) => {
   };
 });
 
+const brightnessCache = {};
+function getImageBrightness(src) {
+  if (brightnessCache[src] !== undefined) return Promise.resolve(brightnessCache[src]);
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = 50; canvas.height = 50;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, 50, 50);
+        const data = ctx.getImageData(0, 0, 50, 50).data;
+        let total = 0;
+        for (let i = 0; i < data.length; i += 4)
+          total += 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+        const b = total / (50 * 50);
+        brightnessCache[src] = b;
+        resolve(b);
+      } catch { resolve(128); }
+    };
+    img.onerror = () => { brightnessCache[src] = 128; resolve(128); };
+    img.src = src.replace(/tr:[^/]+/, "tr:w-50,h-50,q-50");
+  });
+}
+
 function DiscSVG() {
   return (
     <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style={{ overflow: "visible" }}>
@@ -104,7 +130,7 @@ export default function Home() {
     }
 
     function setup() {
-      const navBottom = nav.getBoundingClientRect().bottom + 8;
+      const navBottom = nav.getBoundingClientRect().bottom + 4;
       const panelH    = window.innerHeight - navBottom;
 
       filterPanel.style.top    = `${navBottom}px`;
@@ -124,8 +150,10 @@ export default function Home() {
 
     function positionFilterBar() {
       const rect = projectsLink.getBoundingClientRect();
-      filterBar.style.top  = `${rect.bottom + 6}px`;
-      filterBar.style.left = `${rect.left}px`;
+      filterBar.style.top         = `${rect.bottom + 6}px`;
+      filterBar.style.left        = "0";
+      filterBar.style.right       = "0";
+      filterBar.style.paddingLeft = `${rect.left}px`;
     }
 
     function showFilterBar() {
@@ -217,15 +245,21 @@ export default function Home() {
       });
     }
 
-    // Category label hover → dissolve in background image
+    // Category label hover → dissolve in background image + auto-invert text on dark bg
     const onLabelEnter = () => {
       const src = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
       if (src) {
         hoverBgImg.src = src;
         hoverBgEl.classList.add("is-visible");
+        getImageBrightness(src).then((b) => {
+          document.documentElement.classList.toggle("bg-is-dark", b < 128);
+        });
       }
     };
-    const onLabelLeave = () => hoverBgEl.classList.remove("is-visible");
+    const onLabelLeave = () => {
+      hoverBgEl.classList.remove("is-visible");
+      document.documentElement.classList.remove("bg-is-dark");
+    };
     const onLabelClick = () => {
       allNavLinks.forEach(l => l.classList.remove("is-active"));
       showFilter(CATEGORIES[currentCatIndex].toLowerCase());
