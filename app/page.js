@@ -6,12 +6,13 @@ import { animate } from "animejs";
 const CATEGORIES = ["Branding", "Graphic", "Installation", "Direction"];
 const PX_PER_STEP = 70; // px of scroll per 30° rotation step
 
-// 96 equally spaced lines, extending inward from disc circumference
-// k=0 → 12 o'clock (top), k=72 → 9 o'clock (left)
+// 96 equally spaced lines. Every 24th line (k=0,24,48,72) is a category major tick
+// at 90° intervals; as the disc rotates 90° per category, each aligns with 9 o'clock.
 const CLOCK_LINES = Array.from({ length: 96 }, (_, k) => {
   const deg = k * 3.75 - 90;
   const rad = (deg * Math.PI) / 180;
-  const r1 = 220, r2 = 207;
+  const r1 = 220;
+  const r2 = k % 24 === 0 ? 207 : 212; // major ticks full length; minor ticks 40% shorter
   return {
     x1: +(250 + r1 * Math.cos(rad)).toFixed(1),
     y1: +(250 + r1 * Math.sin(rad)).toFixed(1),
