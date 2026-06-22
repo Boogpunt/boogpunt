@@ -167,6 +167,7 @@ html.bg-is-dark .clock-line { stroke: white; }
   color: var(--fg);
   cursor: pointer;
   white-space: nowrap;
+  text-transform: uppercase;
   opacity: 0;
   pointer-events: none;
   transform: translate(0, -50%);
