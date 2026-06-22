@@ -173,7 +173,7 @@ export default function Home() {
       filterBar.style.top         = `${rect.bottom + 6}px`;
       filterBar.style.left        = "0";
       filterBar.style.right       = "0";
-      filterBar.style.paddingLeft = `${rect.left}px`;
+      filterBar.style.paddingLeft = window.innerWidth <= 640 ? "13px" : `${rect.left}px`;
     }
 
     function showFilterBar() {
