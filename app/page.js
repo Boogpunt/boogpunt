@@ -8,7 +8,7 @@ import { animate } from "animejs";
 const CLOCK_LINES = Array.from({ length: 12 }, (_, k) => {
   const deg = k * 30 - 90;
   const rad = (deg * Math.PI) / 180;
-  const r1 = 249, r2 = 236; // inward 13 units = 20% of original 66-unit length
+  const r1 = 220, r2 = 207; // inward 13 units = 20% of original 66-unit length
   return {
     x1: +(250 + r1 * Math.cos(rad)).toFixed(1),
     y1: +(250 + r1 * Math.sin(rad)).toFixed(1),
@@ -103,8 +103,8 @@ export default function Home() {
       const rect  = discEl.getBoundingClientRect();
       const scale = rect.width / 500;
       // 9 o'clock line ends at SVG x2 = 250 - 315 = -65, y2 = 250
-      // 9 o'clock inner tip: SVG x = 250 + 236·cos(180°) = 14, y = 250
-      brandingLabelEl.style.left = `${rect.left + 14 * scale + 5}px`;
+      // 9 o'clock inner tip: SVG x = 250 + 207·cos(180°) = 43, y = 250
+      brandingLabelEl.style.left = `${rect.left + 43 * scale + 8}px`;
       brandingLabelEl.style.top  = `${rect.top  + 250 * scale}px`;
     }
 

@@ -122,8 +122,7 @@ body {
 /* ─── CLOCK LINES ─── */
 .clock-line {
   stroke: #000;
-  stroke-width: 1rem;
-  stroke-linecap: round;
+  stroke-width: 1px;
   vector-effect: non-scaling-stroke;
   transition: opacity 0.2s ease;
   pointer-events: none;
@@ -140,6 +139,7 @@ body {
   color: var(--fg);
   cursor: pointer;
   white-space: nowrap;
+  text-transform: uppercase;
   transform: translate(0, -50%);
   transition: opacity 0.2s ease;
 }
