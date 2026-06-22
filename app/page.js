@@ -3,60 +3,55 @@
 import { useEffect } from "react";
 import { animate } from "animejs";
 
+const CATEGORIES = ["Branding", "Graphic", "Installation", "Direction"];
+const PX_PER_STEP = 70; // px of scroll per 30° rotation step
+
 // 12 equally spaced lines, extending inward from disc circumference
 // k=0 → 12 o'clock (top), k=9 → 9 o'clock (left)
 const CLOCK_LINES = Array.from({ length: 12 }, (_, k) => {
   const deg = k * 30 - 90;
   const rad = (deg * Math.PI) / 180;
-  const r1 = 220, r2 = 207; // inward 13 units = 20% of original 66-unit length
+  const r1 = 220, r2 = 207;
   return {
     x1: +(250 + r1 * Math.cos(rad)).toFixed(1),
     y1: +(250 + r1 * Math.sin(rad)).toFixed(1),
     x2: +(250 + r2 * Math.cos(rad)).toFixed(1),
     y2: +(250 + r2 * Math.sin(rad)).toFixed(1),
-    isNine: k === 9,
   };
 });
 
 function DiscSVG() {
   return (
     <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style={{ overflow: "visible" }}>
-      {CLOCK_LINES.map((ln, i) => (
-        <g key={i}>
-          <line
-            className={`clock-line${ln.isNine ? " clock-line--nine" : ""}`}
-            x1={ln.x1} y1={ln.y1}
-            x2={ln.x2} y2={ln.y2}
-          />
-          {/* wider transparent hit area for 9 o'clock line */}
-          {ln.isNine && (
-            <line
-              className="clock-line-hit"
-              x1={ln.x1} y1={ln.y1}
-              x2={ln.x2} y2={ln.y2}
-              stroke="transparent" strokeWidth="24"
-              style={{ pointerEvents: "auto", cursor: "pointer" }}
-            />
-          )}
-        </g>
-      ))}
+      <g className="clock-lines-group">
+        {CLOCK_LINES.map((ln, i) => (
+          <line key={i} className="clock-line" x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} />
+        ))}
+      </g>
     </svg>
   );
 }
 
 const IK = "https://ik.imagekit.io/qoon/tr:w-1400,q-85/boogpunt";
 
+const CATEGORY_IMAGES = {
+  Branding:     `${IK}/ZIC/ZIC_0.png`,
+  Graphic:      null,
+  Installation: null,
+  Direction:    null,
+};
+
 const CARDS = [
-  { category: "identity", meta: "SK enmove ZIC / Brand Identity / 2023",        img: `${IK}/ZIC/ZIC_0.png` },
-  { category: "graphic",  meta: "Kiss of Life / Brand Film / 2023",              img: `${IK}/KOF/KOF_1.png` },
-  { category: "identity", meta: "Dorosiwa / Brand Identity / 2023",             img: `${IK}/Dorosiwa/Dorosiwa_1.png` },
-  { category: "editorial",meta: "Blade Typeface / Type Design / 2023",           img: `${IK}/Blade_Font/Blade_Font_1.png` },
-  { category: "graphic",  meta: "Year of the Red Horse / Graphic / 2024",       img: `${IK}/Year_of_the_Red_Horse/Year_of_the_Red_Horse_1.png` },
-  { category: "graphic",  meta: "Broken Birds / Art Direction / 2023",           img: `${IK}/BrokenBirds/BrokenBirds_1.png` },
-  { category: "graphic",  meta: "Break / Architecture Demolition / 2023",        img: `${IK}/Break___Architecture_Demolition/Break___Architecture_Demolition_1.jpg` },
-  { category: "editorial",meta: "Invisible Memory / Exhibition / 2023",          img: `${IK}/Invisible_Memory___Precious_Thing/Invisible_Memory___Precious_Thing_1.png` },
-  { category: "editorial",meta: "Egg Cup / Ceramic Series / 2021",               img: `${IK}/EggCup/EggCup_1.jpg` },
-  { category: "editorial",meta: "Monolith NFT Display / Exhibition / 2022",      img: `${IK}/Monolith/Monolith_0.png` },
+  { category: "branding",     meta: "SK enmove ZIC / Brand Identity / 2023",       img: `${IK}/ZIC/ZIC_0.png` },
+  { category: "graphic",      meta: "Kiss of Life / Brand Film / 2023",             img: `${IK}/KOF/KOF_1.png` },
+  { category: "branding",     meta: "Dorosiwa / Brand Identity / 2023",            img: `${IK}/Dorosiwa/Dorosiwa_1.png` },
+  { category: "direction",    meta: "Blade Typeface / Type Design / 2023",          img: `${IK}/Blade_Font/Blade_Font_1.png` },
+  { category: "graphic",      meta: "Year of the Red Horse / Graphic / 2024",      img: `${IK}/Year_of_the_Red_Horse/Year_of_the_Red_Horse_1.png` },
+  { category: "direction",    meta: "Broken Birds / Art Direction / 2023",          img: `${IK}/BrokenBirds/BrokenBirds_1.png` },
+  { category: "installation", meta: "Break / Architecture Demolition / 2023",       img: `${IK}/Break___Architecture_Demolition/Break___Architecture_Demolition_1.jpg` },
+  { category: "installation", meta: "Invisible Memory / Exhibition / 2023",         img: `${IK}/Invisible_Memory___Precious_Thing/Invisible_Memory___Precious_Thing_1.png` },
+  { category: "installation", meta: "Egg Cup / Ceramic Series / 2021",              img: `${IK}/EggCup/EggCup_1.jpg` },
+  { category: "direction",    meta: "Monolith NFT Display / Exhibition / 2022",     img: `${IK}/Monolith/Monolith_0.png` },
 ];
 
 const PROJECTS = [
@@ -77,7 +72,6 @@ export default function Home() {
     const nav             = document.querySelector(".nav");
     const filterBar       = document.querySelector(".filter-bar");
     const introEl         = document.querySelector(".intro");
-    const grid            = document.querySelector(".grid");
     const spacer          = document.querySelector(".spacer");
     const filterPanel     = document.querySelector(".filter-panel");
     const filterGrid      = document.querySelector(".filter-grid");
@@ -88,31 +82,31 @@ export default function Home() {
     const cards           = [...document.querySelectorAll(".grid .card")];
     const allNavLinks     = [...document.querySelectorAll(".nav-link")];
     const discEl          = document.querySelector(".intro-disc");
-    const clockLines      = [...document.querySelectorAll(".clock-line")];
-    const lineHit         = document.querySelector(".clock-line-hit");
-    const brandingLabelEl = document.querySelector(".disc-label--branding");
+    const linesGroupEl    = document.querySelector(".clock-lines-group");
+    const catLabelEl      = document.querySelector(".disc-label--cat");
+    const hoverBgEl       = document.querySelector(".hover-bg");
+    const hoverBgImg      = hoverBgEl.querySelector("img");
 
-    const DELAY_RATIO = 0.35;
-    let gridAnim, panelAnim, infoPanelAnim;
+    let panelAnim, infoPanelAnim;
     let panelVisible     = false;
     let infoPanelVisible = false;
-    let hideTimeout, labelHideTimeout;
+    let hideTimeout;
+    let currentStep      = -1;
+    let currentCatIndex  = 0;
 
-    function updateDiscLabelPos() {
-      if (!discEl || !brandingLabelEl) return;
+    function updateLabelPos() {
+      if (!discEl || !catLabelEl) return;
       const rect  = discEl.getBoundingClientRect();
       const scale = rect.width / 500;
-      // 9 o'clock line ends at SVG x2 = 250 - 315 = -65, y2 = 250
       // 9 o'clock inner tip: SVG x = 250 + 207·cos(180°) = 43, y = 250
-      brandingLabelEl.style.left = `${rect.left + 43 * scale + 8}px`;
-      brandingLabelEl.style.top  = `${rect.top  + 250 * scale}px`;
+      catLabelEl.style.left = `${rect.left + 43 * scale + 8}px`;
+      catLabelEl.style.top  = `${rect.top  + 250 * scale}px`;
     }
 
     function setup() {
       const navBottom = nav.getBoundingClientRect().bottom + 8;
       const panelH    = window.innerHeight - navBottom;
 
-      grid.style.paddingTop    = `${navBottom}px`;
       filterPanel.style.top    = `${navBottom}px`;
       filterPanel.style.height = `${panelH}px`;
       infoPanel.style.top      = `${navBottom}px`;
@@ -121,11 +115,11 @@ export default function Home() {
       if (!panelVisible)     filterPanel.style.transform = `translateY(${panelH}px)`;
       if (!infoPanelVisible) infoPanel.style.transform   = `translateY(${panelH}px)`;
 
-      const vh = window.innerHeight;
-      introEl.style.height = `${vh}px`;
-      spacer.style.height  = `${grid.scrollHeight + vh + vh * DELAY_RATIO}px`;
+      introEl.style.height = `${window.innerHeight}px`;
+      // Enough scroll for multiple full rotations across all 4 categories
+      spacer.style.height  = `${window.innerHeight * 5}px`;
 
-      updateDiscLabelPos();
+      updateLabelPos();
     }
 
     function positionFilterBar() {
@@ -147,24 +141,20 @@ export default function Home() {
     function onScroll() {
       if (panelVisible || infoPanelVisible) return;
 
-      const y         = window.scrollY;
-      const vh        = window.innerHeight;
-      const delay     = vh * DELAY_RATIO;
-      const maxScroll = Math.max(0, grid.scrollHeight - vh);
+      const totalSteps = Math.floor(window.scrollY / PX_PER_STEP);
+      if (totalSteps === currentStep) return;
+      currentStep = totalSteps;
 
-      let gridY;
-      if (y <= delay) {
-        gridY = vh;
-      } else if (y <= delay + vh) {
-        gridY = vh * (1 - (y - delay) / vh);
-      } else {
-        gridY = -Math.min(y - delay - vh, maxScroll);
+      // Rotate lines by 30° per step (CSS transition handles the snap animation)
+      linesGroupEl.style.transform = `rotate(${totalSteps * 30}deg)`;
+
+      // Cycle category every 3 steps (90° = one category)
+      const newCatIndex = Math.floor(totalSteps / 3) % CATEGORIES.length;
+      if (newCatIndex !== currentCatIndex) {
+        currentCatIndex = newCatIndex;
+        catLabelEl.textContent = CATEGORIES[currentCatIndex];
+        hoverBgEl.classList.remove("is-visible");
       }
-
-      if (gridAnim) gridAnim.pause();
-      gridAnim = animate(grid, { translateY: gridY, duration: 400, ease: "outExpo" });
-
-      introEl.classList.toggle("is-blurred", gridY < vh * 0.7);
     }
 
     function populateFilterGrid(category) {
@@ -191,7 +181,6 @@ export default function Home() {
         duration: 500,
         ease: "inOutExpo",
       });
-      onScroll();
     }
 
     function showInfo() {
@@ -209,36 +198,25 @@ export default function Home() {
         duration: 500,
         ease: "inOutExpo",
       });
-      onScroll();
     }
 
-    // 9 o'clock line → Branding label hover
-    const onLineEnter = () => {
-      clearTimeout(labelHideTimeout);
-      clockLines.forEach(l => { if (!l.classList.contains("clock-line--nine")) l.style.opacity = "0.5"; });
-      brandingLabelEl.classList.add("is-visible");
+    // Category label hover → dissolve in background image
+    const onLabelEnter = () => {
+      const src = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
+      if (src) {
+        hoverBgImg.src = src;
+        hoverBgEl.classList.add("is-visible");
+      }
     };
-    const onLineLeave = () => {
-      labelHideTimeout = setTimeout(() => {
-        clockLines.forEach(l => { l.style.opacity = ""; });
-        brandingLabelEl.classList.remove("is-visible");
-      }, 80);
-    };
-    const onLabelEnter = () => clearTimeout(labelHideTimeout);
-    const onLabelLeave = () => {
-      clockLines.forEach(l => { l.style.opacity = ""; });
-      brandingLabelEl.classList.remove("is-visible");
-    };
+    const onLabelLeave = () => hoverBgEl.classList.remove("is-visible");
     const onLabelClick = () => {
       allNavLinks.forEach(l => l.classList.remove("is-active"));
-      showFilter("all");
+      showFilter(CATEGORIES[currentCatIndex].toLowerCase());
     };
 
-    lineHit.addEventListener("mouseenter", onLineEnter);
-    lineHit.addEventListener("mouseleave", onLineLeave);
-    brandingLabelEl.addEventListener("mouseenter", onLabelEnter);
-    brandingLabelEl.addEventListener("mouseleave", onLabelLeave);
-    brandingLabelEl.addEventListener("click", onLabelClick);
+    catLabelEl.addEventListener("mouseenter", onLabelEnter);
+    catLabelEl.addEventListener("mouseleave", onLabelLeave);
+    catLabelEl.addEventListener("click", onLabelClick);
 
     // Filter bar hover dropdown
     projectsLink.addEventListener("mouseenter", showFilterBar);
@@ -306,27 +284,21 @@ export default function Home() {
     let scrollRafId = null;
     const scrollHandler = () => {
       if (scrollRafId) return;
-      scrollRafId = requestAnimationFrame(() => {
-        scrollRafId = null;
-        onScroll();
-      });
+      scrollRafId = requestAnimationFrame(() => { scrollRafId = null; onScroll(); });
     };
 
     const resizeHandler = () => { setup(); onScroll(); };
 
     setup();
-    onScroll();
     window.addEventListener("resize", resizeHandler);
     window.addEventListener("scroll", scrollHandler, { passive: true });
 
     return () => {
       window.removeEventListener("resize", resizeHandler);
       window.removeEventListener("scroll", scrollHandler);
-      lineHit.removeEventListener("mouseenter", onLineEnter);
-      lineHit.removeEventListener("mouseleave", onLineLeave);
-      brandingLabelEl.removeEventListener("mouseenter", onLabelEnter);
-      brandingLabelEl.removeEventListener("mouseleave", onLabelLeave);
-      brandingLabelEl.removeEventListener("click", onLabelClick);
+      catLabelEl.removeEventListener("mouseenter", onLabelEnter);
+      catLabelEl.removeEventListener("mouseleave", onLabelLeave);
+      catLabelEl.removeEventListener("click", onLabelClick);
       projectsLink.removeEventListener("mouseenter", showFilterBar);
       projectsLink.removeEventListener("mouseleave", scheduleHideFilterBar);
       filterBar.removeEventListener("mouseenter", clearHideTimeout);
@@ -338,8 +310,6 @@ export default function Home() {
       navLinkHandlers.forEach(({ link, handler }) => link.removeEventListener("click", handler));
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
       clearTimeout(hideTimeout);
-      clearTimeout(labelHideTimeout);
-      if (gridAnim) gridAnim.pause();
       if (panelAnim) panelAnim.pause();
       if (infoPanelAnim) infoPanelAnim.pause();
     };
@@ -358,20 +328,17 @@ export default function Home() {
       </nav>
 
       <div className="filter-bar">
-        <button className="filter-btn" data-filter="all">All Types</button>
+        <button className="filter-btn" data-filter="all">All</button>
+        <button className="filter-btn" data-filter="branding">Branding</button>
         <button className="filter-btn" data-filter="graphic">Graphic</button>
-        <button className="filter-btn" data-filter="editorial">Editorial</button>
-        <button className="filter-btn" data-filter="website">Website</button>
-        <button className="filter-btn" data-filter="identity">Identity</button>
-        <button className="filter-btn" data-filter="space">Space</button>
-        <button className="filter-btn" data-filter="practice">Practice</button>
+        <button className="filter-btn" data-filter="installation">Installation</button>
+        <button className="filter-btn" data-filter="direction">Direction</button>
       </div>
 
       <div className="intro">
-        <div className="intro-disc">
-          <DiscSVG />
-        </div>
-        <div className="disc-label disc-label--branding">Branding</div>
+        <div className="hover-bg"><img alt="" /></div>
+        <div className="intro-disc"><DiscSVG /></div>
+        <div className="disc-label disc-label--cat">Branding</div>
       </div>
 
       <div className="filter-panel">
