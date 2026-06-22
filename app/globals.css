@@ -161,7 +161,7 @@ html.bg-is-dark .clock-line { stroke: white; }
 /* ─── CATEGORY LABEL ─── */
 .disc-label {
   position: fixed;
-  font-size: 48px;
+  font-size: 16px;
   font-weight: 700;
   letter-spacing: -0.3px;
   color: var(--fg);

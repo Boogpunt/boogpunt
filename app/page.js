@@ -6,10 +6,10 @@ import { animate } from "animejs";
 const CATEGORIES = ["Branding", "Graphic", "Installation", "Direction"];
 const PX_PER_STEP = 70; // px of scroll per 30° rotation step
 
-// 24 equally spaced lines, extending inward from disc circumference
-// k=0 → 12 o'clock (top), k=18 → 9 o'clock (left)
-const CLOCK_LINES = Array.from({ length: 24 }, (_, k) => {
-  const deg = k * 15 - 90;
+// 96 equally spaced lines, extending inward from disc circumference
+// k=0 → 12 o'clock (top), k=72 → 9 o'clock (left)
+const CLOCK_LINES = Array.from({ length: 96 }, (_, k) => {
+  const deg = k * 3.75 - 90;
   const rad = (deg * Math.PI) / 180;
   const r1 = 220, r2 = 207;
   return {
