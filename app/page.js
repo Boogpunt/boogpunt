@@ -3,15 +3,12 @@
 import { useEffect } from "react";
 import { animate } from "animejs";
 
-const DISC_TEXT =
-  "SK ENMOVE ZIC — BRAND IDENTITY — 2023 · DOROSIWA — BRAND IDENTITY — 2023 · KISS OF LIFE — BRAND FILM — 2023 · BROKEN BIRDS — ART DIRECTION — 2023 · MONOLITH — NFT DISPLAY — 2022 · EGG CUP — CERAMIC SERIES — 2021 · YEAR OF THE RED HORSE — GRAPHIC — 2024 · BLADE TYPEFACE — TYPE DESIGN — 2023 · INVISIBLE MEMORY — EXHIBITION — 2023 · BREAK — ARCHITECTURE DEMOLITION — 2023 ·";
-
-// 12 equally spaced lines at clock positions, radiating from disc edge outward
+// 12 equally spaced lines, extending inward from disc circumference
 // k=0 → 12 o'clock (top), k=9 → 9 o'clock (left)
 const CLOCK_LINES = Array.from({ length: 12 }, (_, k) => {
   const deg = k * 30 - 90;
   const rad = (deg * Math.PI) / 180;
-  const r1 = 249, r2 = 315;
+  const r1 = 249, r2 = 236; // inward 13 units = 20% of original 66-unit length
   return {
     x1: +(250 + r1 * Math.cos(rad)).toFixed(1),
     y1: +(250 + r1 * Math.sin(rad)).toFixed(1),
@@ -22,31 +19,14 @@ const CLOCK_LINES = Array.from({ length: 12 }, (_, k) => {
 });
 
 function DiscSVG() {
-  const id = "disc-ring";
   return (
     <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style={{ overflow: "visible" }}>
-      <defs>
-        <path id={id} d="M250,250 m-220,0 a220,220 0 1,1 440,0 a220,220 0 1,1,-440,0" />
-      </defs>
-      <circle cx="250" cy="250" r="249" fill="#000000" />
-      <text
-        fontSize="8.5"
-        fill="rgba(255,255,255,0.5)"
-        fontFamily="Helvetica Neue, Helvetica, sans-serif"
-        fontWeight="400"
-        letterSpacing="2"
-      >
-        <textPath href={`#${id}`} startOffset="0%">
-          {DISC_TEXT}
-        </textPath>
-      </text>
       {CLOCK_LINES.map((ln, i) => (
         <g key={i}>
           <line
             className={`clock-line${ln.isNine ? " clock-line--nine" : ""}`}
             x1={ln.x1} y1={ln.y1}
             x2={ln.x2} y2={ln.y2}
-            stroke="#000" strokeWidth="2" strokeLinecap="round"
           />
           {/* wider transparent hit area for 9 o'clock line */}
           {ln.isNine && (
@@ -123,8 +103,9 @@ export default function Home() {
       const rect  = discEl.getBoundingClientRect();
       const scale = rect.width / 500;
       // 9 o'clock line ends at SVG x2 = 250 - 315 = -65, y2 = 250
-      brandingLabelEl.style.left = `${rect.left + (-65) * scale}px`;
-      brandingLabelEl.style.top  = `${rect.top  + 250   * scale}px`;
+      // 9 o'clock inner tip: SVG x = 250 + 236·cos(180°) = 14, y = 250
+      brandingLabelEl.style.left = `${rect.left + 14 * scale + 5}px`;
+      brandingLabelEl.style.top  = `${rect.top  + 250 * scale}px`;
     }
 
     function setup() {
