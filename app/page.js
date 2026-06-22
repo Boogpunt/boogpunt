@@ -13,11 +13,7 @@ function DiscSVG({ index }) {
       <defs>
         <path id={id} d="M250,250 m-220,0 a220,220 0 1,1 440,0 a220,220 0 1,1,-440,0" />
       </defs>
-      <circle cx="250" cy="250" r="249" fill="#0d0d0d" />
-      <circle cx="250" cy="250" r="244" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <circle cx="250" cy="250" r="168" fill="#1c1c1c" />
-      <circle cx="250" cy="250" r="172" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1" />
-      <circle cx="250" cy="250" r="20" fill="#555" />
+      <circle cx="250" cy="250" r="249" fill="#000000" />
       <text
         fontSize="8.5"
         fill="rgba(255,255,255,0.5)"
@@ -66,7 +62,6 @@ export default function Home() {
     const nav          = document.querySelector(".nav");
     const filterBar    = document.querySelector(".filter-bar");
     const introEl      = document.querySelector(".intro");
-    const railPath     = document.querySelector(".disc-rail-path");
     const grid         = document.querySelector(".grid");
     const spacer       = document.querySelector(".spacer");
     const filterPanel  = document.querySelector(".filter-panel");
@@ -75,7 +70,6 @@ export default function Home() {
     const projectsLink = document.querySelector('.nav-link[data-menu="projects"]');
     const infoLink     = document.querySelector('.nav-link[data-menu="info"]');
     const navLogo      = document.querySelector(".nav-logo");
-    const introFooter  = document.querySelector(".intro-footer");
     const cards        = [...document.querySelectorAll(".grid .card")];
     const discEls      = [...document.querySelectorAll(".intro-disc")];
     const allNavLinks  = [...document.querySelectorAll(".nav-link")];
@@ -105,22 +99,6 @@ export default function Home() {
       introEl.style.height = `${vh}px`;
       spacer.style.height  = `${grid.scrollHeight + vh + vh * DELAY_RATIO}px`;
 
-      const discR = discEls[discOffsets.indexOf(0)].getBoundingClientRect().width / 2;
-      const R     = discR + 10;
-      const cx    = window.innerWidth / 2;
-      const cy    = vh / 2;
-      const c     = 10;
-      railPath.setAttribute(
-        "d",
-        `M ${cx} 0 ` +
-          `L ${cx} ${cy - R - c} ` +
-          `Q ${cx} ${cy - R} ${cx - c} ${cy - R} ` +
-          `A ${R} ${R} 0 0 0 ${cx - c} ${cy + R} ` +
-          `Q ${cx} ${cy + R} ${cx} ${cy + R + c} ` +
-          `L ${cx} ${vh}`
-      );
-
-      introFooter.style.left = `${window.innerWidth / 2 + 16}px`;
       positionDiscs(false);
     }
 
@@ -407,38 +385,6 @@ export default function Home() {
         <div className="intro-disc"><DiscSVG index={1} /></div>
         <div className="intro-disc"><DiscSVG index={2} /></div>
 
-        <svg className="disc-rail-svg" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <filter id="rail-glow" x="-40%" y="-10%" width="180%" height="120%">
-              <feGaussianBlur stdDeviation="3.5" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          <path
-            id="disc-rail-path"
-            className="disc-rail-path"
-            fill="none"
-            stroke="rgba(160,160,160,0.55)"
-            strokeWidth="2"
-            filter="url(#rail-glow)"
-          />
-          <circle r="3" fill="rgba(180,180,180,0.75)" filter="url(#rail-glow)">
-            <animateMotion dur="6s" repeatCount="indefinite">
-              <mpath href="#disc-rail-path" />
-            </animateMotion>
-          </circle>
-        </svg>
-
-        <div className="intro-footer">
-          <p className="intro-text">
-            Brand Experience Designer based in London<br />
-            Who are superposition with various fields of<br />
-            visual communication.
-          </p>
-        </div>
       </div>
 
       <div className="filter-panel">
