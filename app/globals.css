@@ -106,30 +106,42 @@ body {
 .intro-disc {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  width: min(77vh, 77vw);
-  height: min(77vh, 77vw);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(92.4vh, 92.4vw);
+  height: min(92.4vh, 92.4vw);
   pointer-events: auto;
+  overflow: visible;
 }
 .intro-disc svg {
   width: 100%;
   height: 100%;
+  overflow: visible;
 }
 
-
-.intro-footer {
-  position: absolute;
-  bottom: 56px;
-  left: var(--p);
-  right: var(--p);
+/* ─── CLOCK LINES ─── */
+.clock-line {
+  transition: opacity 0.2s ease;
+  pointer-events: none;
 }
+.clock-line--nine { pointer-events: none; }
 
-.intro-text {
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.046em;
-  line-height: 1.2;
+/* ─── DISC LABEL (Branding etc.) ─── */
+.disc-label {
+  position: fixed;
+  opacity: 0;
+  pointer-events: none;
+  font-weight: 700;
+  letter-spacing: -0.3px;
   color: var(--fg);
+  cursor: pointer;
+  white-space: nowrap;
+  transform: translate(-100%, -50%);
+  transition: opacity 0.2s ease;
+}
+.disc-label.is-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* ─── FILTER PANEL (category overlay curtain) ─── */

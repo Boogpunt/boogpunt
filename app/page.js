@@ -6,10 +6,25 @@ import { animate } from "animejs";
 const DISC_TEXT =
   "SK ENMOVE ZIC — BRAND IDENTITY — 2023 · DOROSIWA — BRAND IDENTITY — 2023 · KISS OF LIFE — BRAND FILM — 2023 · BROKEN BIRDS — ART DIRECTION — 2023 · MONOLITH — NFT DISPLAY — 2022 · EGG CUP — CERAMIC SERIES — 2021 · YEAR OF THE RED HORSE — GRAPHIC — 2024 · BLADE TYPEFACE — TYPE DESIGN — 2023 · INVISIBLE MEMORY — EXHIBITION — 2023 · BREAK — ARCHITECTURE DEMOLITION — 2023 ·";
 
-function DiscSVG({ index }) {
-  const id = `disc-ring-${index}`;
+// 12 equally spaced lines at clock positions, radiating from disc edge outward
+// k=0 → 12 o'clock (top), k=9 → 9 o'clock (left)
+const CLOCK_LINES = Array.from({ length: 12 }, (_, k) => {
+  const deg = k * 30 - 90;
+  const rad = (deg * Math.PI) / 180;
+  const r1 = 249, r2 = 315;
+  return {
+    x1: +(250 + r1 * Math.cos(rad)).toFixed(1),
+    y1: +(250 + r1 * Math.sin(rad)).toFixed(1),
+    x2: +(250 + r2 * Math.cos(rad)).toFixed(1),
+    y2: +(250 + r2 * Math.sin(rad)).toFixed(1),
+    isNine: k === 9,
+  };
+});
+
+function DiscSVG() {
+  const id = "disc-ring";
   return (
-    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style={{ overflow: "visible" }}>
       <defs>
         <path id={id} d="M250,250 m-220,0 a220,220 0 1,1 440,0 a220,220 0 1,1,-440,0" />
       </defs>
@@ -25,6 +40,26 @@ function DiscSVG({ index }) {
           {DISC_TEXT}
         </textPath>
       </text>
+      {CLOCK_LINES.map((ln, i) => (
+        <g key={i}>
+          <line
+            className={`clock-line${ln.isNine ? " clock-line--nine" : ""}`}
+            x1={ln.x1} y1={ln.y1}
+            x2={ln.x2} y2={ln.y2}
+            stroke="#000" strokeWidth="2" strokeLinecap="round"
+          />
+          {/* wider transparent hit area for 9 o'clock line */}
+          {ln.isNine && (
+            <line
+              className="clock-line-hit"
+              x1={ln.x1} y1={ln.y1}
+              x2={ln.x2} y2={ln.y2}
+              stroke="transparent" strokeWidth="24"
+              style={{ pointerEvents: "auto", cursor: "pointer" }}
+            />
+          )}
+        </g>
+      ))}
     </svg>
   );
 }
@@ -59,28 +94,38 @@ const PROJECTS = [
 
 export default function Home() {
   useEffect(() => {
-    const nav          = document.querySelector(".nav");
-    const filterBar    = document.querySelector(".filter-bar");
-    const introEl      = document.querySelector(".intro");
-    const grid         = document.querySelector(".grid");
-    const spacer       = document.querySelector(".spacer");
-    const filterPanel  = document.querySelector(".filter-panel");
-    const filterGrid   = document.querySelector(".filter-grid");
-    const infoPanel    = document.querySelector(".info-panel");
-    const projectsLink = document.querySelector('.nav-link[data-menu="projects"]');
-    const infoLink     = document.querySelector('.nav-link[data-menu="info"]');
-    const navLogo      = document.querySelector(".nav-logo");
-    const cards        = [...document.querySelectorAll(".grid .card")];
-    const discEls      = [...document.querySelectorAll(".intro-disc")];
-    const allNavLinks  = [...document.querySelectorAll(".nav-link")];
+    const nav             = document.querySelector(".nav");
+    const filterBar       = document.querySelector(".filter-bar");
+    const introEl         = document.querySelector(".intro");
+    const grid            = document.querySelector(".grid");
+    const spacer          = document.querySelector(".spacer");
+    const filterPanel     = document.querySelector(".filter-panel");
+    const filterGrid      = document.querySelector(".filter-grid");
+    const infoPanel       = document.querySelector(".info-panel");
+    const projectsLink    = document.querySelector('.nav-link[data-menu="projects"]');
+    const infoLink        = document.querySelector('.nav-link[data-menu="info"]');
+    const navLogo         = document.querySelector(".nav-logo");
+    const cards           = [...document.querySelectorAll(".grid .card")];
+    const allNavLinks     = [...document.querySelectorAll(".nav-link")];
+    const discEl          = document.querySelector(".intro-disc");
+    const clockLines      = [...document.querySelectorAll(".clock-line")];
+    const lineHit         = document.querySelector(".clock-line-hit");
+    const brandingLabelEl = document.querySelector(".disc-label--branding");
 
     const DELAY_RATIO = 0.35;
     let gridAnim, panelAnim, infoPanelAnim;
-    let panelVisible      = false;
-    let infoPanelVisible  = false;
-    let hideTimeout;
-    let discOffsets   = [-1, 0, 1];
-    let discAnimating = false;
+    let panelVisible     = false;
+    let infoPanelVisible = false;
+    let hideTimeout, labelHideTimeout;
+
+    function updateDiscLabelPos() {
+      if (!discEl || !brandingLabelEl) return;
+      const rect  = discEl.getBoundingClientRect();
+      const scale = rect.width / 500;
+      // 9 o'clock line ends at SVG x2 = 250 - 315 = -65, y2 = 250
+      brandingLabelEl.style.left = `${rect.left + (-65) * scale}px`;
+      brandingLabelEl.style.top  = `${rect.top  + 250   * scale}px`;
+    }
 
     function setup() {
       const navBottom = nav.getBoundingClientRect().bottom + 8;
@@ -99,32 +144,7 @@ export default function Home() {
       introEl.style.height = `${vh}px`;
       spacer.style.height  = `${grid.scrollHeight + vh + vh * DELAY_RATIO}px`;
 
-      positionDiscs(false);
-    }
-
-    function discSpacing() {
-      const discW   = discEls[0].getBoundingClientRect().width;
-      const minPeek = 60;
-      const max     = window.innerWidth / 2 + discW / 2 - minPeek;
-      return Math.min(discW * 1.25, Math.max(discW * 0.8, max));
-    }
-
-    function positionDiscs(shouldAnimate) {
-      const discW   = discEls[0].getBoundingClientRect().width;
-      const spacing = discSpacing();
-      const cxPos   = window.innerWidth / 2;
-      discEls.forEach((disc, i) => {
-        const offset     = discOffsets[i];
-        const targetLeft = cxPos - discW / 2 + offset * spacing;
-        const isCenter   = offset === 0;
-        disc.style.cursor = isCenter ? "default" : "pointer";
-        if (shouldAnimate) {
-          animate(disc, { left: targetLeft, opacity: isCenter ? 1 : 0.5, duration: 700, ease: "outExpo" });
-        } else {
-          disc.style.left    = `${targetLeft}px`;
-          disc.style.opacity = isCenter ? 1 : 0.5;
-        }
-      });
+      updateDiscLabelPos();
     }
 
     function positionFilterBar() {
@@ -211,47 +231,33 @@ export default function Home() {
       onScroll();
     }
 
-    // Disc carousel clicks
-    const discClickHandlers = discEls.map((disc, i) => {
-      const handler = () => {
-        if (discAnimating || discOffsets[i] === 0) return;
-        discAnimating = true;
+    // 9 o'clock line → Branding label hover
+    const onLineEnter = () => {
+      clearTimeout(labelHideTimeout);
+      clockLines.forEach(l => { if (!l.classList.contains("clock-line--nine")) l.style.opacity = "0.5"; });
+      brandingLabelEl.classList.add("is-visible");
+    };
+    const onLineLeave = () => {
+      labelHideTimeout = setTimeout(() => {
+        clockLines.forEach(l => { l.style.opacity = ""; });
+        brandingLabelEl.classList.remove("is-visible");
+      }, 80);
+    };
+    const onLabelEnter = () => clearTimeout(labelHideTimeout);
+    const onLabelLeave = () => {
+      clockLines.forEach(l => { l.style.opacity = ""; });
+      brandingLabelEl.classList.remove("is-visible");
+    };
+    const onLabelClick = () => {
+      allNavLinks.forEach(l => l.classList.remove("is-active"));
+      showFilter("all");
+    };
 
-        const direction = discOffsets[i] > 0 ? 1 : -1;
-        const discW     = discEls[0].getBoundingClientRect().width;
-        const spacing   = discSpacing();
-        const cxPos     = window.innerWidth / 2;
-        const leftAt    = (slot) => cxPos - discW / 2 + slot * spacing;
-
-        discOffsets = discOffsets.map((o) => o - direction);
-
-        discEls.forEach((d, j) => {
-          const newOff = discOffsets[j];
-          if (Math.abs(newOff) >= 2) {
-            const recycled  = -Math.sign(newOff);
-            d.style.left    = `${leftAt(recycled * 2)}px`;
-            d.style.opacity = "0.5";
-            discOffsets[j]  = recycled;
-            requestAnimationFrame(() => {
-              d.style.cursor = "pointer";
-              animate(d, { left: leftAt(recycled), opacity: 0.5, duration: 700, ease: "outExpo" });
-            });
-          } else {
-            d.style.cursor = newOff === 0 ? "default" : "pointer";
-            animate(d, {
-              left:     leftAt(newOff),
-              opacity:  newOff === 0 ? 1 : 0.5,
-              duration: 700,
-              ease:     "outExpo",
-            });
-          }
-        });
-
-        setTimeout(() => { discAnimating = false; }, 750);
-      };
-      disc.addEventListener("click", handler);
-      return handler;
-    });
+    lineHit.addEventListener("mouseenter", onLineEnter);
+    lineHit.addEventListener("mouseleave", onLineLeave);
+    brandingLabelEl.addEventListener("mouseenter", onLabelEnter);
+    brandingLabelEl.addEventListener("mouseleave", onLabelLeave);
+    brandingLabelEl.addEventListener("click", onLabelClick);
 
     // Filter bar hover dropdown
     projectsLink.addEventListener("mouseenter", showFilterBar);
@@ -277,7 +283,6 @@ export default function Home() {
       return { btn, handler };
     });
 
-    // Filter panel card click → close and scroll top
     const filterGridClickHandler = (e) => {
       if (e.target.closest(".card")) {
         hideFilter();
@@ -286,7 +291,6 @@ export default function Home() {
     };
     filterGrid.addEventListener("click", filterGridClickHandler);
 
-    // Info link
     const infoLinkHandler = (e) => {
       e.preventDefault();
       const wasActive = infoLink.classList.contains("is-active") && infoPanelVisible;
@@ -300,7 +304,6 @@ export default function Home() {
     };
     infoLink.addEventListener("click", infoLinkHandler);
 
-    // Nav logo
     const navLogoClickHandler = (e) => {
       e.preventDefault();
       if (panelVisible) hideFilter();
@@ -310,7 +313,6 @@ export default function Home() {
     };
     navLogo.addEventListener("click", navLogoClickHandler);
 
-    // Nav links active state (excluding info link which has its own handler)
     const navLinkHandlers = allNavLinks.filter((l) => l !== infoLink).map((link) => {
       const handler = function () {
         allNavLinks.forEach((l) => l.classList.remove("is-active"));
@@ -320,7 +322,6 @@ export default function Home() {
       return { link, handler };
     });
 
-    // rAF-throttled scroll
     let scrollRafId = null;
     const scrollHandler = () => {
       if (scrollRafId) return;
@@ -340,7 +341,11 @@ export default function Home() {
     return () => {
       window.removeEventListener("resize", resizeHandler);
       window.removeEventListener("scroll", scrollHandler);
-      discEls.forEach((disc, i) => disc.removeEventListener("click", discClickHandlers[i]));
+      lineHit.removeEventListener("mouseenter", onLineEnter);
+      lineHit.removeEventListener("mouseleave", onLineLeave);
+      brandingLabelEl.removeEventListener("mouseenter", onLabelEnter);
+      brandingLabelEl.removeEventListener("mouseleave", onLabelLeave);
+      brandingLabelEl.removeEventListener("click", onLabelClick);
       projectsLink.removeEventListener("mouseenter", showFilterBar);
       projectsLink.removeEventListener("mouseleave", scheduleHideFilterBar);
       filterBar.removeEventListener("mouseenter", clearHideTimeout);
@@ -352,6 +357,7 @@ export default function Home() {
       navLinkHandlers.forEach(({ link, handler }) => link.removeEventListener("click", handler));
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
       clearTimeout(hideTimeout);
+      clearTimeout(labelHideTimeout);
       if (gridAnim) gridAnim.pause();
       if (panelAnim) panelAnim.pause();
       if (infoPanelAnim) infoPanelAnim.pause();
@@ -381,10 +387,10 @@ export default function Home() {
       </div>
 
       <div className="intro">
-        <div className="intro-disc"><DiscSVG index={0} /></div>
-        <div className="intro-disc"><DiscSVG index={1} /></div>
-        <div className="intro-disc"><DiscSVG index={2} /></div>
-
+        <div className="intro-disc">
+          <DiscSVG />
+        </div>
+        <div className="disc-label disc-label--branding">Branding</div>
       </div>
 
       <div className="filter-panel">
