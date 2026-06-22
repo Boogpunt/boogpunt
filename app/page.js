@@ -6,10 +6,10 @@ import { animate } from "animejs";
 const CATEGORIES = ["Branding", "Graphic", "Installation", "Direction"];
 const PX_PER_STEP = 70; // px of scroll per 30° rotation step
 
-// 12 equally spaced lines, extending inward from disc circumference
-// k=0 → 12 o'clock (top), k=9 → 9 o'clock (left)
-const CLOCK_LINES = Array.from({ length: 12 }, (_, k) => {
-  const deg = k * 30 - 90;
+// 24 equally spaced lines, extending inward from disc circumference
+// k=0 → 12 o'clock (top), k=18 → 9 o'clock (left)
+const CLOCK_LINES = Array.from({ length: 24 }, (_, k) => {
+  const deg = k * 15 - 90;
   const rad = (deg * Math.PI) / 180;
   const r1 = 220, r2 = 207;
   return {
@@ -155,6 +155,9 @@ export default function Home() {
         catLabelEl.textContent = CATEGORIES[currentCatIndex];
         hoverBgEl.classList.remove("is-visible");
       }
+
+      // Show label only at the 1st stop of each 3-step group
+      catLabelEl.classList.toggle("is-visible", totalSteps % 3 === 0);
     }
 
     function populateFilterGrid(category) {
@@ -166,10 +169,24 @@ export default function Home() {
 
     function showFilter(category) {
       if (infoPanelVisible) hideInfo();
-      populateFilterGrid(category);
-      panelVisible = true;
-      if (panelAnim) panelAnim.pause();
-      panelAnim = animate(filterPanel, { translateY: 0, duration: 700, ease: "outExpo" });
+      if (panelVisible) {
+        // Slide current panel down, then bring new category up
+        if (panelAnim) panelAnim.pause();
+        panelAnim = animate(filterPanel, {
+          translateY: filterPanel.clientHeight,
+          duration: 350,
+          ease: "inExpo",
+          onComplete: () => {
+            populateFilterGrid(category);
+            panelAnim = animate(filterPanel, { translateY: 0, duration: 500, ease: "outExpo" });
+          },
+        });
+      } else {
+        populateFilterGrid(category);
+        panelVisible = true;
+        if (panelAnim) panelAnim.pause();
+        panelAnim = animate(filterPanel, { translateY: 0, duration: 700, ease: "outExpo" });
+      }
     }
 
     function hideFilter() {
@@ -290,6 +307,7 @@ export default function Home() {
     const resizeHandler = () => { setup(); onScroll(); };
 
     setup();
+    onScroll();
     window.addEventListener("resize", resizeHandler);
     window.addEventListener("scroll", scrollHandler, { passive: true });
 

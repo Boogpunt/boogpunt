@@ -80,7 +80,7 @@ body {
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
-  font-weight: inherit;
+  font-weight: 500;
   letter-spacing: inherit;
   color: var(--fg);
   opacity: 0.35;
@@ -151,15 +151,21 @@ body {
 /* ─── CATEGORY LABEL ─── */
 .disc-label {
   position: fixed;
-  font-size: 24px;
+  font-size: 48px;
   font-weight: 700;
   letter-spacing: -0.3px;
   color: var(--fg);
   cursor: pointer;
   white-space: nowrap;
-  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
   transform: translate(0, -50%);
+  transition: opacity 0.3s ease;
   z-index: 6;
+}
+.disc-label.is-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* ─── FILTER PANEL (category overlay curtain) ─── */
@@ -354,5 +360,15 @@ body {
     right: 13px !important;
     width: auto;
     justify-content: space-between;
+  }
+
+  .info-inner {
+    grid-template-columns: 1fr;
+  }
+  .info-bio {
+    order: 1;
+  }
+  .info-table {
+    order: 2;
   }
 }
