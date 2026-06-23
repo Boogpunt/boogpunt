@@ -353,8 +353,11 @@ html.bg-is-dark .clock-major { fill: white; }
   }
   .spacer { display: none; }
 
-  /* Collapse 2-col grid into wrapping flex for hamburger nav */
+  /* Fixed (not sticky) so overflow:hidden on body doesn't hide it */
   .nav {
+    position: fixed;
+    left: 0;
+    right: 0;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
