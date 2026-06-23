@@ -118,7 +118,9 @@ body {
   background: var(--bg);
   z-index: 5;
   pointer-events: none;
+  transition: background 0.45s ease;
 }
+.intro.index-mode { background: var(--fg); }
 
 .intro-disc {
   position: absolute;
@@ -169,13 +171,16 @@ body {
 .intro.index-mode .index-group { opacity: 1; }
 .intro.index-mode .clock-lines-group { opacity: 0; }
 
-.index-circle { fill: var(--fg); }
+.index-circle { fill: var(--bg); }
 
 .index-text {
-  font-size: 8px;
-  font-weight: 700;
-  fill: white;
+  font-size: 16px;
+  font-weight: 400;
+  fill: var(--fg);
+  text-transform: uppercase;
 }
+
+.intro.index-mode .disc-label--cat { text-transform: uppercase; }
 .clock-line {
   stroke: #000;
   stroke-width: 2px;

@@ -59,7 +59,7 @@ function getImageBrightness(src) {
 
 // Index disc — arc text from 12 o'clock clockwise, wrap inner ring at 8 o'clock
 const INDEX_OUTER_R = 210;
-const INDEX_SPACING = 28; // radial gap between arcs (SVG user units)
+const INDEX_SPACING = 14; // radial gap between arcs (SVG user units)
 
 const INDEX_LINES = [
   "Who are you when no one is watching | Ghent bookfair | Outland publishing book fair | Bounding in a spiral dance | Korea cultural centre UK | Gaeun Lee symbol | Socialed credentials",
