@@ -174,7 +174,7 @@ export default function Home() {
 
     function positionFilterBar() {
       const rect = projectsLink.getBoundingClientRect();
-      filterBar.style.top         = `${rect.bottom + 6}px`;
+      filterBar.style.top         = `${rect.bottom}px`;
       filterBar.style.left        = "0";
       filterBar.style.right       = "0";
       filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;
