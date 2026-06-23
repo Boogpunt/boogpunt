@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import { animate } from "animejs";
 
-const CATEGORIES = ["Branding", "Graphic", "Installation", "Direction"];
-const PX_PER_STEP = 70; // px of scroll per 30° rotation step
+const CATEGORIES = ["Installation", "Branding", "Graphic", "Direction"];
+const PX_PER_STEP = 70;
 
 // 92 minor ticks (every 3.75°, skipping every 24th = category major ticks)
 const CLOCK_LINES = Array.from({ length: 96 }, (_, k) => {
@@ -61,7 +61,6 @@ function DiscSVG() {
   return (
     <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style={{ overflow: "visible" }}>
       <defs>
-        {/* bgpt_pt.svg path, centered at x=0, base at y=0 (outer), tip at y=50 (inner) */}
         <path id="cat-tick" d="M14.255.23l-14.26,49.77L-14.255.23c4.73-.15,9.48-.23,14.25-.23s9.53.08,14.26.23Z" />
       </defs>
       <g className="clock-lines-group">
@@ -81,23 +80,23 @@ function DiscSVG() {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1400,q-85/boogpunt";
 
 const CATEGORY_IMAGES = {
-  Branding:     { src: `${IK}/ZIC/ZIC_0.png`,                                      mode: "cover"    },
-  Graphic:      { src: `${IK}/Bound_in_a_spiral_dance/bsd_t_D1SKK0lpE.jpg`,        mode: "portrait" },
-  Installation: { src: `${IK}/Watching/Watching_t_Ef-caLY9R.jpg`,                  mode: "cover"    },
+  Installation: { src: `${IK}/Watching/Watching_t_pZ7HDuKjb.jpg`,           mode: "cover" },
+  Branding:     { src: `${IK}/ZIC/ZIC_t_GnmZsFq1K.jpg`,                     mode: "cover" },
+  Graphic:      { src: `${IK}/Bound_in_a_spiral_dance/bsd_t_eGTNKWnIp.jpg`, mode: "cover" },
   Direction:    null,
 };
 
 const CARDS = [
   { category: "branding",     meta: "SK enmove ZIC / Brand Identity / 2023",       img: `${IK}/ZIC/ZIC_0.png` },
   { category: "graphic",      meta: "Kiss of Life / Brand Film / 2023",             img: `${IK}/KOF/KOF_1.png` },
-  { category: "branding",     meta: "Dorosiwa / Brand Identity / 2023",            img: `${IK}/Dorosiwa/Dorosiwa_1.png` },
-  { category: "direction",    meta: "Blade Typeface / Type Design / 2023",          img: `${IK}/Blade_Font/Blade_Font_1.png` },
-  { category: "graphic",      meta: "Year of the Red Horse / Graphic / 2024",      img: `${IK}/Year_of_the_Red_Horse/Year_of_the_Red_Horse_1.png` },
-  { category: "direction",    meta: "Broken Birds / Art Direction / 2023",          img: `${IK}/BrokenBirds/BrokenBirds_1.png` },
-  { category: "installation", meta: "Break / Architecture Demolition / 2023",       img: `${IK}/Break___Architecture_Demolition/Break___Architecture_Demolition_1.jpg` },
-  { category: "installation", meta: "Invisible Memory / Exhibition / 2023",         img: `${IK}/Invisible_Memory___Precious_Thing/Invisible_Memory___Precious_Thing_1.png` },
-  { category: "installation", meta: "Egg Cup / Ceramic Series / 2021",              img: `${IK}/EggCup/EggCup_1.jpg` },
-  { category: "direction",    meta: "Monolith NFT Display / Exhibition / 2022",     img: `${IK}/Monolith/Monolith_0.png` },
+  { category: "branding",     meta: "Dorosiwa / Brand Identity / 2023",             img: `${IK}/Dorosiwa/Dorosiwa_1.png` },
+  { category: "direction",    meta: "Blade Typeface / Type Design / 2023",           img: `${IK}/Blade_Font/Blade_Font_1.png` },
+  { category: "graphic",      meta: "Year of the Red Horse / Graphic / 2024",       img: `${IK}/Year_of_the_Red_Horse/Year_of_the_Red_Horse_1.png` },
+  { category: "direction",    meta: "Broken Birds / Art Direction / 2023",           img: `${IK}/BrokenBirds/BrokenBirds_1.png` },
+  { category: "installation", meta: "Break / Architecture Demolition / 2023",        img: `${IK}/Break___Architecture_Demolition/Break___Architecture_Demolition_1.jpg` },
+  { category: "installation", meta: "Invisible Memory / Exhibition / 2023",          img: `${IK}/Invisible_Memory___Precious_Thing/Invisible_Memory___Precious_Thing_1.png` },
+  { category: "installation", meta: "Egg Cup / Ceramic Series / 2021",               img: `${IK}/EggCup/EggCup_1.jpg` },
+  { category: "direction",    meta: "Monolith NFT Display / Exhibition / 2022",      img: `${IK}/Monolith/Monolith_0.png` },
 ];
 
 const PROJECTS = [
@@ -115,26 +114,28 @@ const PROJECTS = [
 
 export default function Home() {
   useEffect(() => {
-    const nav             = document.querySelector(".nav");
-    const filterBar       = document.querySelector(".filter-bar");
-    const introEl         = document.querySelector(".intro");
-    const spacer          = document.querySelector(".spacer");
-    const filterPanel     = document.querySelector(".filter-panel");
-    const filterGrid      = document.querySelector(".filter-grid");
-    const infoPanel       = document.querySelector(".info-panel");
-    const projectsLink    = document.querySelector('.nav-link[data-menu="projects"]');
-    const infoLink        = document.querySelector('.nav-link[data-menu="info"]');
-    const navLogo         = document.querySelector(".nav-logo");
-    const cards           = [...document.querySelectorAll(".grid .card")];
-    const allNavLinks     = [...document.querySelectorAll(".nav-link")];
-    const discEl          = document.querySelector(".intro-disc");
-    const linesGroupEl    = document.querySelector(".clock-lines-group");
-    const catLabelEl      = document.querySelector(".disc-label--cat");
-    const hoverBgEl       = document.querySelector(".hover-bg");
-    const hoverBgImg      = hoverBgEl.querySelector("img");
+    const nav          = document.querySelector(".nav");
+    const navToggle    = document.querySelector(".nav-toggle");
+    const filterBar    = document.querySelector(".filter-bar");
+    const introEl      = document.querySelector(".intro");
+    const spacer       = document.querySelector(".spacer");
+    const filterPanel  = document.querySelector(".filter-panel");
+    const filterGrid   = document.querySelector(".filter-grid");
+    const infoPanel    = document.querySelector(".info-panel");
+    const projectsLink = document.querySelector('.nav-link[data-menu="projects"]');
+    const infoLink     = document.querySelector('.nav-link[data-menu="info"]');
+    const navLogo      = document.querySelector(".nav-logo");
+    const cards        = [...document.querySelectorAll(".grid .card")];
+    const allNavLinks  = [...document.querySelectorAll(".nav-link")];
+    const discEl       = document.querySelector(".intro-disc");
+    const linesGroupEl = document.querySelector(".clock-lines-group");
+    const catLabelEl   = document.querySelector(".disc-label--cat");
+    const hoverBgEl    = document.querySelector(".hover-bg");
+    const hoverBgImg   = hoverBgEl.querySelector("img");
 
-    // On touch devices (no hover), background auto-shows on scroll instead of mouse hover
-    const useScrollBg = window.matchMedia("(hover: none)").matches;
+    // Touch devices: use scroll to trigger bg instead of hover
+    const isMobile    = window.matchMedia("(hover: none)").matches;
+    const useScrollBg = isMobile;
 
     let panelAnim, infoPanelAnim;
     let panelVisible     = false;
@@ -142,12 +143,12 @@ export default function Home() {
     let hideTimeout;
     let currentStep      = -1;
     let currentCatIndex  = 0;
+    let vScrollY         = 0;  // virtual scroll position for mobile touch
 
     function updateLabelPos() {
       if (!discEl || !catLabelEl) return;
       const rect  = discEl.getBoundingClientRect();
       const scale = rect.width / 500;
-      // 9 o'clock inner tip: SVG x = 250 + 207·cos(180°) = 43, y = 250
       catLabelEl.style.left = `${rect.left + 43 * scale + 8}px`;
       catLabelEl.style.top  = `${rect.top  + 250 * scale}px`;
     }
@@ -161,11 +162,11 @@ export default function Home() {
       infoPanel.style.top      = `${navBottom}px`;
       infoPanel.style.height   = `${panelH}px`;
 
-      if (!panelVisible)     filterPanel.style.transform = `translateY(${panelH}px)`;
-      if (!infoPanelVisible) infoPanel.style.transform   = `translateY(${panelH}px)`;
+      // Use window.innerHeight offset to prevent flash when mobile address bar hides/shows
+      if (!panelVisible)     filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
+      if (!infoPanelVisible) infoPanel.style.transform   = `translateY(${window.innerHeight}px)`;
 
       introEl.style.height = `${window.innerHeight}px`;
-      // Enough scroll for multiple full rotations across all 4 categories
       spacer.style.height  = `${window.innerHeight * 5}px`;
 
       updateLabelPos();
@@ -176,30 +177,34 @@ export default function Home() {
       filterBar.style.top         = `${rect.bottom + 6}px`;
       filterBar.style.left        = "0";
       filterBar.style.right       = "0";
-      filterBar.style.paddingLeft = window.innerWidth <= 640 ? "13px" : `${rect.left}px`;
+      filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;
+    }
+
+    function hideFilterBar() {
+      filterBar.classList.remove("is-visible");
+      nav.classList.remove("has-submenu");
     }
 
     function showFilterBar() {
       clearTimeout(hideTimeout);
       positionFilterBar();
       filterBar.classList.add("is-visible");
+      nav.classList.add("has-submenu");
     }
 
     function scheduleHideFilterBar() {
-      hideTimeout = setTimeout(() => filterBar.classList.remove("is-visible"), 150);
+      hideTimeout = setTimeout(hideFilterBar, 150);
     }
 
-    function onScroll() {
+    function processScroll(y) {
       if (panelVisible || infoPanelVisible) return;
 
-      const totalSteps = Math.floor(window.scrollY / PX_PER_STEP);
+      const totalSteps = Math.floor(y / PX_PER_STEP);
       if (totalSteps === currentStep) return;
       currentStep = totalSteps;
 
-      // Rotate lines by 30° per step (CSS transition handles the snap animation)
       linesGroupEl.style.transform = `rotate(${totalSteps * 30}deg)`;
 
-      // Cycle category every 3 steps (90° = one category)
       const newCatIndex = Math.floor(totalSteps / 3) % CATEGORIES.length;
       if (newCatIndex !== currentCatIndex) {
         currentCatIndex = newCatIndex;
@@ -207,11 +212,10 @@ export default function Home() {
         if (!useScrollBg) hoverBgEl.classList.remove("is-visible");
       }
 
-      // Show label only at the 1st stop of each 3-step group
       const isLabelStep = totalSteps % 3 === 0;
       catLabelEl.classList.toggle("is-visible", isLabelStep);
 
-      // Mobile: auto dissolve background on label step
+      // Mobile: auto dissolve background image on label step
       if (useScrollBg) {
         const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
         if (isLabelStep && entry) {
@@ -229,6 +233,10 @@ export default function Home() {
       }
     }
 
+    function onScroll() {
+      processScroll(window.scrollY);
+    }
+
     function populateFilterGrid(category) {
       filterGrid.innerHTML = "";
       const matching =
@@ -239,7 +247,6 @@ export default function Home() {
     function showFilter(category) {
       if (infoPanelVisible) hideInfo();
       if (panelVisible) {
-        // Slide current panel down, then bring new category up
         if (panelAnim) panelAnim.pause();
         panelAnim = animate(filterPanel, {
           translateY: filterPanel.clientHeight,
@@ -261,9 +268,10 @@ export default function Home() {
     function hideFilter() {
       panelVisible = false;
       document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("is-active"));
+      if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
       panelAnim = animate(filterPanel, {
-        translateY: filterPanel.clientHeight,
+        translateY: window.innerHeight,
         duration: 500,
         ease: "inOutExpo",
       });
@@ -280,7 +288,7 @@ export default function Home() {
       infoPanelVisible = false;
       if (infoPanelAnim) infoPanelAnim.pause();
       infoPanelAnim = animate(infoPanel, {
-        translateY: infoPanel.clientHeight,
+        translateY: window.innerHeight,
         duration: 500,
         ease: "inOutExpo",
       });
@@ -312,12 +320,34 @@ export default function Home() {
     catLabelEl.addEventListener("mouseleave", onLabelLeave);
     catLabelEl.addEventListener("click", onLabelClick);
 
-    // Filter bar hover dropdown
-    projectsLink.addEventListener("mouseenter", showFilterBar);
-    projectsLink.addEventListener("mouseleave", scheduleHideFilterBar);
+    // Desktop: hover to show filter bar
     const clearHideTimeout = () => clearTimeout(hideTimeout);
-    filterBar.addEventListener("mouseenter", clearHideTimeout);
-    filterBar.addEventListener("mouseleave", scheduleHideFilterBar);
+    if (!isMobile) {
+      projectsLink.addEventListener("mouseenter", showFilterBar);
+      projectsLink.addEventListener("mouseleave", scheduleHideFilterBar);
+      filterBar.addEventListener("mouseenter", clearHideTimeout);
+      filterBar.addEventListener("mouseleave", scheduleHideFilterBar);
+    }
+
+    // Mobile: tap Projects to toggle filter bar
+    const mobileProjectsHandler = isMobile ? (e) => {
+      e.preventDefault();
+      if (filterBar.classList.contains("is-visible")) {
+        hideFilterBar();
+      } else {
+        positionFilterBar();
+        filterBar.classList.add("is-visible");
+        nav.classList.add("has-submenu");
+      }
+    } : null;
+    if (mobileProjectsHandler) projectsLink.addEventListener("click", mobileProjectsHandler);
+
+    // Mobile nav toggle (+): expand/collapse nav-menu
+    const navToggleHandler = navToggle ? () => {
+      const isOpen = nav.classList.toggle("is-open");
+      if (!isOpen) hideFilterBar();
+    } : null;
+    if (navToggleHandler) navToggle.addEventListener("click", navToggleHandler);
 
     // Filter buttons
     const filterBtns = [...document.querySelectorAll(".filter-btn")];
@@ -381,23 +411,54 @@ export default function Home() {
       scrollRafId = requestAnimationFrame(() => { scrollRafId = null; onScroll(); });
     };
 
-    const resizeHandler = () => { setup(); onScroll(); };
+    // Mobile: virtual scroll via touch to prevent page movement + address bar animation
+    let touchStartY = 0;
+    const touchStartHandler = isMobile ? (e) => {
+      touchStartY = e.touches[0].clientY;
+    } : null;
+    const touchMoveHandler = isMobile ? (e) => {
+      if (panelVisible || infoPanelVisible) return; // let open panels scroll naturally
+      e.preventDefault();
+      const delta = touchStartY - e.touches[0].clientY;
+      touchStartY = e.touches[0].clientY;
+      vScrollY = Math.max(0, Math.min(window.innerHeight * 4, vScrollY + delta));
+      processScroll(vScrollY);
+    } : null;
+
+    const resizeHandler = () => {
+      setup();
+      processScroll(isMobile ? vScrollY : window.scrollY);
+    };
 
     setup();
-    onScroll();
+    processScroll(0);
     window.addEventListener("resize", resizeHandler);
-    window.addEventListener("scroll", scrollHandler, { passive: true });
+    if (isMobile) {
+      document.addEventListener("touchstart", touchStartHandler, { passive: true });
+      document.addEventListener("touchmove", touchMoveHandler, { passive: false });
+    } else {
+      window.addEventListener("scroll", scrollHandler, { passive: true });
+    }
 
     return () => {
       window.removeEventListener("resize", resizeHandler);
-      window.removeEventListener("scroll", scrollHandler);
+      if (isMobile) {
+        document.removeEventListener("touchstart", touchStartHandler);
+        document.removeEventListener("touchmove", touchMoveHandler);
+      } else {
+        window.removeEventListener("scroll", scrollHandler);
+      }
       catLabelEl.removeEventListener("mouseenter", onLabelEnter);
       catLabelEl.removeEventListener("mouseleave", onLabelLeave);
       catLabelEl.removeEventListener("click", onLabelClick);
-      projectsLink.removeEventListener("mouseenter", showFilterBar);
-      projectsLink.removeEventListener("mouseleave", scheduleHideFilterBar);
-      filterBar.removeEventListener("mouseenter", clearHideTimeout);
-      filterBar.removeEventListener("mouseleave", scheduleHideFilterBar);
+      if (!isMobile) {
+        projectsLink.removeEventListener("mouseenter", showFilterBar);
+        projectsLink.removeEventListener("mouseleave", scheduleHideFilterBar);
+        filterBar.removeEventListener("mouseenter", clearHideTimeout);
+        filterBar.removeEventListener("mouseleave", scheduleHideFilterBar);
+      }
+      if (mobileProjectsHandler) projectsLink.removeEventListener("click", mobileProjectsHandler);
+      if (navToggleHandler && navToggle) navToggle.removeEventListener("click", navToggleHandler);
       filterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       filterGrid.removeEventListener("click", filterGridClickHandler);
       infoLink.removeEventListener("click", infoLinkHandler);
@@ -420,6 +481,7 @@ export default function Home() {
           <li><a href="#info"    className="nav-link" data-menu="info">Info</a></li>
           <li><a href="#contact" className="nav-link">Contact</a></li>
         </ul>
+        <button className="nav-toggle" aria-label="Menu">+</button>
       </nav>
 
       <div className="filter-bar">
@@ -433,7 +495,7 @@ export default function Home() {
       <div className="intro">
         <div className="hover-bg"><img alt="" /></div>
         <div className="intro-disc"><DiscSVG /></div>
-        <div className="disc-label disc-label--cat">Branding</div>
+        <div className="disc-label disc-label--cat">Installation</div>
       </div>
 
       <div className="filter-panel">

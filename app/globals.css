@@ -134,19 +134,6 @@ body {
   object-fit: cover;
 }
 
-/* Portrait mode: black bg + image at 80vh centered */
-.hover-bg[data-mode="portrait"] {
-  background: #000;
-}
-.hover-bg[data-mode="portrait"] img {
-  width: auto;
-  height: 80vh;
-  object-fit: contain;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
 
 /* ─── CLOCK LINES ─── */
 .clock-lines-group {
@@ -169,7 +156,8 @@ body {
 
 /* ─── DARK BG AUTO INVERT ─── */
 html.bg-is-dark .nav-logo,
-html.bg-is-dark .nav-link { color: white; }
+html.bg-is-dark .nav-link,
+html.bg-is-dark .nav-toggle { color: white; }
 html.bg-is-dark .disc-label { color: white; }
 html.bg-is-dark .clock-line { stroke: white; }
 html.bg-is-dark .clock-major { fill: white; }
@@ -355,16 +343,59 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 /* ─── MOBILE ─── */
+.nav-toggle { display: none; }
+
 @media (max-width: 640px) {
-  .nav-menu {
+  /* Freeze document scroll — touch events handle virtual scroll instead */
+  html, body {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  .spacer { display: none; }
+
+  /* Collapse 2-col grid into wrapping flex for hamburger nav */
+  .nav {
+    display: flex;
     flex-wrap: wrap;
-    gap: 6px 16px;
-    align-content: flex-start;
+    align-items: baseline;
+  }
+  .nav-logo { flex: 1; }
+
+  /* "+" toggle button — matches body font-weight/size */
+  .nav-toggle {
+    display: block;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: 1.1;
+    color: var(--fg);
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.4s ease;
   }
 
+  /* Nav links: hidden by default, revealed on .is-open */
+  .nav-menu {
+    display: none;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    padding: 8px 0 0;
+  }
+  .nav.is-open .nav-menu { display: flex; }
+
+  /* White header when menu or submenu is open */
+  .nav.is-open,
+  .nav.has-submenu { background: white; }
+
+  /* Filter-bar submenu: compact gap on mobile */
   .filter-bar {
     flex-wrap: wrap;
-    gap: 4px 16px;
+    gap: 16px;
   }
 
   .info-inner {
