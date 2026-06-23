@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { animate } from "animejs";
 
-const CATEGORIES = ["Installation", "Branding", "Graphic", "Direction"];
+const CATEGORIES = ["Installation", "Branding", "Graphic", "Typeface"];
 const PX_PER_STEP = 70;
 
 // 92 minor ticks (every 3.75°, skipping every 24th = category major ticks)
@@ -83,20 +83,20 @@ const CATEGORY_IMAGES = {
   Installation: { src: `${IK}/Watching/Watching_t_pZ7HDuKjb.jpg`,           mode: "cover" },
   Branding:     { src: `${IK}/ZIC/ZIC_t_GnmZsFq1K.jpg`,                     mode: "cover" },
   Graphic:      { src: `${IK}/Bound_in_a_spiral_dance/bsd_t_eGTNKWnIp.jpg`, mode: "cover" },
-  Direction:    null,
+  Typeface:     null,
 };
 
 const CARDS = [
   { category: "branding",     meta: "SK enmove ZIC / Brand Identity / 2023",       img: `${IK}/ZIC/ZIC_0.png` },
   { category: "graphic",      meta: "Kiss of Life / Brand Film / 2023",             img: `${IK}/KOF/KOF_1.png` },
   { category: "branding",     meta: "Dorosiwa / Brand Identity / 2023",             img: `${IK}/Dorosiwa/Dorosiwa_1.png` },
-  { category: "direction",    meta: "Blade Typeface / Type Design / 2023",           img: `${IK}/Blade_Font/Blade_Font_1.png` },
+  { category: "typeface",    meta: "Blade Typeface / Type Design / 2023",           img: `${IK}/Blade_Font/Blade_Font_1.png` },
   { category: "graphic",      meta: "Year of the Red Horse / Graphic / 2024",       img: `${IK}/Year_of_the_Red_Horse/Year_of_the_Red_Horse_1.png` },
-  { category: "direction",    meta: "Broken Birds / Art Direction / 2023",           img: `${IK}/BrokenBirds/BrokenBirds_1.png` },
+  { category: "typeface",    meta: "Broken Birds / Art Direction / 2023",           img: `${IK}/BrokenBirds/BrokenBirds_1.png` },
   { category: "installation", meta: "Break / Architecture Demolition / 2023",        img: `${IK}/Break___Architecture_Demolition/Break___Architecture_Demolition_1.jpg` },
   { category: "installation", meta: "Invisible Memory / Exhibition / 2023",          img: `${IK}/Invisible_Memory___Precious_Thing/Invisible_Memory___Precious_Thing_1.png` },
   { category: "installation", meta: "Egg Cup / Ceramic Series / 2021",               img: `${IK}/EggCup/EggCup_1.jpg` },
-  { category: "direction",    meta: "Monolith NFT Display / Exhibition / 2022",      img: `${IK}/Monolith/Monolith_0.png` },
+  { category: "typeface",    meta: "Monolith NFT Display / Exhibition / 2022",      img: `${IK}/Monolith/Monolith_0.png` },
 ];
 
 const PROJECTS = [
@@ -122,8 +122,8 @@ export default function Home() {
     const filterPanel  = document.querySelector(".filter-panel");
     const filterGrid   = document.querySelector(".filter-grid");
     const infoPanel    = document.querySelector(".info-panel");
-    const projectsLink = document.querySelector('.nav-link[data-menu="projects"]');
-    const infoLink     = document.querySelector('.nav-link[data-menu="info"]');
+    const projectsLink = document.querySelector('.nav-link[data-menu="works"]');
+    const infoLink     = document.querySelector('.nav-link[data-menu="about"]');
     const navLogo      = document.querySelector(".nav-logo");
     const cards        = [...document.querySelectorAll(".grid .card")];
     const allNavLinks  = [...document.querySelectorAll(".nav-link")];
@@ -154,7 +154,7 @@ export default function Home() {
     }
 
     function setup() {
-      const navBottom = nav.getBoundingClientRect().bottom + 4;
+      const navBottom = nav.getBoundingClientRect().bottom;
       const panelH    = window.innerHeight - navBottom;
 
       filterPanel.style.top    = `${navBottom}px`;
@@ -173,8 +173,9 @@ export default function Home() {
     }
 
     function positionFilterBar() {
-      const rect = projectsLink.getBoundingClientRect();
-      filterBar.style.top         = `${rect.bottom}px`;
+      const navRect = nav.getBoundingClientRect();
+      const rect    = projectsLink.getBoundingClientRect();
+      filterBar.style.top         = `${navRect.bottom}px`;
       filterBar.style.left        = "0";
       filterBar.style.right       = "0";
       filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;
@@ -245,7 +246,8 @@ export default function Home() {
     }
 
     function showFilter(category) {
-      if (isMobile) { nav.classList.remove("is-open"); hideFilterBar(); }
+      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
+      setup();
       if (infoPanelVisible) hideInfo();
       if (panelVisible) {
         if (panelAnim) panelAnim.pause();
@@ -279,7 +281,8 @@ export default function Home() {
     }
 
     function showInfo() {
-      if (isMobile) { nav.classList.remove("is-open"); hideFilterBar(); }
+      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
+      setup();
       if (panelVisible) hideFilter();
       infoPanelVisible = true;
       if (infoPanelAnim) infoPanelAnim.pause();
@@ -331,23 +334,32 @@ export default function Home() {
       filterBar.addEventListener("mouseleave", scheduleHideFilterBar);
     }
 
-    // Mobile: tap Projects to toggle filter bar
-    const mobileProjectsHandler = isMobile ? (e) => {
+    // Mobile: tap Works to switch nav into inline filter mode
+    const mobileWorksHandler = isMobile ? (e) => {
       e.preventDefault();
-      if (filterBar.classList.contains("is-visible")) {
-        hideFilterBar();
-      } else {
-        positionFilterBar();
-        filterBar.classList.add("is-visible");
-        nav.classList.add("has-submenu");
-      }
+      nav.classList.add("in-filter-mode");
     } : null;
-    if (mobileProjectsHandler) projectsLink.addEventListener("click", mobileProjectsHandler);
+    if (mobileWorksHandler) projectsLink.addEventListener("click", mobileWorksHandler);
 
-    // Mobile nav toggle (+): expand/collapse nav-menu
+    // Mobile: tap a nav filter item → apply filter and close nav
+    const navFilterBtns = [...document.querySelectorAll(".nav-filter-btn")];
+    const navFilterBtnHandlers = isMobile ? navFilterBtns.map((btn) => {
+      const handler = () => {
+        nav.classList.remove("is-open");
+        nav.classList.remove("in-filter-mode");
+        showFilter(btn.dataset.filter);
+      };
+      btn.addEventListener("click", handler);
+      return { btn, handler };
+    }) : [];
+
+    // Mobile nav toggle (+): expand/collapse nav-menu; also clears filter mode
     const navToggleHandler = navToggle ? () => {
       const isOpen = nav.classList.toggle("is-open");
-      if (!isOpen) hideFilterBar();
+      if (!isOpen) {
+        hideFilterBar();
+        nav.classList.remove("in-filter-mode");
+      }
     } : null;
     if (navToggleHandler) navToggle.addEventListener("click", navToggleHandler);
 
@@ -459,7 +471,8 @@ export default function Home() {
         filterBar.removeEventListener("mouseenter", clearHideTimeout);
         filterBar.removeEventListener("mouseleave", scheduleHideFilterBar);
       }
-      if (mobileProjectsHandler) projectsLink.removeEventListener("click", mobileProjectsHandler);
+      if (mobileWorksHandler) projectsLink.removeEventListener("click", mobileWorksHandler);
+      navFilterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       if (navToggleHandler && navToggle) navToggle.removeEventListener("click", navToggleHandler);
       filterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       filterGrid.removeEventListener("click", filterGridClickHandler);
@@ -479,10 +492,15 @@ export default function Home() {
         <a href="/" className="nav-logo">Boogpunt</a>
         <button className="nav-toggle" aria-label="Menu">+</button>
         <ul className="nav-menu">
-          <li><a href="#work"    className="nav-link is-active" data-menu="projects">Projects</a></li>
-          <li><a href="#"        className="nav-link">Index</a></li>
-          <li><a href="#info"    className="nav-link" data-menu="info">Info</a></li>
-          <li><a href="#contact" className="nav-link">Contact</a></li>
+          <li className="nav-main-item"><a href="#work" className="nav-link is-active" data-menu="works">Works</a></li>
+          <li className="nav-main-item"><a href="#"     className="nav-link">Index</a></li>
+          <li className="nav-main-item"><a href="#info" className="nav-link" data-menu="about">About</a></li>
+          <li className="nav-main-item"><a href="mailto:qoon@boogpunt.com" className="nav-link">Contact</a></li>
+          <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="all">All</button></li>
+          <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="branding">Branding</button></li>
+          <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="graphic">Graphic</button></li>
+          <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="typeface">Typeface</button></li>
+          <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="installation">Installation</button></li>
         </ul>
       </nav>
 
@@ -490,14 +508,14 @@ export default function Home() {
         <button className="filter-btn" data-filter="all">All</button>
         <button className="filter-btn" data-filter="branding">Branding</button>
         <button className="filter-btn" data-filter="graphic">Graphic</button>
+        <button className="filter-btn" data-filter="typeface">Typeface</button>
         <button className="filter-btn" data-filter="installation">Installation</button>
-        <button className="filter-btn" data-filter="direction">Direction</button>
       </div>
 
       <div className="intro">
         <div className="hover-bg"><img alt="" /></div>
         <div className="intro-disc"><DiscSVG /></div>
-        <div className="disc-label disc-label--cat">Installation</div>
+        <div className="disc-label disc-label--cat">{CATEGORIES[0]}</div>
       </div>
 
       <div className="filter-panel">

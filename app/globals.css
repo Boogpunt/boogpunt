@@ -72,7 +72,7 @@ body {
   pointer-events: auto;
   transform: translateY(0);
   background: white;
-  padding-top: 12px;
+  padding-top: 6px;
   padding-bottom: 12px;
 }
 
@@ -91,6 +91,24 @@ body {
 }
 .filter-btn.is-active { opacity: 1; }
 .filter-btn:hover { opacity: 0.7; }
+
+/* ─── MOBILE NAV FILTER MODE ─── */
+/* Filter items hidden by default (desktop never shows them; mobile only in filter mode) */
+.nav-filter-item { display: none; }
+
+/* Button reset for inline filter buttons */
+.nav-filter-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: 1.1;
+  color: var(--fg);
+  cursor: pointer;
+  padding: 0;
+}
 
 /* ─── INTRO (curtain) ─── */
 .intro {
@@ -383,20 +401,20 @@ html.bg-is-dark .clock-major { fill: white; }
     transform: rotate(45deg);
   }
 
-  /* Nav links: hidden by default, revealed on .is-open */
+  /* Nav links: hidden by default, revealed on .is-open — column layout right-aligned */
   .nav-menu {
     display: none;
+    flex-direction: column;
+    align-items: flex-end;
     width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 12px 16px;
+    gap: 12px;
     padding: 12px 0 0;
   }
   .nav.is-open .nav-menu { display: flex; }
 
-  /* White header when menu or submenu is open */
-  .nav.is-open,
-  .nav.has-submenu { background: white; }
+  /* Works → inline filter mode: swap main items for filter items */
+  .nav.in-filter-mode .nav-main-item { display: none; }
+  .nav.in-filter-mode .nav-filter-item { display: list-item; }
 
   /* Filter-bar submenu: compact gap on mobile */
   .filter-bar {
