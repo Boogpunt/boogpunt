@@ -356,6 +356,17 @@ html.bg-is-dark .clock-major { fill: white; }
 
 /* ─── MOBILE ─── */
 @media (max-width: 640px) {
+  .nav-menu {
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    align-content: flex-start;
+  }
+
+  .filter-bar {
+    flex-wrap: wrap;
+    gap: 4px 16px;
+  }
+
   .info-inner {
     grid-template-columns: 1fr;
   }

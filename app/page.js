@@ -133,6 +133,9 @@ export default function Home() {
     const hoverBgEl       = document.querySelector(".hover-bg");
     const hoverBgImg      = hoverBgEl.querySelector("img");
 
+    // On touch devices (no hover), background auto-shows on scroll instead of mouse hover
+    const useScrollBg = window.matchMedia("(hover: none)").matches;
+
     let panelAnim, infoPanelAnim;
     let panelVisible     = false;
     let infoPanelVisible = false;
@@ -201,11 +204,29 @@ export default function Home() {
       if (newCatIndex !== currentCatIndex) {
         currentCatIndex = newCatIndex;
         catLabelEl.textContent = CATEGORIES[currentCatIndex];
-        hoverBgEl.classList.remove("is-visible");
+        if (!useScrollBg) hoverBgEl.classList.remove("is-visible");
       }
 
       // Show label only at the 1st stop of each 3-step group
-      catLabelEl.classList.toggle("is-visible", totalSteps % 3 === 0);
+      const isLabelStep = totalSteps % 3 === 0;
+      catLabelEl.classList.toggle("is-visible", isLabelStep);
+
+      // Mobile: auto dissolve background on label step
+      if (useScrollBg) {
+        const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
+        if (isLabelStep && entry) {
+          hoverBgImg.src = entry.src;
+          hoverBgEl.dataset.mode = entry.mode;
+          hoverBgEl.classList.add("is-visible");
+          getImageBrightness(entry.src).then((b) => {
+            document.documentElement.classList.toggle("bg-is-dark", b < 128);
+          });
+        } else if (!isLabelStep) {
+          hoverBgEl.classList.remove("is-visible");
+          delete hoverBgEl.dataset.mode;
+          document.documentElement.classList.remove("bg-is-dark");
+        }
+      }
     }
 
     function populateFilterGrid(category) {
