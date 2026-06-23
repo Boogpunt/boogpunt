@@ -245,6 +245,7 @@ export default function Home() {
     }
 
     function showFilter(category) {
+      if (isMobile) { nav.classList.remove("is-open"); hideFilterBar(); }
       if (infoPanelVisible) hideInfo();
       if (panelVisible) {
         if (panelAnim) panelAnim.pause();
@@ -278,6 +279,7 @@ export default function Home() {
     }
 
     function showInfo() {
+      if (isMobile) { nav.classList.remove("is-open"); hideFilterBar(); }
       if (panelVisible) hideFilter();
       infoPanelVisible = true;
       if (infoPanelAnim) infoPanelAnim.pause();
@@ -475,13 +477,13 @@ export default function Home() {
     <>
       <nav className="nav">
         <a href="/" className="nav-logo">Boogpunt</a>
+        <button className="nav-toggle" aria-label="Menu">+</button>
         <ul className="nav-menu">
           <li><a href="#work"    className="nav-link is-active" data-menu="projects">Projects</a></li>
           <li><a href="#"        className="nav-link">Index</a></li>
           <li><a href="#info"    className="nav-link" data-menu="info">Info</a></li>
           <li><a href="#contact" className="nav-link">Contact</a></li>
         </ul>
-        <button className="nav-toggle" aria-label="Menu">+</button>
       </nav>
 
       <div className="filter-bar">

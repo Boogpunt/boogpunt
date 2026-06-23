@@ -377,7 +377,10 @@ html.bg-is-dark .clock-major { fill: white; }
     color: var(--fg);
     cursor: pointer;
     padding: 0;
-    transition: color 0.4s ease;
+    transition: transform 0.3s ease, color 0.4s ease;
+  }
+  .nav.is-open .nav-toggle {
+    transform: rotate(45deg);
   }
 
   /* Nav links: hidden by default, revealed on .is-open */
