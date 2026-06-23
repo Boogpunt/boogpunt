@@ -57,12 +57,35 @@ function getImageBrightness(src) {
   });
 }
 
+// Index disc — arc text from 12 o'clock clockwise, wrap inner ring at 8 o'clock
+const INDEX_OUTER_R = 210;
+const INDEX_SPACING = 28; // radial gap between arcs (SVG user units)
+
+const INDEX_LINES = [
+  "Who are you when no one is watching | Ghent bookfair | Outland publishing book fair | Bounding in a spiral dance | Korea cultural centre UK | Gaeun Lee symbol | Socialed credentials",
+  "Fabrika for across RCA | Yunseok Jang web | Blade typeface | Como clinic | Alice monde wedding | Hanel hair salon | Leadvault luggage | Xray 21 radiology | Josun hotel and resort",
+  "The miraculous flight | enmove ZIC | Powerplants dialogue 01 | Kiss of Life logotype | 1ha web and motion | Brooklyn museum appearal",
+  "Dorosiwa | Mother offline | Egg cup ceramics | Park's club popup store | Monolith NFT display",
+];
+
+// Compute arc end-point at 8 o'clock (240° clockwise from 12, i.e. 150° from +x axis)
+function arcPath(r) {
+  const ex = +(250 - r * 0.866025).toFixed(1);
+  const ey = +(250 + r * 0.5).toFixed(1);
+  return `M 250 ${250 - r} A ${r} ${r} 0 1 1 ${ex} ${ey}`;
+}
+
 function DiscSVG() {
   return (
     <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" style={{ overflow: "visible" }}>
       <defs>
         <path id="cat-tick" d="M14.255.23l-14.26,49.77L-14.255.23c4.73-.15,9.48-.23,14.25-.23s9.53.08,14.26.23Z" />
+        {INDEX_LINES.map((_, i) => (
+          <path key={i} id={`idx-arc-${i}`} d={arcPath(INDEX_OUTER_R - i * INDEX_SPACING)} />
+        ))}
       </defs>
+
+      {/* Clock mode */}
       <g className="clock-lines-group">
         {CLOCK_LINES.map((ln, i) => (
           <line key={i} className="clock-line" x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} />
@@ -71,6 +94,16 @@ function DiscSVG() {
           <g key={i} transform={`translate(${t.cx},${t.cy}) rotate(${t.rotation}) scale(0.26)`}>
             <use href="#cat-tick" className="clock-major" />
           </g>
+        ))}
+      </g>
+
+      {/* Index mode — black disc with curved project text */}
+      <g className="index-group">
+        <circle cx="250" cy="250" r="222" className="index-circle" />
+        {INDEX_LINES.map((text, i) => (
+          <text key={i} className="index-text">
+            <textPath href={`#idx-arc-${i}`}>{text}</textPath>
+          </text>
         ))}
       </g>
     </svg>
@@ -124,6 +157,7 @@ export default function Home() {
     const infoPanel    = document.querySelector(".info-panel");
     const projectsLink = document.querySelector('.nav-link[data-menu="works"]');
     const infoLink     = document.querySelector('.nav-link[data-menu="about"]');
+    const indexLink    = document.querySelector('.nav-link[data-menu="index"]');
     const navLogo      = document.querySelector(".nav-logo");
     const cards        = [...document.querySelectorAll(".grid .card")];
     const allNavLinks  = [...document.querySelectorAll(".nav-link")];
@@ -197,6 +231,7 @@ export default function Home() {
 
     function processScroll(y) {
       if (panelVisible || infoPanelVisible) return;
+      if (introEl.classList.contains("index-mode")) return;
 
       const totalSteps = Math.floor(y / PX_PER_STEP);
       if (totalSteps === currentStep) return;
@@ -295,6 +330,12 @@ export default function Home() {
         duration: 500,
         ease: "inOutExpo",
       });
+    }
+
+    function exitIndexMode() {
+      if (!introEl.classList.contains("index-mode")) return;
+      introEl.classList.remove("index-mode");
+      processScroll(isMobile ? vScrollY : window.scrollY);
     }
 
     // Category label hover → dissolve in background image + auto-invert text on dark bg
@@ -405,6 +446,7 @@ export default function Home() {
 
     const infoLinkHandler = (e) => {
       e.preventDefault();
+      exitIndexMode();
       const wasActive = infoLink.classList.contains("is-active") && infoPanelVisible;
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
       if (wasActive) {
@@ -418,6 +460,7 @@ export default function Home() {
 
     const navLogoClickHandler = (e) => {
       e.preventDefault();
+      exitIndexMode();
       if (panelVisible) hideFilter();
       if (infoPanelVisible) hideInfo();
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
@@ -425,8 +468,24 @@ export default function Home() {
     };
     navLogo.addEventListener("click", navLogoClickHandler);
 
-    const navLinkHandlers = allNavLinks.filter((l) => l !== infoLink).map((link) => {
+    const indexLinkHandler = (e) => {
+      e.preventDefault();
+      const isNowIndex = !introEl.classList.contains("index-mode");
+      allNavLinks.forEach((l) => l.classList.remove("is-active"));
+      if (isNowIndex) {
+        indexLink.classList.add("is-active");
+        introEl.classList.add("index-mode");
+        catLabelEl.textContent = "Participated Project";
+        catLabelEl.classList.add("is-visible");
+      } else {
+        exitIndexMode();
+      }
+    };
+    if (indexLink) indexLink.addEventListener("click", indexLinkHandler);
+
+    const navLinkHandlers = allNavLinks.filter((l) => l !== infoLink && l !== indexLink).map((link) => {
       const handler = function () {
+        exitIndexMode();
         allNavLinks.forEach((l) => l.classList.remove("is-active"));
         this.classList.add("is-active");
       };
@@ -490,6 +549,7 @@ export default function Home() {
       filterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       filterGrid.removeEventListener("click", filterGridClickHandler);
       infoLink.removeEventListener("click", infoLinkHandler);
+      if (indexLink) indexLink.removeEventListener("click", indexLinkHandler);
       navLogo.removeEventListener("click", navLogoClickHandler);
       navLinkHandlers.forEach(({ link, handler }) => link.removeEventListener("click", handler));
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
@@ -505,7 +565,7 @@ export default function Home() {
         <button className="nav-toggle" aria-label="Menu">+</button>
         <ul className="nav-menu">
           <li className="nav-main-item"><a href="#work" className="nav-link is-active" data-menu="works">Works</a></li>
-          <li className="nav-main-item"><a href="#"     className="nav-link">Index</a></li>
+          <li className="nav-main-item"><a href="#" className="nav-link" data-menu="index">Index</a></li>
           <li className="nav-main-item"><a href="#info" className="nav-link" data-menu="about">About</a></li>
           <li className="nav-main-item"><a href="mailto:qoon@boogpunt.com" className="nav-link">Contact</a></li>
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="all">All</button></li>
