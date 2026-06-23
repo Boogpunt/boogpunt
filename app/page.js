@@ -157,7 +157,7 @@ export default function Home() {
     const infoPanel    = document.querySelector(".info-panel");
     const projectsLink = document.querySelector('.nav-link[data-menu="works"]');
     const infoLink     = document.querySelector('.nav-link[data-menu="about"]');
-    const indexLink    = document.querySelector('.nav-link[data-menu="index"]');
+    const indexLink    = document.getElementById("nav-index");
     const navLogo      = document.querySelector(".nav-logo");
     const cards        = [...document.querySelectorAll(".grid .card")];
     const allNavLinks  = [...document.querySelectorAll(".nav-link")];
@@ -167,9 +167,7 @@ export default function Home() {
     const hoverBgEl    = document.querySelector(".hover-bg");
     const hoverBgImg   = hoverBgEl.querySelector("img");
 
-    // Touch devices: use scroll to trigger bg instead of hover
-    const isMobile    = window.matchMedia("(hover: none)").matches;
-    const useScrollBg = isMobile;
+    const isMobile = window.matchMedia("(hover: none)").matches;
 
     let panelAnim, infoPanelAnim;
     let panelVisible     = false;
@@ -243,14 +241,14 @@ export default function Home() {
       if (newCatIndex !== currentCatIndex) {
         currentCatIndex = newCatIndex;
         catLabelEl.textContent = CATEGORIES[currentCatIndex];
-        if (!useScrollBg) hoverBgEl.classList.remove("is-visible");
+        if (!isMobile) hoverBgEl.classList.remove("is-visible");
       }
 
       const isLabelStep = totalSteps % 3 === 0;
       catLabelEl.classList.toggle("is-visible", isLabelStep);
 
       // Mobile: auto dissolve background image on label step
-      if (useScrollBg) {
+      if (isMobile) {
         const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
         if (isLabelStep && entry) {
           hoverBgImg.src = entry.src;
@@ -481,7 +479,7 @@ export default function Home() {
         exitIndexMode();
       }
     };
-    if (indexLink) indexLink.addEventListener("click", indexLinkHandler);
+    indexLink.addEventListener("click", indexLinkHandler);
 
     const navLinkHandlers = allNavLinks.filter((l) => l !== infoLink && l !== indexLink).map((link) => {
       const handler = function () {
@@ -549,7 +547,7 @@ export default function Home() {
       filterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       filterGrid.removeEventListener("click", filterGridClickHandler);
       infoLink.removeEventListener("click", infoLinkHandler);
-      if (indexLink) indexLink.removeEventListener("click", indexLinkHandler);
+      indexLink.removeEventListener("click", indexLinkHandler);
       navLogo.removeEventListener("click", navLogoClickHandler);
       navLinkHandlers.forEach(({ link, handler }) => link.removeEventListener("click", handler));
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
@@ -565,7 +563,7 @@ export default function Home() {
         <button className="nav-toggle" aria-label="Menu">+</button>
         <ul className="nav-menu">
           <li className="nav-main-item"><a href="#work" className="nav-link is-active" data-menu="works">Works</a></li>
-          <li className="nav-main-item"><a href="#" className="nav-link" data-menu="index">Index</a></li>
+          <li className="nav-main-item"><a href="#" id="nav-index" className="nav-link">Index</a></li>
           <li className="nav-main-item"><a href="#info" className="nav-link" data-menu="about">About</a></li>
           <li className="nav-main-item"><a href="mailto:qoon@boogpunt.com" className="nav-link">Contact</a></li>
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="all">All</button></li>
