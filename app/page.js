@@ -140,7 +140,6 @@ export default function Home() {
     let panelAnim, infoPanelAnim;
     let panelVisible     = false;
     let infoPanelVisible = false;
-    let hideTimeout;
     let currentStep      = -1;
     let currentCatIndex  = 0;
     let vScrollY         = 0;  // virtual scroll position for mobile touch
@@ -153,29 +152,31 @@ export default function Home() {
       catLabelEl.style.top  = `${rect.top  + 250 * scale}px`;
     }
 
-    function setup() {
-      const navBottom = nav.getBoundingClientRect().bottom;
-      const panelH    = window.innerHeight - navBottom;
-
-      filterPanel.style.top    = `${navBottom}px`;
+    function updatePanelTops() {
+      const navB     = nav.getBoundingClientRect().bottom;
+      const panelTop = filterBar.classList.contains("is-visible")
+        ? filterBar.getBoundingClientRect().bottom
+        : navB;
+      const panelH = window.innerHeight - panelTop;
+      filterPanel.style.top    = `${panelTop}px`;
       filterPanel.style.height = `${panelH}px`;
-      infoPanel.style.top      = `${navBottom}px`;
+      infoPanel.style.top      = `${panelTop}px`;
       infoPanel.style.height   = `${panelH}px`;
+    }
 
+    function setup() {
+      updatePanelTops();
       // Use window.innerHeight offset to prevent flash when mobile address bar hides/shows
       if (!panelVisible)     filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
       if (!infoPanelVisible) infoPanel.style.transform   = `translateY(${window.innerHeight}px)`;
-
       introEl.style.height = `${window.innerHeight}px`;
       spacer.style.height  = `${window.innerHeight * 5}px`;
-
       updateLabelPos();
     }
 
     function positionFilterBar() {
-      const navRect = nav.getBoundingClientRect();
-      const rect    = projectsLink.getBoundingClientRect();
-      filterBar.style.top         = `${navRect.bottom}px`;
+      const rect = projectsLink.getBoundingClientRect();
+      filterBar.style.top         = `${rect.bottom}px`;
       filterBar.style.left        = "0";
       filterBar.style.right       = "0";
       filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;
@@ -184,17 +185,14 @@ export default function Home() {
     function hideFilterBar() {
       filterBar.classList.remove("is-visible");
       nav.classList.remove("has-submenu");
+      updatePanelTops();
     }
 
     function showFilterBar() {
-      clearTimeout(hideTimeout);
       positionFilterBar();
       filterBar.classList.add("is-visible");
       nav.classList.add("has-submenu");
-    }
-
-    function scheduleHideFilterBar() {
-      hideTimeout = setTimeout(hideFilterBar, 150);
+      updatePanelTops();
     }
 
     function processScroll(y) {
@@ -325,13 +323,30 @@ export default function Home() {
     catLabelEl.addEventListener("mouseleave", onLabelLeave);
     catLabelEl.addEventListener("click", onLabelClick);
 
-    // Desktop: hover to show filter bar
-    const clearHideTimeout = () => clearTimeout(hideTimeout);
+    // Desktop: click Works to toggle filter bar; click outside to dismiss
+    let desktopWorksClickHandler = null;
+    let outsideClickHandler = null;
     if (!isMobile) {
-      projectsLink.addEventListener("mouseenter", showFilterBar);
-      projectsLink.addEventListener("mouseleave", scheduleHideFilterBar);
-      filterBar.addEventListener("mouseenter", clearHideTimeout);
-      filterBar.addEventListener("mouseleave", scheduleHideFilterBar);
+      desktopWorksClickHandler = (e) => {
+        e.preventDefault();
+        if (filterBar.classList.contains("is-visible")) {
+          hideFilterBar();
+        } else {
+          allNavLinks.forEach(l => l.classList.remove("is-active"));
+          projectsLink.classList.add("is-active");
+          showFilterBar();
+        }
+      };
+      outsideClickHandler = (e) => {
+        if (filterBar.classList.contains("is-visible") &&
+            !nav.contains(e.target) &&
+            !filterBar.contains(e.target) &&
+            !filterPanel.contains(e.target)) {
+          hideFilterBar();
+        }
+      };
+      projectsLink.addEventListener("click", desktopWorksClickHandler);
+      document.addEventListener("click", outsideClickHandler);
     }
 
     // Mobile: tap Works to switch nav into inline filter mode
@@ -466,10 +481,8 @@ export default function Home() {
       catLabelEl.removeEventListener("mouseleave", onLabelLeave);
       catLabelEl.removeEventListener("click", onLabelClick);
       if (!isMobile) {
-        projectsLink.removeEventListener("mouseenter", showFilterBar);
-        projectsLink.removeEventListener("mouseleave", scheduleHideFilterBar);
-        filterBar.removeEventListener("mouseenter", clearHideTimeout);
-        filterBar.removeEventListener("mouseleave", scheduleHideFilterBar);
+        if (desktopWorksClickHandler) projectsLink.removeEventListener("click", desktopWorksClickHandler);
+        if (outsideClickHandler) document.removeEventListener("click", outsideClickHandler);
       }
       if (mobileWorksHandler) projectsLink.removeEventListener("click", mobileWorksHandler);
       navFilterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
@@ -480,7 +493,6 @@ export default function Home() {
       navLogo.removeEventListener("click", navLogoClickHandler);
       navLinkHandlers.forEach(({ link, handler }) => link.removeEventListener("click", handler));
       if (scrollRafId) cancelAnimationFrame(scrollRafId);
-      clearTimeout(hideTimeout);
       if (panelAnim) panelAnim.pause();
       if (infoPanelAnim) infoPanelAnim.pause();
     };

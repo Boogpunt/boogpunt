@@ -212,13 +212,14 @@ html.bg-is-dark .clock-major { fill: white; }
   overflow-y: auto;
   transform: translateY(200%);
   will-change: transform;
+  transition: top 0.25s ease;
 }
 
 .filter-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--p);
-  padding: 6px var(--p) 30px;
+  padding: 0 var(--p) 30px;
 }
 
 /* ─── CARD PLACEMENTS ─── */
@@ -295,6 +296,7 @@ html.bg-is-dark .clock-major { fill: white; }
   overflow-y: auto;
   transform: translateY(200%);
   will-change: transform;
+  transition: top 0.25s ease;
 }
 
 .info-inner {
