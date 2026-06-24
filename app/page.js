@@ -148,6 +148,7 @@ export default function Home() {
   useEffect(() => {
     const nav          = document.querySelector(".nav");
     const navToggle    = document.querySelector(".nav-toggle");
+    const filterBar    = document.querySelector(".filter-bar");
     const introEl      = document.querySelector(".intro");
     const spacer       = document.querySelector(".spacer");
     const filterPanel  = document.querySelector(".filter-panel");
@@ -188,12 +189,36 @@ export default function Home() {
     }
 
     function updatePanelTops() {
-      const navB   = nav.getBoundingClientRect().bottom;
-      const panelH = window.innerHeight - navB;
-      filterPanel.style.top    = `${navB}px`;
+      const navB     = nav.getBoundingClientRect().bottom;
+      const panelTop = filterBar.classList.contains("is-visible")
+        ? filterBar.getBoundingClientRect().bottom
+        : navB;
+      const panelH = window.innerHeight - panelTop;
+      filterPanel.style.top    = `${panelTop}px`;
       filterPanel.style.height = `${panelH}px`;
-      infoPanel.style.top      = `${navB}px`;
+      infoPanel.style.top      = `${panelTop}px`;
       infoPanel.style.height   = `${panelH}px`;
+    }
+
+    function positionFilterBar() {
+      const rect = projectsLink.getBoundingClientRect();
+      filterBar.style.top         = `${rect.bottom}px`;
+      filterBar.style.left        = "0";
+      filterBar.style.right       = "0";
+      filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;
+    }
+
+    function hideFilterBar() {
+      filterBar.classList.remove("is-visible");
+      nav.classList.remove("has-submenu");
+      updatePanelTops();
+    }
+
+    function showFilterBar() {
+      positionFilterBar();
+      filterBar.classList.add("is-visible");
+      nav.classList.add("has-submenu");
+      updatePanelTops();
     }
 
     function setup() {
@@ -256,7 +281,7 @@ export default function Home() {
     }
 
     function showFilter(category) {
-      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); }
+      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
       setup();
       if (infoPanelVisible) hideInfo();
       if (panelVisible) {
@@ -280,6 +305,8 @@ export default function Home() {
 
     function hideFilter() {
       panelVisible = false;
+      document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("is-active"));
+      if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
       panelAnim = animate(filterPanel, {
         translateY: window.innerHeight,
@@ -289,7 +316,7 @@ export default function Home() {
     }
 
     function showInfo() {
-      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); }
+      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
       setup();
       if (panelVisible) hideFilter();
       infoPanelVisible = true;
@@ -348,6 +375,37 @@ export default function Home() {
     catLabelEl.addEventListener("mouseleave", onLabelLeave);
     catLabelEl.addEventListener("click", onLabelClick);
 
+    // Desktop: hover Works to show filter bar
+    let worksEnterHandler = null;
+    let worksLeaveHandler = null;
+    let filterBarEnterHandler = null;
+    let filterBarLeaveHandler = null;
+    if (!isMobile) {
+      let hideTimer = null;
+      const cancelHide = () => { if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; } };
+      const scheduleHide = () => { cancelHide(); hideTimer = setTimeout(hideFilterBar, 200); };
+      worksEnterHandler     = () => { cancelHide(); allNavLinks.forEach(l => l.classList.remove("is-active")); projectsLink.classList.add("is-active"); showFilterBar(); };
+      worksLeaveHandler     = scheduleHide;
+      filterBarEnterHandler = cancelHide;
+      filterBarLeaveHandler = scheduleHide;
+      projectsLink.addEventListener("mouseenter", worksEnterHandler);
+      projectsLink.addEventListener("mouseleave", worksLeaveHandler);
+      filterBar.addEventListener("mouseenter", filterBarEnterHandler);
+      filterBar.addEventListener("mouseleave", filterBarLeaveHandler);
+    }
+
+    // Filter buttons
+    const filterBtns = [...document.querySelectorAll(".filter-btn")];
+    const filterBtnHandlers = filterBtns.map((btn) => {
+      const handler = function () {
+        const wasActive = this.classList.contains("is-active") && panelVisible;
+        filterBtns.forEach((b) => b.classList.remove("is-active"));
+        if (wasActive) { hideFilter(); } else { this.classList.add("is-active"); showFilter(this.dataset.filter); }
+      };
+      btn.addEventListener("click", handler);
+      return { btn, handler };
+    });
+
     // Mobile: tap Works to switch nav into inline filter mode
     const mobileWorksHandler = isMobile ? (e) => {
       e.preventDefault();
@@ -370,7 +428,7 @@ export default function Home() {
     // Mobile nav toggle (+): expand/collapse nav-menu; also clears filter mode
     const navToggleHandler = navToggle ? () => {
       const isOpen = nav.classList.toggle("is-open");
-      if (!isOpen) nav.classList.remove("in-filter-mode");
+      if (!isOpen) { hideFilterBar(); nav.classList.remove("in-filter-mode"); }
     } : null;
     if (navToggleHandler) navToggle.addEventListener("click", navToggleHandler);
 
@@ -399,6 +457,7 @@ export default function Home() {
     const navLogoClickHandler = (e) => {
       e.preventDefault();
       exitIndexMode();
+      hideFilterBar();
       if (panelVisible) hideFilter();
       if (infoPanelVisible) hideInfo();
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
@@ -409,6 +468,7 @@ export default function Home() {
     const indexLinkHandler = (e) => {
       e.preventDefault();
       if (infoPanelVisible) hideInfo();
+      hideFilterBar(); // always hide filter-bar when entering/toggling index
       const isNowIndex = !introEl.classList.contains("index-mode");
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
       if (isNowIndex) {
@@ -509,6 +569,13 @@ export default function Home() {
       catLabelEl.removeEventListener("mouseenter", onLabelEnter);
       catLabelEl.removeEventListener("mouseleave", onLabelLeave);
       catLabelEl.removeEventListener("click", onLabelClick);
+      if (!isMobile) {
+        if (worksEnterHandler)     projectsLink.removeEventListener("mouseenter", worksEnterHandler);
+        if (worksLeaveHandler)     projectsLink.removeEventListener("mouseleave", worksLeaveHandler);
+        if (filterBarEnterHandler) filterBar.removeEventListener("mouseenter", filterBarEnterHandler);
+        if (filterBarLeaveHandler) filterBar.removeEventListener("mouseleave", filterBarLeaveHandler);
+      }
+      filterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       if (mobileWorksHandler) projectsLink.removeEventListener("click", mobileWorksHandler);
       navFilterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       if (navToggleHandler && navToggle) navToggle.removeEventListener("click", navToggleHandler);
@@ -542,6 +609,14 @@ export default function Home() {
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="installation">Installation</button></li>
         </ul>
       </nav>
+
+      <div className="filter-bar">
+        <button className="filter-btn" data-filter="all">All</button>
+        <button className="filter-btn" data-filter="branding">Branding</button>
+        <button className="filter-btn" data-filter="graphic">Graphic</button>
+        <button className="filter-btn" data-filter="typeface">Typeface</button>
+        <button className="filter-btn" data-filter="installation">Installation</button>
+      </div>
 
       <div className="intro">
         <div className="hover-bg"><img alt="" /></div>
