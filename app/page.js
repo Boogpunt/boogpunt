@@ -97,9 +97,8 @@ function DiscSVG() {
         ))}
       </g>
 
-      {/* Index mode — black disc with curved project text */}
+      {/* Index mode — arc text inside disc ticks */}
       <g className="index-group">
-        <circle cx="250" cy="250" r="222" className="index-circle" />
         {INDEX_LINES.map((text, i) => (
           <text key={i} className="index-text">
             <textPath href={`#idx-arc-${i}`}>{text}</textPath>
@@ -503,8 +502,9 @@ export default function Home() {
       touchStartY = e.touches[0].clientY;
     } : null;
     const touchMoveHandler = isMobile ? (e) => {
-      if (panelVisible || infoPanelVisible) return; // let open panels scroll naturally
+      if (panelVisible || infoPanelVisible) return;
       e.preventDefault();
+      if (introEl.classList.contains("index-mode")) return; // scroll paused in index mode
       const delta = touchStartY - e.touches[0].clientY;
       touchStartY = e.touches[0].clientY;
       vScrollY = Math.max(0, Math.min(window.innerHeight * 4, vScrollY + delta));

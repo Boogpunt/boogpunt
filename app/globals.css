@@ -118,9 +118,7 @@ body {
   background: var(--bg);
   z-index: 5;
   pointer-events: none;
-  transition: background 0.45s ease;
 }
-.intro.index-mode { background: var(--fg); }
 
 .intro-disc {
   position: absolute;
@@ -159,19 +157,16 @@ body {
 .clock-lines-group {
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ─── INDEX DISC ─── */
+/* ─── INDEX ARC TEXT ─── */
 .index-group {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.45s ease;
 }
 .intro.index-mode .index-group { opacity: 1; }
-.intro.index-mode .clock-lines-group { opacity: 0; }
-
-.index-circle { fill: var(--bg); }
 
 .index-text {
   font-size: 16px;
@@ -179,8 +174,6 @@ body {
   fill: var(--fg);
   text-transform: uppercase;
 }
-
-.intro.index-mode .disc-label--cat { text-transform: uppercase; }
 .clock-line {
   stroke: #000;
   stroke-width: 2px;
