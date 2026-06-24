@@ -342,7 +342,7 @@ html.bg-is-dark .clock-major { fill: white; }
 
 .info-body {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.3px;
   color: var(--fg);
@@ -364,7 +364,7 @@ html.bg-is-dark .clock-major { fill: white; }
 
 .info-label {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.3px;
   color: var(--fg);
@@ -372,7 +372,7 @@ html.bg-is-dark .clock-major { fill: white; }
 
 .info-items p {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.3px;
   color: var(--fg);
@@ -406,9 +406,11 @@ html.bg-is-dark .clock-major { fill: white; }
   }
   .nav-logo { flex: 1; }
 
-  /* "+" toggle button — matches body font-weight/size */
+  /* "+" toggle button — matches body font-weight/size; right 50% touch area */
   .nav-toggle {
-    display: block;
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
     background: none;
     border: none;
     font-family: inherit;
@@ -466,32 +468,52 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 .project-header {
-  display: flex;
-  align-items: baseline;
-  gap: 24px;
-  padding: 20px 0 40px;
+  padding: 20px 0 32px;
   border-bottom: 1px solid var(--fg);
   margin-bottom: var(--p);
 }
 
 .project-title {
-  font-size: 24px;
+  font-size: clamp(48px, 12.5vw, 220px);
   font-weight: 700;
   line-height: 1.0;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.03em;
   color: var(--fg);
+  white-space: nowrap;
+  margin-bottom: 20px;
 }
 
-.project-client {
+.project-credits-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0 var(--p);
+}
+
+.project-credits-row p {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.3px;
   color: var(--fg);
+  margin-bottom: 4px;
 }
 
 .project-detail-img {
   display: block;
   width: 100%;
   margin-bottom: var(--p);
+}
+
+@media (max-width: 640px) {
+  .project-detail {
+    padding-top: 50px;
+  }
+  .project-title {
+    font-size: clamp(36px, 11vw, 80px);
+    white-space: normal;
+  }
+  .project-credits-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px var(--p);
+  }
 }
