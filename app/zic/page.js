@@ -45,20 +45,20 @@ export default function ZICPage() {
         ))}
         <div className="project-credits">
           <div className="project-credit-entry">
-            <p className="caption">Executive director.</p>
-            <p className="caption">Changho Lee</p>
+            <span className="caption">Executive director.</span>
+            <span className="caption">Changho Lee</span>
           </div>
           <div className="project-credit-entry">
-            <p className="caption">Design director.</p>
-            <p className="caption">Gibaek Ryu</p>
+            <span className="caption">Design director.</span>
+            <span className="caption">Gibaek Ryu</span>
           </div>
           <div className="project-credit-entry">
-            <p className="caption">Concept director.</p>
-            <p className="caption">Byungsun Jeon</p>
+            <span className="caption">Concept director.</span>
+            <span className="caption">Byungsun Jeon</span>
           </div>
           <div className="project-credit-entry">
-            <p className="caption">Concept &amp; Design.</p>
-            <p className="caption">Geum jo Bae, Seonyung Shin, Qoon Park, Taeun Uhm</p>
+            <span className="caption">Concept &amp; Design.</span>
+            <span className="caption">Geum jo Bae, Seonyung Shin, Qoon Park, Taeun Uhm</span>
           </div>
         </div>
       </main>

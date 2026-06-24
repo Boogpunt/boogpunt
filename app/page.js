@@ -176,8 +176,8 @@ export default function Home() {
       const scale = rect.width / 500;
       catLabelEl.style.left = `${rect.left + 43 * scale + 8}px`;
       catLabelEl.style.top  = `${rect.top  + 250 * scale}px`;
-      // SVG font-size in user units so arc text renders at exactly 16px on screen
-      const svgFs = +(16 / scale).toFixed(3);
+      const targetFs = isMobile ? 11 : 16;
+      const svgFs = +(targetFs / scale).toFixed(3);
       document.querySelectorAll(".index-text").forEach(el => el.setAttribute("font-size", svgFs));
     }
 
@@ -212,6 +212,17 @@ export default function Home() {
       filterBar.classList.add("is-visible");
       nav.classList.add("has-submenu");
       updatePanelTops();
+    }
+
+    document.documentElement.classList.add("main-page");
+
+    // Mobile: increase arc spacing so text lines don't overlap at smaller SVG size
+    if (isMobile) {
+      const mobileSpacing = 20;
+      INDEX_LINES.forEach((_, i) => {
+        const pathEl = document.getElementById(`idx-arc-${i}`);
+        if (pathEl) pathEl.setAttribute("d", arcPath(INDEX_OUTER_R - i * mobileSpacing));
+      });
     }
 
     function setup() {
@@ -576,6 +587,7 @@ export default function Home() {
     }
 
     return () => {
+      document.documentElement.classList.remove("main-page");
       window.removeEventListener("resize", resizeHandler);
       if (isMobile) {
         document.removeEventListener("touchstart", touchStartHandler);

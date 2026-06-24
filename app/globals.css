@@ -384,6 +384,7 @@ html.bg-is-dark .clock-major { fill: white; }
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--fg);
+  opacity: 0.35;
   margin-bottom: 4px;
 }
 
@@ -395,22 +396,26 @@ html.bg-is-dark .clock-major { fill: white; }
 /* ─── MOBILE ─── */
 .nav-toggle { display: none; }
 
+/* Main page only: freeze scroll on mobile (touch events handle category scroll) */
 @media (max-width: 640px) {
-  /* Freeze document scroll — touch events handle virtual scroll instead */
-  html, body {
+  html.main-page,
+  html.main-page body {
     overflow: hidden;
     overscroll-behavior: none;
   }
+}
+
+@media (max-width: 640px) {
   .spacer { display: none; }
 
-  /* Fixed (not sticky) so overflow:hidden on body doesn't hide it */
+  /* Fixed (not sticky) so content below isn't hidden */
   .nav {
     position: fixed;
     left: 0;
     right: 0;
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
   }
   .nav-logo { flex: 1; }
 
@@ -487,6 +492,7 @@ html.bg-is-dark .clock-major { fill: white; }
   letter-spacing: -0.05em;
   color: var(--fg);
   white-space: nowrap;
+  margin-left: calc(-1 * var(--p));
   margin-bottom: 12px;
 }
 
@@ -502,7 +508,10 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 .project-credit-entry {
-  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 24px;
+  margin-bottom: 8px;
 }
 
 .project-detail-img {

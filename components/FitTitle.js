@@ -10,7 +10,7 @@ export default function FitTitle({ children, className }) {
 
     const fit = () => {
       el.style.fontSize = "200px";
-      const ratio = el.parentElement.clientWidth / el.scrollWidth;
+      const ratio = window.innerWidth / el.scrollWidth;
       el.style.fontSize = `${200 * ratio}px`;
     };
 
