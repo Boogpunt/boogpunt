@@ -28,23 +28,27 @@ export default function ZICPage() {
       <main className="project-detail">
         <header className="project-header">
           <h1 className="project-title">SK enmove ZIC</h1>
-          <div className="project-credits-row">
-            <div>
-              <p>Client. SK enmove</p>
-              <p>2023</p>
+          <div className="project-header-sub">
+            <span>Client. SK enmove</span>
+            <span>2023</span>
+          </div>
+          <div className="project-credits">
+            <div className="project-credit-entry">
+              <p className="caption">Executive director.</p>
+              <p className="caption">Changho Lee</p>
             </div>
-            <div>
-              <p>Executive director. Changho Lee</p>
-              <p>Design director. Gibaek Ryu</p>
-              <p>Concept director. Byungsun Jeon</p>
+            <div className="project-credit-entry">
+              <p className="caption">Design director.</p>
+              <p className="caption">Gibaek Ryu</p>
             </div>
-            <div>
-              <p>Concept &amp; Design. Geum jo Bae</p>
-              <p>Seonyung Shin</p>
-              <p>Qoon Park</p>
-              <p>Taeun Uhm</p>
+            <div className="project-credit-entry">
+              <p className="caption">Concept director.</p>
+              <p className="caption">Byungsun Jeon</p>
             </div>
-            <div />
+            <div className="project-credit-entry">
+              <p className="caption">Concept &amp; Design.</p>
+              <p className="caption">Geum jo Bae, Seonyung Shin, Qoon Park, Taeun Uhm</p>
+            </div>
           </div>
         </header>
         {ZIC_IMAGES.map((src, i) => (
