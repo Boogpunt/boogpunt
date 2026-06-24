@@ -47,13 +47,13 @@ export default function ZICPage() {
           <span className="caption">Executive director.</span>
           <span className="caption">Changho Lee</span>
 
-          <span className="caption">Design director.</span>
+          <span className="caption project-credits-break">Design director.</span>
           <span className="caption">Gibaek Ryu</span>
 
-          <span className="caption">Concept director.</span>
+          <span className="caption project-credits-break">Concept director.</span>
           <span className="caption">Byungsun Jeon</span>
 
-          <span className="caption project-credits-multi">Concept &amp; Design.</span>
+          <span className="caption project-credits-multi project-credits-break">Concept &amp; Design.</span>
           <span className="caption">Geum jo Bae</span>
           <span className="caption">Seonyung Shin</span>
           <span className="caption">Qoon Park</span>
