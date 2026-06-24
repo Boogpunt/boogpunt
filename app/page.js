@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { animate } from "animejs";
 
-const CATEGORIES = ["Installation", "Branding", "Graphic", "Typeface"];
+const CATEGORIES = ["Graphic", "Installation", "Branding", "Typeface"];
 const PX_PER_STEP = 70;
 
 // 92 minor ticks (every 3.75°, skipping every 24th = category major ticks)
@@ -112,10 +112,10 @@ function DiscSVG() {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1400,q-85/boogpunt";
 
 const CATEGORY_IMAGES = {
-  Installation: { src: `${IK}/Watching/Watching_t_pZ7HDuKjb.jpg`,           mode: "cover" },
-  Branding:     { src: `${IK}/ZIC/ZIC_t_GnmZsFq1K.jpg`,                     mode: "cover" },
-  Graphic:      { src: `${IK}/Bound_in_a_spiral_dance/bsd_t_eGTNKWnIp.jpg`, mode: "cover" },
-  Typeface:     null,
+  Graphic:      { src: `${IK}/Watching/Watching_t_pZ7HDuKjb.jpg`,           mode: "cover" },
+  Installation: { src: `${IK}/Minkowski/Minkowski_t.jpg`,                   mode: "cover" },
+  Branding:     { src: `${IK}/ZIC/ZIC_t.jpg`,                               mode: "cover" },
+  Typeface:     { src: `${IK}/Bound_in_a_spiral_dance/bsd_t_eGTNKWnIp.jpg`, mode: "cover" },
 };
 
 const CARDS = [
