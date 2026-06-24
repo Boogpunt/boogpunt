@@ -37,14 +37,18 @@ export default function NavWithFilter() {
       filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;
     }
 
+    const spacer = document.querySelector(".filter-bar-spacer");
+
     function hideFilterBar() {
       filterBar.classList.remove("is-visible");
+      if (spacer) spacer.style.height = "0";
       updatePanelTops();
     }
 
     function showFilterBar() {
       positionFilterBar();
       filterBar.classList.add("is-visible");
+      if (spacer) spacer.style.height = `${filterBar.getBoundingClientRect().height}px`;
       updatePanelTops();
     }
 
@@ -198,6 +202,8 @@ export default function NavWithFilter() {
       <div className="filter-panel">
         <div className="filter-grid"></div>
       </div>
+
+      <div className="filter-bar-spacer" />
     </>
   );
 }

@@ -235,11 +235,12 @@ export default function Home() {
       if (panelVisible || infoPanelVisible) return;
       if (introEl.classList.contains("index-mode")) return;
 
+      // Continuous rotation — no 70px threshold
+      linesGroupEl.style.transform = `rotate(${y / PX_PER_STEP * 30}deg)`;
+
       const totalSteps = Math.floor(y / PX_PER_STEP);
       if (totalSteps === currentStep) return;
       currentStep = totalSteps;
-
-      linesGroupEl.style.transform = `rotate(${totalSteps * 30}deg)`;
 
       const newCatIndex = Math.floor(totalSteps / 3) % CATEGORIES.length;
       if (newCatIndex !== currentCatIndex) {

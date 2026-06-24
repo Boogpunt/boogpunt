@@ -454,6 +454,12 @@ html.bg-is-dark .clock-major { fill: white; }
   }
 }
 
+/* ─── FILTER BAR SPACER (detail pages only) ─── */
+.filter-bar-spacer {
+  height: 0;
+  transition: height 0.2s ease;
+}
+
 /* ─── PROJECT DETAIL PAGE ─── */
 .project-detail {
   padding: 0 var(--p) 80px;
