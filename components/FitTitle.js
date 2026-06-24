@@ -15,6 +15,7 @@ export default function FitTitle({ children, className }) {
     };
 
     fit();
+    document.fonts.ready.then(fit);
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);
   }, []);

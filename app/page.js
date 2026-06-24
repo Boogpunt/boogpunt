@@ -630,8 +630,10 @@ export default function Home() {
   return (
     <>
       <nav className="nav">
-        <a href="/" className="nav-logo">Boogpunt</a>
-        <button className="nav-toggle" aria-label="Menu">+</button>
+        <div className="nav-row">
+          <a href="/" className="nav-logo">Boogpunt</a>
+          <button className="nav-toggle" aria-label="Menu">+</button>
+        </div>
         <ul className="nav-menu">
           <li className="nav-main-item"><a href="#work" className="nav-link is-active" data-menu="works">Works</a></li>
           <li className="nav-main-item"><a href="#" id="nav-index" className="nav-link">Index</a></li>

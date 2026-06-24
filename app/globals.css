@@ -395,6 +395,8 @@ html.bg-is-dark .clock-major { fill: white; }
 
 /* ─── MOBILE ─── */
 .nav-toggle { display: none; }
+/* Desktop: nav-row is invisible to the grid layout */
+.nav-row { display: contents; }
 
 /* Main page only: freeze scroll on mobile (touch events handle category scroll) */
 @media (max-width: 640px) {
@@ -408,18 +410,22 @@ html.bg-is-dark .clock-major { fill: white; }
 @media (max-width: 640px) {
   .spacer { display: none; }
 
-  /* Fixed (not sticky) so content below isn't hidden */
+  /* Block layout: nav-row stays fixed; nav-menu appends below without affecting row */
   .nav {
     position: fixed;
     left: 0;
     right: 0;
+    display: block;
+  }
+
+  /* nav-row holds logo + toggle — isolated from nav-menu layout */
+  .nav-row {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
   }
   .nav-logo { flex: 1; }
 
-  /* "+" toggle button — matches body font-weight/size; right 50% touch area */
+  /* "+" toggle button — right 50% touch area */
   .nav-toggle {
     display: flex;
     flex: 1;
@@ -440,14 +446,13 @@ html.bg-is-dark .clock-major { fill: white; }
     transform: rotate(45deg);
   }
 
-  /* Nav links: hidden by default, revealed on .is-open — column layout right-aligned */
+  /* Nav links: hidden by default, revealed on .is-open */
   .nav-menu {
     display: none;
     flex-direction: column;
     align-items: flex-end;
-    width: 100%;
     gap: 12px;
-    padding: 12px 0 0;
+    padding: 12px 13px 12px;
   }
   .nav.is-open .nav-menu { display: flex; }
 
@@ -505,13 +510,15 @@ html.bg-is-dark .clock-major { fill: white; }
 .project-credits {
   width: 50%;
   padding-top: var(--p);
-}
-
-.project-credit-entry {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 0 24px;
-  margin-bottom: 8px;
+  gap: 4px 24px;
+  align-items: baseline;
+}
+
+.project-credits-multi {
+  grid-row: span 4;
+  align-self: start;
 }
 
 .project-detail-img {
@@ -526,5 +533,6 @@ html.bg-is-dark .clock-major { fill: white; }
   }
   .project-credits {
     width: 100%;
+    gap: 4px 16px;
   }
 }
