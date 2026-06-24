@@ -172,7 +172,6 @@ body {
   font-weight: 400;
   letter-spacing: -0.3px;
   fill: var(--fg);
-  text-transform: uppercase;
 }
 .clock-line {
   stroke: #000;

@@ -58,7 +58,7 @@ function getImageBrightness(src) {
 }
 
 // Index disc — arc text from 12 o'clock clockwise, wrap inner ring at 8 o'clock
-const INDEX_OUTER_R = 200;
+const INDEX_OUTER_R = 195;
 const INDEX_SPACING = 14; // radial gap between arcs (SVG user units)
 
 const INDEX_LINES = [
@@ -335,6 +335,9 @@ export default function Home() {
     function exitIndexMode() {
       if (!introEl.classList.contains("index-mode")) return;
       introEl.classList.remove("index-mode");
+      catLabelEl.classList.remove("is-visible");
+      catLabelEl.textContent = CATEGORIES[currentCatIndex];
+      currentStep = -1; // force processScroll to fully refresh state
       processScroll(isMobile ? vScrollY : window.scrollY);
     }
 
@@ -365,30 +368,30 @@ export default function Home() {
     catLabelEl.addEventListener("mouseleave", onLabelLeave);
     catLabelEl.addEventListener("click", onLabelClick);
 
-    // Desktop: click Works to toggle filter bar; click outside to dismiss
-    let desktopWorksClickHandler = null;
-    let outsideClickHandler = null;
+    // Desktop: hover Works to show filter bar; 200ms grace period before hiding
+    let worksEnterHandler = null;
+    let worksLeaveHandler = null;
+    let filterBarEnterHandler = null;
+    let filterBarLeaveHandler = null;
     if (!isMobile) {
-      desktopWorksClickHandler = (e) => {
-        e.preventDefault();
-        if (filterBar.classList.contains("is-visible")) {
-          hideFilterBar();
-        } else {
-          allNavLinks.forEach(l => l.classList.remove("is-active"));
-          projectsLink.classList.add("is-active");
-          showFilterBar();
-        }
+      let hideTimer = null;
+      const cancelHide = () => { if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; } };
+      const scheduleHide = () => { cancelHide(); hideTimer = setTimeout(hideFilterBar, 200); };
+
+      worksEnterHandler = () => {
+        cancelHide();
+        allNavLinks.forEach(l => l.classList.remove("is-active"));
+        projectsLink.classList.add("is-active");
+        showFilterBar();
       };
-      outsideClickHandler = (e) => {
-        if (filterBar.classList.contains("is-visible") &&
-            !nav.contains(e.target) &&
-            !filterBar.contains(e.target) &&
-            !filterPanel.contains(e.target)) {
-          hideFilterBar();
-        }
-      };
-      projectsLink.addEventListener("click", desktopWorksClickHandler);
-      document.addEventListener("click", outsideClickHandler);
+      worksLeaveHandler   = scheduleHide;
+      filterBarEnterHandler = cancelHide;
+      filterBarLeaveHandler = scheduleHide;
+
+      projectsLink.addEventListener("mouseenter", worksEnterHandler);
+      projectsLink.addEventListener("mouseleave", worksLeaveHandler);
+      filterBar.addEventListener("mouseenter", filterBarEnterHandler);
+      filterBar.addEventListener("mouseleave", filterBarLeaveHandler);
     }
 
     // Mobile: tap Works to switch nav into inline filter mode
@@ -462,6 +465,7 @@ export default function Home() {
     const navLogoClickHandler = (e) => {
       e.preventDefault();
       exitIndexMode();
+      hideFilterBar();
       if (panelVisible) hideFilter();
       if (infoPanelVisible) hideInfo();
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
@@ -542,8 +546,10 @@ export default function Home() {
       catLabelEl.removeEventListener("mouseleave", onLabelLeave);
       catLabelEl.removeEventListener("click", onLabelClick);
       if (!isMobile) {
-        if (desktopWorksClickHandler) projectsLink.removeEventListener("click", desktopWorksClickHandler);
-        if (outsideClickHandler) document.removeEventListener("click", outsideClickHandler);
+        if (worksEnterHandler)     projectsLink.removeEventListener("mouseenter", worksEnterHandler);
+        if (worksLeaveHandler)     projectsLink.removeEventListener("mouseleave", worksLeaveHandler);
+        if (filterBarEnterHandler) filterBar.removeEventListener("mouseenter", filterBarEnterHandler);
+        if (filterBarLeaveHandler) filterBar.removeEventListener("mouseleave", filterBarLeaveHandler);
       }
       if (mobileWorksHandler) projectsLink.removeEventListener("click", mobileWorksHandler);
       navFilterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
