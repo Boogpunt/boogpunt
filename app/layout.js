@@ -4,9 +4,6 @@ import ImageKitProvider from "@/components/ImageKitProvider";
 export const metadata = {
   title: "BOOGPUNT",
   description: "Brand Experience Designer based in London",
-  icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-  },
 };
 
 export default function RootLayout({ children }) {

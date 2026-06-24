@@ -8,11 +8,12 @@ export default function FitTitle({ children, className }) {
     const el = ref.current;
     if (!el) return;
 
-    const fit = () => {
-      el.style.fontSize = "200px";
-      const ratio = el.parentElement.clientWidth / el.scrollWidth;
-      el.style.fontSize = `${200 * ratio}px`;
-    };
+    const fit = () => requestAnimationFrame(() => {
+      el.style.fontSize = "100px";
+      const textWidth = el.getBoundingClientRect().width;
+      const containerWidth = el.parentElement.getBoundingClientRect().width;
+      if (textWidth > 0) el.style.fontSize = `${100 * containerWidth / textWidth}px`;
+    });
 
     fit();
     document.fonts.ready.then(fit);
