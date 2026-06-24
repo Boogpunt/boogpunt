@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { animate } from "animejs";
 
 const CATEGORIES = ["Graphic", "Installation", "Branding", "Typeface"];
-const PX_PER_STEP = 70;
+const DEG_PER_CAT = 90; // degrees per category (4 categories × 90° = full circle)
 
 // 92 minor ticks (every 3.75°, skipping every 24th = category major ticks)
 const CLOCK_LINES = Array.from({ length: 96 }, (_, k) => {
@@ -171,9 +171,12 @@ export default function Home() {
     let panelAnim, infoPanelAnim;
     let panelVisible     = false;
     let infoPanelVisible = false;
-    let currentStep      = -1;
     let currentCatIndex  = 0;
-    let vScrollY         = 0;  // virtual scroll position for mobile touch
+    let currentAngle     = 0;   // current disc rotation in degrees
+    let isAnimating      = false;
+    let snapRafId        = null;
+    let cooldown         = false;
+    let cooldownTimer    = null;
     let typingInterval   = null;
     let rotRafId         = null;
 
@@ -227,51 +230,64 @@ export default function Home() {
       if (!panelVisible)     filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
       if (!infoPanelVisible) infoPanel.style.transform   = `translateY(${window.innerHeight}px)`;
       introEl.style.height = `${window.innerHeight}px`;
-      spacer.style.height  = `${window.innerHeight * 5}px`;
+      spacer.style.height  = "0";
       updateLabelPos();
     }
 
-    function processScroll(y) {
+    function animateToAngle(target) {
+      if (isAnimating) return;
+      isAnimating = true;
+      cooldown = true;
+      if (cooldownTimer) { clearTimeout(cooldownTimer); cooldownTimer = null; }
+
+      const from     = currentAngle;
+      const duration = 550;
+      let t0 = null;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        const p     = Math.min((ts - t0) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3); // outCubic
+        linesGroupEl.style.transform = `rotate(${from + (target - from) * eased}deg)`;
+        if (p < 1) {
+          snapRafId = requestAnimationFrame(step);
+        } else {
+          currentAngle = target;
+          isAnimating  = false;
+          snapRafId    = null;
+          catLabelEl.classList.add("is-visible");
+          cooldownTimer = setTimeout(() => { cooldown = false; cooldownTimer = null; }, 250);
+        }
+      }
+      catLabelEl.classList.remove("is-visible");
+      snapRafId = requestAnimationFrame(step);
+    }
+
+    function advanceCategory(dir) {
+      if (isAnimating || cooldown) return;
       if (panelVisible || infoPanelVisible) return;
       if (introEl.classList.contains("index-mode")) return;
 
-      // Continuous rotation — no 70px threshold
-      linesGroupEl.style.transform = `rotate(${y / PX_PER_STEP * 30}deg)`;
+      currentCatIndex = ((currentCatIndex + dir) % CATEGORIES.length + CATEGORIES.length) % CATEGORIES.length;
+      catLabelEl.textContent = CATEGORIES[currentCatIndex];
+      if (!isMobile) hoverBgEl.classList.remove("is-visible");
 
-      const totalSteps = Math.floor(y / PX_PER_STEP);
-      if (totalSteps === currentStep) return;
-      currentStep = totalSteps;
-
-      const newCatIndex = Math.floor(totalSteps / 3) % CATEGORIES.length;
-      if (newCatIndex !== currentCatIndex) {
-        currentCatIndex = newCatIndex;
-        catLabelEl.textContent = CATEGORIES[currentCatIndex];
-        if (!isMobile) hoverBgEl.classList.remove("is-visible");
-      }
-
-      const isLabelStep = totalSteps % 3 === 0;
-      catLabelEl.classList.toggle("is-visible", isLabelStep);
-
-      // Mobile: auto dissolve background image on label step
       if (isMobile) {
         const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
-        if (isLabelStep && entry) {
+        if (entry) {
           hoverBgImg.src = entry.src;
           hoverBgEl.dataset.mode = entry.mode;
           hoverBgEl.classList.add("is-visible");
           getImageBrightness(entry.src).then((b) => {
             document.documentElement.classList.toggle("bg-is-dark", b < 128);
           });
-        } else if (!isLabelStep) {
+        } else {
           hoverBgEl.classList.remove("is-visible");
           delete hoverBgEl.dataset.mode;
           document.documentElement.classList.remove("bg-is-dark");
         }
       }
-    }
 
-    function onScroll() {
-      processScroll(window.scrollY);
+      animateToAngle(currentAngle + dir * DEG_PER_CAT);
     }
 
     function populateFilterGrid(category) {
@@ -342,10 +358,9 @@ export default function Home() {
       document.querySelectorAll(".index-text textPath").forEach(el => { el.textContent = ""; });
       introEl.classList.remove("index-mode");
       document.documentElement.classList.remove("index-bg");
-      catLabelEl.classList.remove("is-visible");
       catLabelEl.textContent = CATEGORIES[currentCatIndex];
-      currentStep = -1;
-      processScroll(isMobile ? vScrollY : window.scrollY);
+      linesGroupEl.style.transform = `rotate(${currentAngle}deg)`;
+      catLabelEl.classList.add("is-visible");
     }
 
     // Category label hover → dissolve in background image + auto-invert text on dark bg
@@ -465,7 +480,6 @@ export default function Home() {
       if (panelVisible) hideFilter();
       if (infoPanelVisible) hideInfo();
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
-      window.scrollTo({ top: 0, behavior: "smooth" });
     };
     navLogo.addEventListener("click", navLogoClickHandler);
 
@@ -490,7 +504,7 @@ export default function Home() {
         textPaths.forEach(el => { el.textContent = ""; });
 
         // Rotate ticks one full turn (outCubic, 700ms), typing starts simultaneously
-        const startRot = Math.max(0, currentStep) * 30;
+        const startRot = currentAngle;
         const rotDur = 700;
         let t0 = null;
         function spinStep(ts) {
@@ -527,13 +541,16 @@ export default function Home() {
       return { link, handler };
     });
 
-    let scrollRafId = null;
-    const scrollHandler = () => {
-      if (scrollRafId) return;
-      scrollRafId = requestAnimationFrame(() => { scrollRafId = null; onScroll(); });
+    // Desktop: wheel → advance one category per scroll
+    const wheelHandler = (e) => {
+      if (panelVisible || infoPanelVisible) return;
+      e.preventDefault();
+      if (isAnimating || cooldown) return;
+      if (introEl.classList.contains("index-mode")) return;
+      advanceCategory(e.deltaY > 0 ? 1 : -1);
     };
 
-    // Mobile: virtual scroll via touch to prevent page movement + address bar animation
+    // Mobile: swipe up/down → advance one category per swipe
     let touchStartY = 0;
     const touchStartHandler = isMobile ? (e) => {
       touchStartY = e.touches[0].clientY;
@@ -541,26 +558,25 @@ export default function Home() {
     const touchMoveHandler = isMobile ? (e) => {
       if (panelVisible || infoPanelVisible) return;
       e.preventDefault();
-      if (introEl.classList.contains("index-mode")) return; // scroll paused in index mode
-      const delta = touchStartY - e.touches[0].clientY;
-      touchStartY = e.touches[0].clientY;
-      vScrollY = Math.max(0, Math.min(window.innerHeight * 4, vScrollY + delta));
-      processScroll(vScrollY);
+    } : null;
+    const touchEndHandler = isMobile ? (e) => {
+      const delta = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(delta) < 30) return;
+      advanceCategory(delta > 0 ? 1 : -1);
     } : null;
 
-    const resizeHandler = () => {
-      setup();
-      processScroll(isMobile ? vScrollY : window.scrollY);
-    };
+    const resizeHandler = () => { setup(); };
 
     setup();
-    processScroll(0);
+    catLabelEl.textContent = CATEGORIES[0];
+    catLabelEl.classList.add("is-visible");
     window.addEventListener("resize", resizeHandler);
     if (isMobile) {
       document.addEventListener("touchstart", touchStartHandler, { passive: true });
       document.addEventListener("touchmove", touchMoveHandler, { passive: false });
+      document.addEventListener("touchend", touchEndHandler, { passive: true });
     } else {
-      window.addEventListener("scroll", scrollHandler, { passive: true });
+      window.addEventListener("wheel", wheelHandler, { passive: false });
     }
 
     return () => {
@@ -568,8 +584,9 @@ export default function Home() {
       if (isMobile) {
         document.removeEventListener("touchstart", touchStartHandler);
         document.removeEventListener("touchmove", touchMoveHandler);
+        document.removeEventListener("touchend", touchEndHandler);
       } else {
-        window.removeEventListener("scroll", scrollHandler);
+        window.removeEventListener("wheel", wheelHandler);
       }
       catLabelEl.removeEventListener("mouseenter", onLabelEnter);
       catLabelEl.removeEventListener("mouseleave", onLabelLeave);
@@ -591,7 +608,8 @@ export default function Home() {
       indexLink.removeEventListener("click", indexLinkHandler);
       navLogo.removeEventListener("click", navLogoClickHandler);
       navLinkHandlers.forEach(({ link, handler }) => link.removeEventListener("click", handler));
-      if (scrollRafId) cancelAnimationFrame(scrollRafId);
+      if (snapRafId) cancelAnimationFrame(snapRafId);
+      if (cooldownTimer) clearTimeout(cooldownTimer);
       if (panelAnim) panelAnim.pause();
       if (infoPanelAnim) infoPanelAnim.pause();
     };
