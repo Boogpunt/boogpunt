@@ -681,6 +681,13 @@ export default function Home() {
             <p className="info-body">Based on this, he approaches design not as a fixed outcome, but as an interaction that shifts, adapts, and unfolds across different environments.</p>
           </div>
           <div className="info-table">
+            <div className="info-entry">
+              <span className="info-label">Contact</span>
+              <div className="info-items">
+                <p>Qoon@boogpunt.com</p>
+                <p>@8009pt</p>
+              </div>
+            </div>
             <div className="info-entry info-entry--experience">
               <span className="info-label">Experience</span>
               <div className="info-items">
@@ -695,19 +702,6 @@ export default function Home() {
                 <p>Royal College of Art. MA Visual Communication</p>
                 <p>De Haagse Hogeschool. CMD Exchanged Students</p>
                 <p>University of Seoul. BA Product Design</p>
-              </div>
-            </div>
-            <div className="info-entry">
-              <span className="info-label">Prize</span>
-              <div className="info-items">
-                <p>Global Design IT Awards Silver 2023</p>
-              </div>
-            </div>
-            <div className="info-entry">
-              <span className="info-label">Contact</span>
-              <div className="info-items">
-                <p>Qoon@boogpunt.com</p>
-                <p>@8009pt</p>
               </div>
             </div>
             <div className="info-entry info-entry--projects">
