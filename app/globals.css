@@ -169,7 +169,6 @@ body {
 .intro.index-mode .index-group { opacity: 1; }
 
 .index-text {
-  font-size: 16px;
   font-weight: 400;
   letter-spacing: -0.3px;
   fill: var(--fg);

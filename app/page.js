@@ -181,6 +181,9 @@ export default function Home() {
       const scale = rect.width / 500;
       catLabelEl.style.left = `${rect.left + 43 * scale + 8}px`;
       catLabelEl.style.top  = `${rect.top  + 250 * scale}px`;
+      // SVG font-size in user units so arc text renders at exactly 16px on screen
+      const svgFs = +(16 / scale).toFixed(3);
+      document.querySelectorAll(".index-text").forEach(el => el.setAttribute("font-size", svgFs));
     }
 
     function updatePanelTops() {
