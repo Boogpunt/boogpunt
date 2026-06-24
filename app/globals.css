@@ -520,10 +520,6 @@ html.bg-is-dark .clock-major { fill: white; }
   align-self: start;
 }
 
-.project-credits-break {
-  padding-top: 1.1em;
-}
-
 .project-detail-img {
   display: block;
   width: 100%;

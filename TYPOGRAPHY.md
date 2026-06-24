@@ -11,7 +11,7 @@
 |------------------|---------|--------|-------------|----------------|-----------|
 | **Body**         | 16px    | 700    | 1.1         | -0.02em        | 기본값 전체 상속 → Nav Logo, Nav Link, Filter Btn, Disc Label, About Body/Label/Items, Project Header Sub, Project Credits |
 | **Body Arc**     | 16px (동적 SVG) | 400 | -      | -0.02em        | Index 모드 원형 arc 텍스트 4줄 |
-| **Caption**      | 12px    | 700    | 1.3         | -0.02em        | 필터 오버레이 썸네일 캡션, 상세페이지 크레딧 (직책/이름) |
+| **Caption**      | 12px    | 700    | 1.1         | -0.02em        | 필터 오버레이 썸네일 캡션, 상세페이지 크레딧 (직책/이름) |
 | **About Title**  | 24px    | 700    | 1.0         | -0.02em        | About 패널 상단 제목 (Boogpunt) |
 | **Project Title**| 16vw    | 700    | 1.0         | -0.05em        | 상세페이지 대형 타이틀 |
 
@@ -34,7 +34,7 @@ body                → Body (cascade base)
 .info-items p       → Body
 .project-title      → Project Title
 .project-header-sub → Body  (flex space-between: Client. SK enmove / 2023)
-.project-credit-entry p → Caption
+.project-credits span.caption → Caption
 ```
 
 ---
