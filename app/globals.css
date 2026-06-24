@@ -53,45 +53,6 @@ body {
 .nav-link:hover { opacity: 0.7; }
 .nav-link.is-active { opacity: 1; }
 
-/* ─── FILTER BAR (category submenu under Projects) ─── */
-.filter-bar {
-  position: fixed;
-  z-index: 20;
-  display: flex;
-  align-items: baseline;
-  gap: 24px;
-  padding: 4px 0;
-  background: transparent;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-4px);
-  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease;
-}
-.filter-bar.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-  background: white;
-  padding-top: 6px;
-  padding-bottom: 12px;
-}
-
-.filter-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  letter-spacing: inherit;
-  color: var(--fg);
-  opacity: 0.35;
-  padding: 0;
-  transition: opacity 0.3s ease;
-}
-.filter-btn.is-active { opacity: 1; }
-.filter-btn:hover { opacity: 0.7; }
-
 /* ─── MOBILE NAV FILTER MODE ─── */
 /* Filter items hidden by default (desktop never shows them; mobile only in filter mode) */
 .nav-filter-item { display: none; }
@@ -431,12 +392,6 @@ html.bg-is-dark .clock-major { fill: white; }
   /* Works → inline filter mode: swap main items for filter items */
   .nav.in-filter-mode .nav-main-item { display: none; }
   .nav.in-filter-mode .nav-filter-item { display: list-item; }
-
-  /* Filter-bar submenu: compact gap on mobile */
-  .filter-bar {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
 
   .info-inner {
     grid-template-columns: 1fr;

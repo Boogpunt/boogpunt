@@ -59,7 +59,7 @@ function getImageBrightness(src) {
 
 // Index disc — arc text from 12 o'clock clockwise, wrap inner ring at 8 o'clock
 const INDEX_OUTER_R = 195;
-const INDEX_SPACING = 14; // radial gap between arcs (SVG user units)
+const INDEX_SPACING = 11; // radial gap between arcs (SVG user units)
 
 const INDEX_LINES = [
   "Who are you when no one is watching | Ghent bookfair | Outland publishing book fair | Bounding in a spiral dance | Korea cultural centre UK | Gaeun Lee symbol | Socialed credentials",
@@ -148,7 +148,6 @@ export default function Home() {
   useEffect(() => {
     const nav          = document.querySelector(".nav");
     const navToggle    = document.querySelector(".nav-toggle");
-    const filterBar    = document.querySelector(".filter-bar");
     const introEl      = document.querySelector(".intro");
     const spacer       = document.querySelector(".spacer");
     const filterPanel  = document.querySelector(".filter-panel");
@@ -174,6 +173,8 @@ export default function Home() {
     let currentStep      = -1;
     let currentCatIndex  = 0;
     let vScrollY         = 0;  // virtual scroll position for mobile touch
+    let typingInterval   = null;
+    let rotRafId         = null;
 
     function updateLabelPos() {
       if (!discEl || !catLabelEl) return;
@@ -187,14 +188,11 @@ export default function Home() {
     }
 
     function updatePanelTops() {
-      const navB     = nav.getBoundingClientRect().bottom;
-      const panelTop = filterBar.classList.contains("is-visible")
-        ? filterBar.getBoundingClientRect().bottom
-        : navB;
-      const panelH = window.innerHeight - panelTop;
-      filterPanel.style.top    = `${panelTop}px`;
+      const navB   = nav.getBoundingClientRect().bottom;
+      const panelH = window.innerHeight - navB;
+      filterPanel.style.top    = `${navB}px`;
       filterPanel.style.height = `${panelH}px`;
-      infoPanel.style.top      = `${panelTop}px`;
+      infoPanel.style.top      = `${navB}px`;
       infoPanel.style.height   = `${panelH}px`;
     }
 
@@ -206,27 +204,6 @@ export default function Home() {
       introEl.style.height = `${window.innerHeight}px`;
       spacer.style.height  = `${window.innerHeight * 5}px`;
       updateLabelPos();
-    }
-
-    function positionFilterBar() {
-      const rect = projectsLink.getBoundingClientRect();
-      filterBar.style.top         = `${rect.bottom}px`;
-      filterBar.style.left        = "0";
-      filterBar.style.right       = "0";
-      filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;
-    }
-
-    function hideFilterBar() {
-      filterBar.classList.remove("is-visible");
-      nav.classList.remove("has-submenu");
-      updatePanelTops();
-    }
-
-    function showFilterBar() {
-      positionFilterBar();
-      filterBar.classList.add("is-visible");
-      nav.classList.add("has-submenu");
-      updatePanelTops();
     }
 
     function processScroll(y) {
@@ -279,7 +256,7 @@ export default function Home() {
     }
 
     function showFilter(category) {
-      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
+      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); }
       setup();
       if (infoPanelVisible) hideInfo();
       if (panelVisible) {
@@ -303,8 +280,6 @@ export default function Home() {
 
     function hideFilter() {
       panelVisible = false;
-      document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("is-active"));
-      if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
       panelAnim = animate(filterPanel, {
         translateY: window.innerHeight,
@@ -314,7 +289,7 @@ export default function Home() {
     }
 
     function showInfo() {
-      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
+      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); }
       setup();
       if (panelVisible) hideFilter();
       infoPanelVisible = true;
@@ -334,10 +309,13 @@ export default function Home() {
 
     function exitIndexMode() {
       if (!introEl.classList.contains("index-mode")) return;
+      if (typingInterval) { clearInterval(typingInterval); typingInterval = null; }
+      if (rotRafId) { cancelAnimationFrame(rotRafId); rotRafId = null; }
+      document.querySelectorAll(".index-text textPath").forEach(el => { el.textContent = ""; });
       introEl.classList.remove("index-mode");
       catLabelEl.classList.remove("is-visible");
       catLabelEl.textContent = CATEGORIES[currentCatIndex];
-      currentStep = -1; // force processScroll to fully refresh state
+      currentStep = -1;
       processScroll(isMobile ? vScrollY : window.scrollY);
     }
 
@@ -360,6 +338,7 @@ export default function Home() {
       document.documentElement.classList.remove("bg-is-dark");
     };
     const onLabelClick = () => {
+      if (introEl.classList.contains("index-mode")) return;
       allNavLinks.forEach(l => l.classList.remove("is-active"));
       showFilter(CATEGORIES[currentCatIndex].toLowerCase());
     };
@@ -367,32 +346,6 @@ export default function Home() {
     catLabelEl.addEventListener("mouseenter", onLabelEnter);
     catLabelEl.addEventListener("mouseleave", onLabelLeave);
     catLabelEl.addEventListener("click", onLabelClick);
-
-    // Desktop: hover Works to show filter bar; 200ms grace period before hiding
-    let worksEnterHandler = null;
-    let worksLeaveHandler = null;
-    let filterBarEnterHandler = null;
-    let filterBarLeaveHandler = null;
-    if (!isMobile) {
-      let hideTimer = null;
-      const cancelHide = () => { if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; } };
-      const scheduleHide = () => { cancelHide(); hideTimer = setTimeout(hideFilterBar, 200); };
-
-      worksEnterHandler = () => {
-        cancelHide();
-        allNavLinks.forEach(l => l.classList.remove("is-active"));
-        projectsLink.classList.add("is-active");
-        showFilterBar();
-      };
-      worksLeaveHandler   = scheduleHide;
-      filterBarEnterHandler = cancelHide;
-      filterBarLeaveHandler = scheduleHide;
-
-      projectsLink.addEventListener("mouseenter", worksEnterHandler);
-      projectsLink.addEventListener("mouseleave", worksLeaveHandler);
-      filterBar.addEventListener("mouseenter", filterBarEnterHandler);
-      filterBar.addEventListener("mouseleave", filterBarLeaveHandler);
-    }
 
     // Mobile: tap Works to switch nav into inline filter mode
     const mobileWorksHandler = isMobile ? (e) => {
@@ -416,29 +369,9 @@ export default function Home() {
     // Mobile nav toggle (+): expand/collapse nav-menu; also clears filter mode
     const navToggleHandler = navToggle ? () => {
       const isOpen = nav.classList.toggle("is-open");
-      if (!isOpen) {
-        hideFilterBar();
-        nav.classList.remove("in-filter-mode");
-      }
+      if (!isOpen) nav.classList.remove("in-filter-mode");
     } : null;
     if (navToggleHandler) navToggle.addEventListener("click", navToggleHandler);
-
-    // Filter buttons
-    const filterBtns = [...document.querySelectorAll(".filter-btn")];
-    const filterBtnHandlers = filterBtns.map((btn) => {
-      const handler = function () {
-        const wasActive = this.classList.contains("is-active") && panelVisible;
-        filterBtns.forEach((b) => b.classList.remove("is-active"));
-        if (wasActive) {
-          hideFilter();
-        } else {
-          this.classList.add("is-active");
-          showFilter(this.dataset.filter);
-        }
-      };
-      btn.addEventListener("click", handler);
-      return { btn, handler };
-    });
 
     const filterGridClickHandler = (e) => {
       if (e.target.closest(".card")) {
@@ -465,7 +398,6 @@ export default function Home() {
     const navLogoClickHandler = (e) => {
       e.preventDefault();
       exitIndexMode();
-      hideFilterBar();
       if (panelVisible) hideFilter();
       if (infoPanelVisible) hideInfo();
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
@@ -482,6 +414,36 @@ export default function Home() {
         introEl.classList.add("index-mode");
         catLabelEl.textContent = "Participated Project";
         catLabelEl.classList.add("is-visible");
+
+        if (typingInterval) { clearInterval(typingInterval); typingInterval = null; }
+        if (rotRafId) { cancelAnimationFrame(rotRafId); rotRafId = null; }
+
+        const textPaths = [...document.querySelectorAll(".index-text textPath")];
+        textPaths.forEach(el => { el.textContent = ""; });
+
+        // Rotate ticks one full turn (outCubic), then type all 4 lines simultaneously
+        const startRot = Math.max(0, currentStep) * 30;
+        const rotDur = 700;
+        let t0 = null;
+        function spinStep(ts) {
+          if (t0 === null) t0 = ts;
+          const p = Math.min((ts - t0) / rotDur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          linesGroupEl.style.transform = `rotate(${startRot + 360 * eased}deg)`;
+          if (p < 1) {
+            rotRafId = requestAnimationFrame(spinStep);
+          } else {
+            rotRafId = null;
+            let ci = 0;
+            const maxLen = Math.max(...INDEX_LINES.map(l => l.length));
+            typingInterval = setInterval(() => {
+              ci++;
+              textPaths.forEach((el, i) => { el.textContent = INDEX_LINES[i].slice(0, ci); });
+              if (ci >= maxLen) { clearInterval(typingInterval); typingInterval = null; }
+            }, 12);
+          }
+        }
+        rotRafId = requestAnimationFrame(spinStep);
       } else {
         exitIndexMode();
       }
@@ -545,17 +507,12 @@ export default function Home() {
       catLabelEl.removeEventListener("mouseenter", onLabelEnter);
       catLabelEl.removeEventListener("mouseleave", onLabelLeave);
       catLabelEl.removeEventListener("click", onLabelClick);
-      if (!isMobile) {
-        if (worksEnterHandler)     projectsLink.removeEventListener("mouseenter", worksEnterHandler);
-        if (worksLeaveHandler)     projectsLink.removeEventListener("mouseleave", worksLeaveHandler);
-        if (filterBarEnterHandler) filterBar.removeEventListener("mouseenter", filterBarEnterHandler);
-        if (filterBarLeaveHandler) filterBar.removeEventListener("mouseleave", filterBarLeaveHandler);
-      }
       if (mobileWorksHandler) projectsLink.removeEventListener("click", mobileWorksHandler);
       navFilterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       if (navToggleHandler && navToggle) navToggle.removeEventListener("click", navToggleHandler);
-      filterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       filterGrid.removeEventListener("click", filterGridClickHandler);
+      if (typingInterval) clearInterval(typingInterval);
+      if (rotRafId) cancelAnimationFrame(rotRafId);
       infoLink.removeEventListener("click", infoLinkHandler);
       indexLink.removeEventListener("click", indexLinkHandler);
       navLogo.removeEventListener("click", navLogoClickHandler);
@@ -583,14 +540,6 @@ export default function Home() {
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="installation">Installation</button></li>
         </ul>
       </nav>
-
-      <div className="filter-bar">
-        <button className="filter-btn" data-filter="all">All</button>
-        <button className="filter-btn" data-filter="branding">Branding</button>
-        <button className="filter-btn" data-filter="graphic">Graphic</button>
-        <button className="filter-btn" data-filter="typeface">Typeface</button>
-        <button className="filter-btn" data-filter="installation">Installation</button>
-      </div>
 
       <div className="intro">
         <div className="hover-bg"><img alt="" /></div>
