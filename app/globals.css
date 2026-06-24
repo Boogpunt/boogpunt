@@ -342,7 +342,7 @@ html.bg-is-dark .clock-major { fill: white; }
 
 .info-body {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.3px;
   color: var(--fg);
@@ -364,7 +364,7 @@ html.bg-is-dark .clock-major { fill: white; }
 
 .info-label {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.3px;
   color: var(--fg);
@@ -372,7 +372,7 @@ html.bg-is-dark .clock-major { fill: white; }
 
 .info-items p {
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.1;
   letter-spacing: -0.3px;
   color: var(--fg);
@@ -466,27 +466,28 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 .project-header {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0 var(--p);
-  padding: 32px 0 40px;
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 20px 0 40px;
   border-bottom: 1px solid var(--fg);
   margin-bottom: var(--p);
 }
 
 .project-title {
-  grid-column: 1 / -1;
-  font-size: clamp(20px, 3vw, 32px);
-  font-weight: 400;
-  margin-bottom: 24px;
-  letter-spacing: -0.02em;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.3px;
+  color: var(--fg);
 }
 
-.project-meta p,
-.project-credits p {
-  font-size: 11px;
-  line-height: 1.6;
-  letter-spacing: 0.01em;
+.project-client {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.3px;
+  color: var(--fg);
 }
 
 .project-detail-img {

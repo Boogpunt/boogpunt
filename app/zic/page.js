@@ -27,17 +27,8 @@ export default function ZICPage() {
       <NavWithFilter />
       <main className="project-detail">
         <header className="project-header">
-          <h1 className="project-title">SK ENMOVE ZIC Branding</h1>
-          <div className="project-meta">
-            <p>Client. SK Enmove</p>
-            <p>2023</p>
-          </div>
-          <div className="project-credits">
-            <p>Executive director. Changho Lee</p>
-            <p>Design director. Gibaek Ryu</p>
-            <p>Concept director. Byungsun Jeon</p>
-            <p>Concept &amp; Design. Geum jo Bae, Seonyung Shin, Qoon Park, Taeun Uhm</p>
-          </div>
+          <h1 className="project-title">SK enmove ZIC</h1>
+          <p className="project-client">Client. SK enmove</p>
         </header>
         {ZIC_IMAGES.map((src, i) => (
           <img
