@@ -119,7 +119,7 @@ const CATEGORY_IMAGES = {
 };
 
 const CARDS = [
-  { category: "branding",     meta: "SK enmove ZIC / Brand Identity / 2023",       img: `${IK}/ZIC/ZIC_0.png` },
+  { category: "branding",     meta: "SK enmove ZIC / Brand Identity / 2023",       img: `${IK}/ZIC/ZIC_0.png`,                                                                                     slug: "zic" },
   { category: "graphic",      meta: "Kiss of Life / Brand Film / 2023",             img: `${IK}/KOF/KOF_1.png` },
   { category: "branding",     meta: "Dorosiwa / Brand Identity / 2023",             img: `${IK}/Dorosiwa/Dorosiwa_1.png` },
   { category: "typeface",    meta: "Blade Typeface / Type Design / 2023",           img: `${IK}/Blade_Font/Blade_Font_1.png` },
@@ -191,7 +191,7 @@ export default function Home() {
     function updatePanelTops() {
       const navB     = nav.getBoundingClientRect().bottom;
       const panelTop = filterBar.classList.contains("is-visible")
-        ? filterBar.getBoundingClientRect().bottom
+        ? filterBar.getBoundingClientRect().bottom + 12
         : navB;
       const panelH = window.innerHeight - panelTop;
       filterPanel.style.top    = `${panelTop}px`;
@@ -433,9 +433,12 @@ export default function Home() {
     if (navToggleHandler) navToggle.addEventListener("click", navToggleHandler);
 
     const filterGridClickHandler = (e) => {
-      if (e.target.closest(".card")) {
+      const card = e.target.closest(".card");
+      if (card) {
+        const slug = card.dataset.slug;
         hideFilter();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        if (slug) window.location.href = `/${slug}`;
+        else window.scrollTo({ top: 0, behavior: "smooth" });
       }
     };
     filterGrid.addEventListener("click", filterGridClickHandler);
@@ -679,7 +682,7 @@ export default function Home() {
 
       <main className="grid" id="work">
         {CARDS.map((card, i) => (
-          <article key={i} className="card" data-category={card.category}>
+          <article key={i} className="card" data-category={card.category} data-slug={card.slug || ""}>
             <img className="card-img" src={card.img} alt={card.meta} loading="lazy" />
             <p className="card-meta">{card.meta}</p>
           </article>

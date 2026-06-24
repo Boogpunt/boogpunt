@@ -164,7 +164,6 @@ html.index-bg .clock-major { fill: white; }
 .clock-lines-group {
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ─── INDEX ARC TEXT ─── */
@@ -453,4 +452,15 @@ html.bg-is-dark .clock-major { fill: white; }
     order: 2;
     padding-left: 13px;
   }
+}
+
+/* ─── PROJECT DETAIL PAGE ─── */
+.project-detail {
+  padding: 0 var(--p) 80px;
+}
+
+.project-detail-img {
+  display: block;
+  width: 100%;
+  margin-bottom: var(--p);
 }
