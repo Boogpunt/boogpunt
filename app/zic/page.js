@@ -1,4 +1,5 @@
 import NavWithFilter from "@/components/NavWithFilter";
+import FitTitle from "@/components/FitTitle";
 import "../globals.css";
 
 export const metadata = {
@@ -27,28 +28,10 @@ export default function ZICPage() {
       <NavWithFilter />
       <main className="project-detail">
         <header className="project-header">
-          <h1 className="project-title">SK enmove ZIC</h1>
+          <FitTitle className="project-title">SK enmove ZIC</FitTitle>
           <div className="project-header-sub">
             <span>Client. SK enmove</span>
             <span>2023</span>
-          </div>
-          <div className="project-credits">
-            <div className="project-credit-entry">
-              <p className="caption">Executive director.</p>
-              <p className="caption">Changho Lee</p>
-            </div>
-            <div className="project-credit-entry">
-              <p className="caption">Design director.</p>
-              <p className="caption">Gibaek Ryu</p>
-            </div>
-            <div className="project-credit-entry">
-              <p className="caption">Concept director.</p>
-              <p className="caption">Byungsun Jeon</p>
-            </div>
-            <div className="project-credit-entry">
-              <p className="caption">Concept &amp; Design.</p>
-              <p className="caption">Geum jo Bae, Seonyung Shin, Qoon Park, Taeun Uhm</p>
-            </div>
           </div>
         </header>
         {ZIC_IMAGES.map((src, i) => (
@@ -60,6 +43,24 @@ export default function ZICPage() {
             loading={i === 0 ? "eager" : "lazy"}
           />
         ))}
+        <div className="project-credits">
+          <div className="project-credit-entry">
+            <p className="caption">Executive director.</p>
+            <p className="caption">Changho Lee</p>
+          </div>
+          <div className="project-credit-entry">
+            <p className="caption">Design director.</p>
+            <p className="caption">Gibaek Ryu</p>
+          </div>
+          <div className="project-credit-entry">
+            <p className="caption">Concept director.</p>
+            <p className="caption">Byungsun Jeon</p>
+          </div>
+          <div className="project-credit-entry">
+            <p className="caption">Concept &amp; Design.</p>
+            <p className="caption">Geum jo Bae, Seonyung Shin, Qoon Park, Taeun Uhm</p>
+          </div>
+        </div>
       </main>
     </>
   );

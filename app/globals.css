@@ -491,6 +491,7 @@ html.bg-is-dark .clock-major { fill: white; }
 
 .project-credits {
   width: 50%;
+  padding-top: var(--p);
 }
 
 .project-credit-entry {
@@ -506,9 +507,6 @@ html.bg-is-dark .clock-major { fill: white; }
 @media (max-width: 640px) {
   .project-detail {
     padding-top: 50px;
-  }
-  .project-title {
-    white-space: normal;
   }
   .project-credits {
     width: 100%;
