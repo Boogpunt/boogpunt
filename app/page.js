@@ -58,7 +58,7 @@ function getImageBrightness(src) {
 }
 
 // Index disc — arc text from 12 o'clock clockwise, wrap inner ring at 8 o'clock
-const INDEX_OUTER_R = 210;
+const INDEX_OUTER_R = 200;
 const INDEX_SPACING = 14; // radial gap between arcs (SVG user units)
 
 const INDEX_LINES = [
@@ -337,6 +337,7 @@ export default function Home() {
 
     // Category label hover → dissolve in background image + auto-invert text on dark bg
     const onLabelEnter = () => {
+      if (introEl.classList.contains("index-mode")) return;
       const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
       if (entry) {
         hoverBgImg.src = entry.src;
