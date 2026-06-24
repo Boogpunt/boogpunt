@@ -468,7 +468,8 @@ export default function Home() {
     const indexLinkHandler = (e) => {
       e.preventDefault();
       if (infoPanelVisible) hideInfo();
-      hideFilterBar(); // always hide filter-bar when entering/toggling index
+      if (panelVisible) hideFilter();
+      hideFilterBar();
       const isNowIndex = !introEl.classList.contains("index-mode");
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
       if (isNowIndex) {
@@ -601,7 +602,7 @@ export default function Home() {
           <li className="nav-main-item"><a href="#work" className="nav-link is-active" data-menu="works">Works</a></li>
           <li className="nav-main-item"><a href="#" id="nav-index" className="nav-link">Index</a></li>
           <li className="nav-main-item"><a href="#info" className="nav-link" data-menu="about">About</a></li>
-          <li className="nav-main-item"><a href="mailto:qoon@boogpunt.com" className="nav-link">Contact</a></li>
+          <li className="nav-main-item"><a href="mailto:qoon@boogpunt.com" className="nav-link" target="_blank" rel="noopener noreferrer">Contact</a></li>
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="all">All</button></li>
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="branding">Branding</button></li>
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="graphic">Graphic</button></li>
