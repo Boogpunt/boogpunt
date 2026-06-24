@@ -482,11 +482,11 @@ html.bg-is-dark .clock-major { fill: white; }
 
 /* ─── PROJECT DETAIL PAGE ─── */
 .project-detail {
-  padding: 0 var(--p) 80px;
+  padding: 0 var(--p) 40px;
 }
 
 .project-header {
-  padding: 20px 0 32px;
+  padding: 20px 0 12px;
   margin-bottom: var(--p);
 }
 
@@ -497,13 +497,13 @@ html.bg-is-dark .clock-major { fill: white; }
   letter-spacing: -0.05em;
   color: var(--fg);
   white-space: nowrap;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .project-header-sub {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 24px;
+  padding-bottom: 12px;
 }
 
 .project-credits {

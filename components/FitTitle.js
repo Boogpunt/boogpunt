@@ -13,8 +13,8 @@ export default function FitTitle({ children, className }) {
       const range = document.createRange();
       range.selectNodeContents(el);
       const textWidth = range.getBoundingClientRect().width;
-      const containerWidth = el.parentElement.clientWidth;
-      if (textWidth > 0) el.style.fontSize = `${100 * containerWidth / textWidth}px`;
+      const containerWidth = el.parentElement.getBoundingClientRect().width;
+      if (textWidth > 0) el.style.fontSize = `${Math.floor(100 * containerWidth / textWidth)}px`;
     };
 
     fit();
