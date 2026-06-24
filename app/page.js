@@ -91,7 +91,8 @@ function DiscSVG() {
           <line key={i} className="clock-line" x1={ln.x1} y1={ln.y1} x2={ln.x2} y2={ln.y2} />
         ))}
         {MAJOR_TICKS.map((t, i) => (
-          <g key={i} transform={`translate(${t.cx},${t.cy}) rotate(${t.rotation}) scale(0.26)`}>
+          <g key={i} className="clock-major-group" transform={`translate(${t.cx},${t.cy}) rotate(${t.rotation}) scale(0.26)`}>
+            <rect x="-30" y="-10" width="60" height="65" fill="transparent" />
             <use href="#cat-tick" className="clock-major" />
           </g>
         ))}
@@ -131,18 +132,7 @@ const CARDS = [
   { category: "typeface",    meta: "Monolith NFT Display / Exhibition / 2022",      img: `${IK}/Monolith/Monolith_0.png` },
 ];
 
-const PROJECTS = [
-  "SK enmove ZIC Brand Renewal",
-  "Dorosiwa Brand Renewal",
-  "Kiss of Life : Brand Film Logotype",
-  "The Miraculous Flight of the Broken Bird",
-  "Monolith NFT Display Design",
-  "Egg Cup Ceramic Series",
-  "Year of the Red Horse",
-  "Blade Typeface",
-  "Invisible Memory : Precious Thing",
-  "Break : Architecture Demolition",
-];
+const ALL_INDEX_ITEMS = INDEX_LINES.flatMap(line => line.split(" | "));
 
 export default function Home() {
   useEffect(() => {
@@ -391,6 +381,12 @@ export default function Home() {
     catLabelEl.addEventListener("mouseleave", onLabelLeave);
     catLabelEl.addEventListener("click", onLabelClick);
 
+    const majorTickEls = !isMobile ? [...document.querySelectorAll(".clock-major-group")] : [];
+    majorTickEls.forEach(g => {
+      g.addEventListener("mouseenter", onLabelEnter);
+      g.addEventListener("mouseleave", onLabelLeave);
+    });
+
     // Desktop: hover Works to show filter bar
     let worksEnterHandler = null;
     let worksLeaveHandler = null;
@@ -591,6 +587,10 @@ export default function Home() {
       catLabelEl.removeEventListener("mouseenter", onLabelEnter);
       catLabelEl.removeEventListener("mouseleave", onLabelLeave);
       catLabelEl.removeEventListener("click", onLabelClick);
+      majorTickEls.forEach(g => {
+        g.removeEventListener("mouseenter", onLabelEnter);
+        g.removeEventListener("mouseleave", onLabelLeave);
+      });
       if (!isMobile) {
         if (worksEnterHandler)     projectsLink.removeEventListener("mouseenter", worksEnterHandler);
         if (worksLeaveHandler)     projectsLink.removeEventListener("mouseleave", worksLeaveHandler);
@@ -660,7 +660,7 @@ export default function Home() {
             <p className="info-body">Based on this, he approaches design not as a fixed outcome, but as an interaction that shifts, adapts, and unfolds across different environments.</p>
           </div>
           <div className="info-table">
-            <div className="info-entry">
+            <div className="info-entry info-entry--experience">
               <span className="info-label">Experience</span>
               <div className="info-items">
                 <p>COV STUDIO. Lead Graphic Designer. 2024–2025</p>
@@ -690,9 +690,9 @@ export default function Home() {
               </div>
             </div>
             <div className="info-entry info-entry--projects">
-              <span className="info-label"></span>
+              <span className="info-label">Client</span>
               <div className="info-items">
-                {PROJECTS.map((p, i) => <p key={i}>{p}</p>)}
+                {ALL_INDEX_ITEMS.map((item, i) => <p key={i}>{item}</p>)}
               </div>
             </div>
           </div>

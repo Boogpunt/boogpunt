@@ -188,6 +188,10 @@ html.index-bg .index-text { fill: white; }
   pointer-events: none;
   transition: stroke 0.4s ease;
 }
+.clock-major-group {
+  pointer-events: all;
+  cursor: pointer;
+}
 .clock-major {
   fill: var(--fg);
   pointer-events: none;
@@ -361,6 +365,9 @@ html.bg-is-dark .clock-major { fill: white; }
   grid-template-columns: 120px 1fr;
   padding: 6px 13px 6px 0;
   gap: 0 16px;
+}
+.info-entry--experience .info-items p {
+  margin-bottom: 1.1em;
 }
 
 .info-label {
