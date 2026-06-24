@@ -22,7 +22,7 @@ const ik = new ImageKit({
   urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 });
 
-const IMAGES_DIR    = path.join(__dirname, "../images");
+const IMAGES_DIR    = path.join(__dirname, "../../images");
 const IK_BASE_FOLDER = "/boogpunt";
 
 const filterArg = process.argv[2];
@@ -39,7 +39,7 @@ function walkDir(dir, base = dir) {
 }
 
 async function upload(file) {
-  const relDir    = path.dirname(file.rel);
+  const relDir    = path.dirname(file.rel).replace(/ /g, "_");
   const ikFolder  = relDir === "." ? IK_BASE_FOLDER : `${IK_BASE_FOLDER}/${relDir}`;
   const fileName  = path.basename(file.rel);
   const fileBuffer = fs.readFileSync(file.full);

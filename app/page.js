@@ -115,7 +115,7 @@ const CATEGORY_IMAGES = {
   Graphic:      { src: `${IK}/Watching/Watching_t_pZ7HDuKjb.jpg`,           mode: "cover" },
   Installation: { src: `${IK}/Minkowski/Minkowski_t.jpg`,                   mode: "cover" },
   Branding:     { src: `${IK}/ZIC/ZIC_t.jpg`,                               mode: "cover" },
-  Typeface:     { src: `${IK}/Bound_in_a_spiral_dance/bsd_t_eGTNKWnIp.jpg`, mode: "cover" },
+  Typeface:     { src: `${IK}/Bound_in_a_spiral_dance/bsd_t.jpg`,            mode: "cover" },
 };
 
 const CARDS = [
