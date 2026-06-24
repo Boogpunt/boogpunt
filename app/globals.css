@@ -289,7 +289,8 @@ html.bg-is-dark .clock-major { fill: white; }
   display: block;
   width: 100%;
   background: #000;
-  clip-path: inset(0);
+  border-radius: 2px;
+  clip-path: inset(0 round 2px);
   transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   object-fit: cover;
 }
@@ -456,9 +457,10 @@ html.bg-is-dark .clock-major { fill: white; }
     flex-direction: column;
     align-items: flex-end;
     gap: 12px;
-    padding: 12px 13px 12px;
+    padding: 12px 0;
   }
   .nav.is-open .nav-menu { display: flex; }
+  .nav.is-open { background: var(--bg); }
 
   /* Works → inline filter mode: swap main items for filter items */
   .nav.in-filter-mode .nav-main-item { display: none; }
@@ -527,6 +529,7 @@ html.bg-is-dark .clock-major { fill: white; }
 .project-detail-img {
   display: block;
   width: 100%;
+  border-radius: 2px;
   margin-bottom: calc(var(--p) / 2);
 }
 

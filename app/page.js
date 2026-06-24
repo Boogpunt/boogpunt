@@ -304,6 +304,7 @@ export default function Home() {
 
     function showFilter(category) {
       if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
+      document.body.style.overflow = "hidden";
       setup();
       if (infoPanelVisible) hideInfo();
       if (panelVisible) {
@@ -327,6 +328,7 @@ export default function Home() {
 
     function hideFilter() {
       panelVisible = false;
+      document.body.style.overflow = "";
       document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("is-active"));
       if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
@@ -592,6 +594,7 @@ export default function Home() {
 
     return () => {
       document.documentElement.classList.remove("main-page");
+      document.body.style.overflow = "";
       window.removeEventListener("resize", resizeHandler);
       if (isMobile) {
         document.removeEventListener("touchstart", touchStartHandler);

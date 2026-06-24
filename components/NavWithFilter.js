@@ -69,6 +69,7 @@ export default function NavWithFilter() {
 
     function showFilter(category) {
       if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
+      document.body.style.overflow = "hidden";
       updatePanelTops();
       if (!panelVisible) filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
       if (panelVisible) {
@@ -91,6 +92,7 @@ export default function NavWithFilter() {
 
     function hideFilter() {
       panelVisible = false;
+      document.body.style.overflow = "";
       document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("is-active"));
       if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
@@ -157,6 +159,7 @@ export default function NavWithFilter() {
     filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
 
     return () => {
+      document.body.style.overflow = "";
       if (!isMobile) {
         if (worksEnterH) projectsLink.removeEventListener("mouseenter", worksEnterH);
         if (worksLeaveH) projectsLink.removeEventListener("mouseleave", worksLeaveH);
