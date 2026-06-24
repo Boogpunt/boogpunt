@@ -313,6 +313,7 @@ export default function Home() {
       if (rotRafId) { cancelAnimationFrame(rotRafId); rotRafId = null; }
       document.querySelectorAll(".index-text textPath").forEach(el => { el.textContent = ""; });
       introEl.classList.remove("index-mode");
+      document.documentElement.classList.remove("index-bg");
       catLabelEl.classList.remove("is-visible");
       catLabelEl.textContent = CATEGORIES[currentCatIndex];
       currentStep = -1;
@@ -407,11 +408,13 @@ export default function Home() {
 
     const indexLinkHandler = (e) => {
       e.preventDefault();
+      if (infoPanelVisible) hideInfo();
       const isNowIndex = !introEl.classList.contains("index-mode");
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
       if (isNowIndex) {
         indexLink.classList.add("is-active");
         introEl.classList.add("index-mode");
+        document.documentElement.classList.add("index-bg");
         catLabelEl.textContent = "Participated Project";
         catLabelEl.classList.add("is-visible");
 
@@ -421,7 +424,7 @@ export default function Home() {
         const textPaths = [...document.querySelectorAll(".index-text textPath")];
         textPaths.forEach(el => { el.textContent = ""; });
 
-        // Rotate ticks one full turn (outCubic), then type all 4 lines simultaneously
+        // Rotate ticks one full turn (outCubic, 700ms), typing starts simultaneously
         const startRot = Math.max(0, currentStep) * 30;
         const rotDur = 700;
         let t0 = null;
@@ -430,20 +433,18 @@ export default function Home() {
           const p = Math.min((ts - t0) / rotDur, 1);
           const eased = 1 - Math.pow(1 - p, 3);
           linesGroupEl.style.transform = `rotate(${startRot + 360 * eased}deg)`;
-          if (p < 1) {
-            rotRafId = requestAnimationFrame(spinStep);
-          } else {
-            rotRafId = null;
-            let ci = 0;
-            const maxLen = Math.max(...INDEX_LINES.map(l => l.length));
-            typingInterval = setInterval(() => {
-              ci++;
-              textPaths.forEach((el, i) => { el.textContent = INDEX_LINES[i].slice(0, ci); });
-              if (ci >= maxLen) { clearInterval(typingInterval); typingInterval = null; }
-            }, 12);
-          }
+          if (p < 1) rotRafId = requestAnimationFrame(spinStep);
+          else rotRafId = null;
         }
         rotRafId = requestAnimationFrame(spinStep);
+
+        let ci = 0;
+        const maxLen = Math.max(...INDEX_LINES.map(l => l.length));
+        typingInterval = setInterval(() => {
+          ci++;
+          textPaths.forEach((el, i) => { el.textContent = INDEX_LINES[i].slice(0, ci); });
+          if (ci >= maxLen) { clearInterval(typingInterval); typingInterval = null; }
+        }, 6);
       } else {
         exitIndexMode();
       }
@@ -453,6 +454,7 @@ export default function Home() {
     const navLinkHandlers = allNavLinks.filter((l) => l !== infoLink && l !== indexLink).map((link) => {
       const handler = function () {
         exitIndexMode();
+        if (infoPanelVisible) hideInfo();
         allNavLinks.forEach((l) => l.classList.remove("is-active"));
         this.classList.add("is-active");
       };
