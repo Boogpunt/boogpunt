@@ -110,14 +110,15 @@ function DiscSVG() {
   );
 }
 
-const IK    = "https://ik.imagekit.io/qoon/tr:w-1400,q-85/boogpunt";
-const BG_IK = "https://ik.imagekit.io/qoon/tr:w-2400,q-92/boogpunt";
+const IK      = "https://ik.imagekit.io/qoon/tr:w-1400,q-85/boogpunt";
+const BG_IK   = "https://ik.imagekit.io/qoon/tr:w-2400,q-92/boogpunt/bg/desktop";
+const BG_IK_M = "https://ik.imagekit.io/qoon/tr:w-1000,q-88/boogpunt/bg/mobile";
 
 const CATEGORY_IMAGES = {
-  Graphic:      { src: `${BG_IK}/Watching/Watching_t.jpg`,              mode: "cover" },
-  Installation: { src: `${BG_IK}/Minkowski/Minkowski_t.jpg`,            mode: "cover" },
-  Branding:     { src: `${BG_IK}/ZIC/ZIC_t.jpg`,                        mode: "cover" },
-  Typeface:     { src: `${BG_IK}/BoundInASpiralDance/bsd_t.jpg`,        mode: "cover" },
+  Graphic:      { desktop: `${BG_IK}/graphic.jpg`,      mobile: `${BG_IK_M}/graphic.jpg`,      mode: "cover" },
+  Installation: { desktop: `${BG_IK}/installation.jpg`, mobile: `${BG_IK_M}/installation.jpg`, mode: "cover" },
+  Branding:     { desktop: `${BG_IK}/branding.jpg`,     mobile: `${BG_IK_M}/branding.jpg`,     mode: "cover" },
+  Typeface:     { desktop: `${BG_IK}/typeface.jpg`,     mobile: `${BG_IK_M}/typeface.jpg`,     mode: "cover" },
 };
 
 const CARDS = [
@@ -163,8 +164,9 @@ export default function Home() {
     const isMobile = window.matchMedia("(hover: none)").matches;
 
     let panelAnim, infoPanelAnim;
-    let panelVisible     = false;
-    let infoPanelVisible = false;
+    let panelVisible        = false;
+    let infoPanelVisible    = false;
+    let activePanelCategory = null;
     let currentCatIndex  = 0;
     let currentAngle     = 0;   // current disc rotation in degrees
     let isAnimating      = false;
@@ -279,10 +281,10 @@ export default function Home() {
       if (isMobile) {
         const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
         if (entry) {
-          hoverBgImg.src = entry.src;
+          hoverBgImg.src = entry.mobile;
           hoverBgEl.dataset.mode = entry.mode;
           hoverBgEl.classList.add("is-visible");
-          getImageBrightness(entry.src).then((b) => {
+          getImageBrightness(entry.mobile).then((b) => {
             document.documentElement.classList.toggle("bg-is-dark", b < 128);
           });
         } else {
@@ -303,6 +305,7 @@ export default function Home() {
     }
 
     function showFilter(category) {
+      activePanelCategory = category;
       if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
       document.body.style.overflow = "hidden";
       setup();
@@ -328,6 +331,8 @@ export default function Home() {
 
     function hideFilter() {
       panelVisible = false;
+      activePanelCategory = null;
+      sessionStorage.removeItem("filterCategory");
       document.body.style.overflow = "";
       document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("is-active"));
       if (isMobile) hideFilterBar();
@@ -375,10 +380,11 @@ export default function Home() {
       if (introEl.classList.contains("index-mode")) return;
       const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
       if (entry) {
-        hoverBgImg.src = entry.src;
+        const bgSrc = isMobile ? entry.mobile : entry.desktop;
+        hoverBgImg.src = bgSrc;
         hoverBgEl.dataset.mode = entry.mode;
         hoverBgEl.classList.add("is-visible");
-        getImageBrightness(entry.src).then((b) => {
+        getImageBrightness(bgSrc).then((b) => {
           document.documentElement.classList.toggle("bg-is-dark", b < 128);
         });
       }
@@ -465,9 +471,13 @@ export default function Home() {
       const card = e.target.closest(".card");
       if (card) {
         const slug = card.dataset.slug;
-        hideFilter();
-        if (slug) window.location.href = `/${slug}`;
-        else window.scrollTo({ top: 0, behavior: "smooth" });
+        if (slug) {
+          if (activePanelCategory) sessionStorage.setItem("filterCategory", activePanelCategory);
+          window.location.href = `/${slug}`;
+        } else {
+          hideFilter();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       }
     };
     filterGrid.addEventListener("click", filterGridClickHandler);
@@ -583,6 +593,8 @@ export default function Home() {
     setup();
     catLabelEl.textContent = CATEGORIES[0];
     catLabelEl.classList.add("is-visible");
+    const savedCat = sessionStorage.getItem("filterCategory");
+    if (savedCat) { sessionStorage.removeItem("filterCategory"); showFilter(savedCat); }
     window.addEventListener("resize", resizeHandler);
     if (isMobile) {
       document.addEventListener("touchstart", touchStartHandler, { passive: true });
