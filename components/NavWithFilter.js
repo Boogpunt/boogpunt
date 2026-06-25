@@ -22,7 +22,7 @@ export default function NavWithFilter() {
     function updatePanelTops() {
       const navB     = nav.getBoundingClientRect().bottom;
       const panelTop = filterBar.classList.contains("is-visible")
-        ? navB + filterBar.getBoundingClientRect().height
+        ? navB + filterBar.getBoundingClientRect().height + 10
         : navB;
       const panelH = window.innerHeight - panelTop;
       filterPanel.style.top    = `${panelTop}px`;

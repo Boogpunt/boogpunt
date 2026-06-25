@@ -481,7 +481,7 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 .project-header {
-  padding: 20px 0 12px;
+  padding: 10px 0 12px;
   margin-bottom: var(--p);
   text-align: center;
 }
