@@ -21,7 +21,7 @@ export default function BladePage() {
       <NavWithFilter />
       <main className="project-detail">
         <header className="project-header">
-          <FitTitle className="project-title">{"Blade "}</FitTitle>
+          <FitTitle className="project-title">Blade</FitTitle>
           <div className="project-header-sub">
             <span>Client. Personal Project</span>
             <span>2026</span>

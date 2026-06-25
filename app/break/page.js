@@ -19,7 +19,7 @@ export default function BreakPage() {
       <NavWithFilter />
       <main className="project-detail">
         <header className="project-header">
-          <FitTitle className="project-title">{"Break "}</FitTitle>
+          <FitTitle className="project-title">Break</FitTitle>
           <div className="project-header-sub">
             <span>Client. Personal Project</span>
             <span>2024</span>

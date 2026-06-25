@@ -13,7 +13,7 @@ export default function FitTitle({ children, className }) {
       el.style.width = "max-content";
       const textWidth = el.getBoundingClientRect().width;
       el.style.width = "";
-      const containerWidth = el.getBoundingClientRect().width;
+      const containerWidth = el.getBoundingClientRect().width - 8;
       if (textWidth <= 0 || containerWidth <= 0) return;
 
       let size = Math.floor(100 * containerWidth / textWidth);

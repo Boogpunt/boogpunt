@@ -21,7 +21,7 @@ export default function RunawayPage() {
       <NavWithFilter />
       <main className="project-detail">
         <header className="project-header">
-          <FitTitle className="project-title">{"Runaway "}</FitTitle>
+          <FitTitle className="project-title">Runaway</FitTitle>
           <div className="project-header-sub">
             <span>Client. Personal Project</span>
             <span>2026</span>
