@@ -22,7 +22,7 @@ export default function NavWithFilter() {
     function updatePanelTops() {
       const navB     = nav.getBoundingClientRect().bottom;
       const panelTop = filterBar.classList.contains("is-visible")
-        ? navB + filterBar.getBoundingClientRect().height + 6
+        ? navB + filterBar.getBoundingClientRect().height
         : navB;
       const panelH = window.innerHeight - panelTop;
       filterPanel.style.top    = `${panelTop}px`;
@@ -70,6 +70,7 @@ export default function NavWithFilter() {
 
     function showFilter(category) {
       nav.style.background = "#ffffff";
+      filterBar.style.background = "#ffffff";
       if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
       document.body.style.overflow = "hidden";
       updatePanelTops();
@@ -95,6 +96,7 @@ export default function NavWithFilter() {
     function hideFilter() {
       panelVisible = false;
       nav.style.background = "";
+      filterBar.style.background = "";
       document.body.style.overflow = "";
       document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("is-active"));
       if (isMobile) hideFilterBar();
