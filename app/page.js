@@ -233,9 +233,8 @@ export default function Home() {
 
     function setup() {
       updatePanelTops();
-      // Use window.innerHeight offset to prevent flash when mobile address bar hides/shows
-      if (!panelVisible)     filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
-      if (!infoPanelVisible) infoPanel.style.transform   = `translateY(${window.innerHeight}px)`;
+      if (!panelVisible)     filterPanel.style.transform = `translateY(-${window.innerHeight}px)`;
+      if (!infoPanelVisible) infoPanel.style.transform   = `translateY(-${window.innerHeight}px)`;
       introEl.style.height = `${window.innerHeight}px`;
       spacer.style.height  = "0";
       updateLabelPos();
@@ -313,7 +312,7 @@ export default function Home() {
       if (panelVisible) {
         if (panelAnim) panelAnim.pause();
         panelAnim = animate(filterPanel, {
-          translateY: filterPanel.clientHeight,
+          translateY: -filterPanel.clientHeight,
           duration: 350,
           ease: "inExpo",
           onComplete: () => {
@@ -338,7 +337,7 @@ export default function Home() {
       if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
       panelAnim = animate(filterPanel, {
-        translateY: window.innerHeight,
+        translateY: -window.innerHeight,
         duration: 500,
         ease: "inOutExpo",
       });
@@ -357,7 +356,7 @@ export default function Home() {
       infoPanelVisible = false;
       if (infoPanelAnim) infoPanelAnim.pause();
       infoPanelAnim = animate(infoPanel, {
-        translateY: window.innerHeight,
+        translateY: -window.innerHeight,
         duration: 500,
         ease: "inOutExpo",
       });
@@ -593,6 +592,14 @@ export default function Home() {
     setup();
     catLabelEl.textContent = CATEGORIES[0];
     catLabelEl.classList.add("is-visible");
+    if (isMobile) {
+      const initEntry = CATEGORY_IMAGES[CATEGORIES[0]];
+      if (initEntry) {
+        hoverBgImg.src = initEntry.mobile;
+        hoverBgEl.dataset.mode = initEntry.mode;
+        hoverBgEl.classList.add("is-visible");
+      }
+    }
     const savedCat = sessionStorage.getItem("filterCategory");
     if (savedCat) { sessionStorage.removeItem("filterCategory"); showFilter(savedCat); }
     window.addEventListener("resize", resizeHandler);

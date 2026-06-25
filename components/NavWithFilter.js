@@ -71,11 +71,11 @@ export default function NavWithFilter() {
       if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
       document.body.style.overflow = "hidden";
       updatePanelTops();
-      if (!panelVisible) filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
+      if (!panelVisible) filterPanel.style.transform = `translateY(-${window.innerHeight}px)`;
       if (panelVisible) {
         if (panelAnim) panelAnim.pause();
         panelAnim = animate(filterPanel, {
-          translateY: filterPanel.clientHeight,
+          translateY: -filterPanel.clientHeight,
           duration: 350, ease: "inExpo",
           onComplete: () => {
             populateFilterGrid(category);
@@ -96,7 +96,7 @@ export default function NavWithFilter() {
       document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("is-active"));
       if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
-      panelAnim = animate(filterPanel, { translateY: window.innerHeight, duration: 500, ease: "inOutExpo" });
+      panelAnim = animate(filterPanel, { translateY: -window.innerHeight, duration: 500, ease: "inOutExpo" });
     }
 
     const filterGridClickHandler = (e) => {
@@ -156,7 +156,7 @@ export default function NavWithFilter() {
     window.addEventListener("resize", resizeH);
 
     updatePanelTops();
-    filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
+    filterPanel.style.transform = `translateY(-${window.innerHeight}px)`;
 
     return () => {
       document.body.style.overflow = "";
