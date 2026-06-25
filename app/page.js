@@ -163,7 +163,7 @@ export default function Home() {
     const hoverBgImg   = hoverBgEl.querySelector("img");
 
     const isMobile   = window.matchMedia("(hover: none)").matches;
-    const isPortrait = () => window.matchMedia("(orientation: portrait)").matches;
+    const isPortrait = () => window.innerHeight > window.innerWidth;
 
     let panelAnim, infoPanelAnim;
     let panelVisible        = false;
