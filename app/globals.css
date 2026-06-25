@@ -483,16 +483,17 @@ html.bg-is-dark .clock-major { fill: white; }
 .project-header {
   padding: 20px 0 12px;
   margin-bottom: var(--p);
+  text-align: center;
 }
 
 .project-title {
+  display: inline-block;
   font-size: 16vw;
   font-weight: 700;
   line-height: 1.0;
   letter-spacing: -0.05em;
   color: var(--fg);
   white-space: nowrap;
-  text-align: center;
   margin-bottom: 6px;
 }
 

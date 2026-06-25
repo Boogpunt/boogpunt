@@ -9,32 +9,30 @@ export default function FitTitle({ children, className }) {
     if (!el) return;
 
     const fit = () => {
+      // Container width from parent (not el itself, since el is inline-block)
+      const containerWidth = el.parentElement?.getBoundingClientRect().width;
+      if (!containerWidth) return;
+
       el.style.fontSize = "100px";
-      el.style.width = "max-content";
       const textWidth = el.getBoundingClientRect().width;
-      el.style.width = "";
-      const containerWidth = el.getBoundingClientRect().width - 8;
-      if (textWidth <= 0 || containerWidth <= 0) return;
+      if (!textWidth) return;
 
       let size = Math.floor(100 * containerWidth / textWidth);
       el.style.fontSize = size + "px";
 
-      el.style.width = "max-content";
+      // Trim any subpixel overshoot
       while (el.getBoundingClientRect().width > containerWidth && size > 1) {
         el.style.fontSize = --size + "px";
       }
-      el.style.width = "";
     };
 
     const run = () => requestAnimationFrame(fit);
     document.fonts.ready.then(run);
-    document.fonts.addEventListener("loadingdone", run);
+
     const observer = new ResizeObserver(run);
-    observer.observe(el.parentElement);
-    return () => {
-      observer.disconnect();
-      document.fonts.removeEventListener("loadingdone", run);
-    };
+    observer.observe(el.parentElement); // window resize
+    observer.observe(el);               // font change: inline-block width = text width, so font load triggers this
+    return () => observer.disconnect();
   }, []);
 
   return <h1 ref={ref} className={className}>{children}</h1>;
