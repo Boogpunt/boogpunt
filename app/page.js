@@ -404,6 +404,7 @@ export default function Home() {
       }
     };
     const onLabelLeave = () => {
+      if (isPortrait()) return;
       hoverBgEl.classList.remove("is-visible");
       delete hoverBgEl.dataset.mode;
       document.documentElement.classList.remove("bg-is-dark");
