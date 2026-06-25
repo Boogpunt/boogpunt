@@ -26,8 +26,10 @@ export default function FitTitle({ children, className }) {
       el.style.width = "";
     };
 
-    document.fonts.ready.then(() => requestAnimationFrame(fit));
-    const observer = new ResizeObserver(() => requestAnimationFrame(fit));
+    const run = () => requestAnimationFrame(fit);
+    document.fonts.ready.then(run);
+    document.fonts.load("700 100px neue-haas-grotesk-text").then(run);
+    const observer = new ResizeObserver(run);
     observer.observe(el.parentElement);
     return () => observer.disconnect();
   }, []);
