@@ -29,12 +29,6 @@ export default function KissOfLifePage() {
         {IMAGES.map((src, i) => (
           <img key={i} className="project-detail-img" src={src} alt={`Kiss of Life ${i}`} loading={i === 0 ? "eager" : "lazy"} />
         ))}
-        <div className="project-credits">
-          <span className="caption">Design.</span>
-          <span className="caption">Doyeon Kim, Qoon Park</span>
-          <span className="caption">Film and Production.</span>
-          <span className="caption">S2 Entertainments</span>
-        </div>
         <div className="project-video">
           <iframe
             src="https://www.youtube.com/embed/i3lqCquDMJY?si=UHCJ_4hBhmdgVpUZ&controls=0"
@@ -44,6 +38,12 @@ export default function KissOfLifePage() {
             referrerPolicy="strict-origin-when-cross-origin"
             allowFullScreen
           />
+        </div>
+        <div className="project-credits">
+          <span className="caption">Design.</span>
+          <span className="caption">Doyeon Kim, Qoon Park</span>
+          <span className="caption">Film and Production.</span>
+          <span className="caption">S2 Entertainments</span>
         </div>
       </main>
     </>
