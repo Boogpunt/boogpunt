@@ -111,8 +111,8 @@ function DiscSVG() {
 }
 
 const IK      = "https://ik.imagekit.io/qoon/tr:w-1400,q-85/boogpunt";
-const BG_IK   = "https://ik.imagekit.io/qoon/tr:w-2400,q-92/boogpunt/bg/desktop";
-const BG_IK_M = "https://ik.imagekit.io/qoon/tr:w-1000,q-88/boogpunt/bg/mobile";
+const BG_IK   = "https://ik.imagekit.io/qoon/tr:w-2400,q-92/boogpunt/bg/desktop?v=2";
+const BG_IK_M = "https://ik.imagekit.io/qoon/tr:w-1000,q-88/boogpunt/bg/mobile?v=2";
 
 const CATEGORY_IMAGES = {
   Graphic:      { desktop: `${BG_IK}/graphic_mainbg_d.jpg`,      mobile: `${BG_IK_M}/graphic_mainbg_m.jpg`,      mode: "cover" },
