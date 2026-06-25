@@ -39,6 +39,9 @@ html.index-bg .nav {
 html.main-page.overlay-open .nav {
   background: #ffffff;
 }
+html.main-page.overlay-open .nav-logo,
+html.main-page.overlay-open .nav-link,
+html.main-page.overlay-open .nav-toggle { color: var(--fg); }
 
 .nav-logo {
   color: var(--fg);
@@ -251,14 +254,11 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 .filter-grid {
-  columns: 3;
-  column-gap: var(--p);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--p);
   padding: 0 var(--p) 30px;
-}
-.filter-grid > .card {
-  break-inside: avoid;
-  margin-bottom: var(--p);
-  display: block;
+  align-items: start;
 }
 
 /* ─── CARD BASE ─── */
@@ -512,7 +512,7 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 @media (max-width: 640px) {
-  .filter-grid { columns: 2; }
+  .filter-grid { grid-template-columns: repeat(2, 1fr); }
   .project-detail {
     padding-top: 50px;
   }
