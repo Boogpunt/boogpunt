@@ -71,7 +71,7 @@ html.main-page.overlay-open .nav-toggle { color: var(--fg); }
   display: flex;
   align-items: baseline;
   gap: 24px;
-  padding: 2px 0;
+  padding: 0;
   background: transparent;
   opacity: 0;
   pointer-events: none;
