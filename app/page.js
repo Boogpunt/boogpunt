@@ -162,7 +162,8 @@ export default function Home() {
     const hoverBgEl    = document.querySelector(".hover-bg");
     const hoverBgImg   = hoverBgEl.querySelector("img");
 
-    const isMobile = window.matchMedia("(hover: none)").matches;
+    const isMobile   = window.matchMedia("(hover: none)").matches;
+    const isPortrait = () => window.matchMedia("(orientation: portrait)").matches;
 
     let panelAnim, infoPanelAnim;
     let panelVisible        = false;
@@ -277,9 +278,9 @@ export default function Home() {
 
       currentCatIndex = ((currentCatIndex + dir) % CATEGORIES.length + CATEGORIES.length) % CATEGORIES.length;
       catLabelEl.textContent = CATEGORIES[currentCatIndex];
-      if (!isMobile) hoverBgEl.classList.remove("is-visible");
+      if (!isPortrait()) hoverBgEl.classList.remove("is-visible");
 
-      if (isMobile) {
+      if (isPortrait()) {
         const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
         if (entry) {
           hoverBgImg.src = entry.mobile;
@@ -393,7 +394,7 @@ export default function Home() {
       if (introEl.classList.contains("index-mode")) return;
       const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
       if (entry) {
-        const bgSrc = isMobile ? entry.mobile : entry.desktop;
+        const bgSrc = isPortrait() ? entry.mobile : entry.desktop;
         hoverBgImg.src = bgSrc;
         hoverBgEl.dataset.mode = entry.mode;
         hoverBgEl.classList.add("is-visible");
@@ -602,12 +603,27 @@ export default function Home() {
       advanceCategory(delta > 0 ? 1 : -1);
     } : null;
 
-    const resizeHandler = () => { setup(); };
+    const showPortraitBg = () => {
+      const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
+      if (entry) {
+        hoverBgImg.src = entry.mobile;
+        hoverBgEl.dataset.mode = entry.mode;
+        hoverBgEl.classList.add("is-visible");
+        getImageBrightness(entry.mobile).then((b) => {
+          document.documentElement.classList.toggle("bg-is-dark", b < 128);
+        });
+      }
+    };
+    const resizeHandler = () => {
+      setup();
+      if (isPortrait()) showPortraitBg();
+      else { hoverBgEl.classList.remove("is-visible"); delete hoverBgEl.dataset.mode; document.documentElement.classList.remove("bg-is-dark"); }
+    };
 
     setup();
     catLabelEl.textContent = CATEGORIES[0];
     catLabelEl.classList.add("is-visible");
-    if (isMobile) {
+    if (isPortrait()) {
       const initEntry = CATEGORY_IMAGES[CATEGORIES[0]];
       if (initEntry) {
         hoverBgImg.src = initEntry.mobile;
