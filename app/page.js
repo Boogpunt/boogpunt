@@ -163,7 +163,7 @@ export default function Home() {
     const hoverBgImg   = hoverBgEl.querySelector("img");
 
     const isMobile   = window.matchMedia("(hover: none)").matches;
-    const isPortrait = () => window.innerHeight > window.innerWidth;
+    const isPortrait = () => window.matchMedia("(orientation: portrait)").matches;
 
     let panelAnim, infoPanelAnim;
     let panelVisible        = false;
@@ -192,7 +192,7 @@ export default function Home() {
     function updatePanelTops() {
       const navB     = nav.getBoundingClientRect().bottom;
       const panelTop = filterBar.classList.contains("is-visible")
-        ? navB + filterBar.getBoundingClientRect().height + 12
+        ? navB + filterBar.getBoundingClientRect().height + 10
         : navB;
       const panelH = window.innerHeight - panelTop;
       filterPanel.style.top    = `${panelTop}px`;
@@ -415,8 +415,10 @@ export default function Home() {
       showFilter(CATEGORIES[currentCatIndex].toLowerCase());
     };
 
-    catLabelEl.addEventListener("mouseenter", onLabelEnter);
-    catLabelEl.addEventListener("mouseleave", onLabelLeave);
+    if (!isMobile) {
+      catLabelEl.addEventListener("mouseenter", onLabelEnter);
+      catLabelEl.addEventListener("mouseleave", onLabelLeave);
+    }
     catLabelEl.addEventListener("click", onLabelClick);
 
     const majorTickEls = !isMobile ? [...document.querySelectorAll(".clock-major-group")] : [];
@@ -654,8 +656,10 @@ export default function Home() {
       } else {
         window.removeEventListener("wheel", wheelHandler);
       }
-      catLabelEl.removeEventListener("mouseenter", onLabelEnter);
-      catLabelEl.removeEventListener("mouseleave", onLabelLeave);
+      if (!isMobile) {
+        catLabelEl.removeEventListener("mouseenter", onLabelEnter);
+        catLabelEl.removeEventListener("mouseleave", onLabelLeave);
+      }
       catLabelEl.removeEventListener("click", onLabelClick);
       majorTickEls.forEach(g => {
         g.removeEventListener("mouseenter", onLabelEnter);
