@@ -31,7 +31,7 @@ export default function NavWithFilter() {
 
     function positionFilterBar() {
       const rect = projectsLink.getBoundingClientRect();
-      filterBar.style.top         = `${rect.bottom}px`;
+      filterBar.style.top         = `${nav.getBoundingClientRect().bottom}px`;
       filterBar.style.left        = "0";
       filterBar.style.right       = "0";
       filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;

@@ -115,10 +115,10 @@ const BG_IK   = "https://ik.imagekit.io/qoon/tr:w-2400,q-92/boogpunt/bg/desktop"
 const BG_IK_M = "https://ik.imagekit.io/qoon/tr:w-1000,q-88/boogpunt/bg/mobile";
 
 const CATEGORY_IMAGES = {
-  Graphic:      { desktop: `${BG_IK}/graphic.jpg`,      mobile: `${BG_IK_M}/graphic.jpg`,      mode: "cover" },
-  Installation: { desktop: `${BG_IK}/installation.jpg`, mobile: `${BG_IK_M}/installation.jpg`, mode: "cover" },
-  Branding:     { desktop: `${BG_IK}/branding.jpg`,     mobile: `${BG_IK_M}/branding.jpg`,     mode: "cover" },
-  Typeface:     { desktop: `${BG_IK}/typeface.jpg`,     mobile: `${BG_IK_M}/typeface.jpg`,     mode: "cover" },
+  Graphic:      { desktop: `${BG_IK}/graphic_mainbg_d.jpg`,      mobile: `${BG_IK_M}/graphic_mainbg_m.jpg`,      mode: "cover" },
+  Installation: { desktop: `${BG_IK}/installation_mainbg_d.jpg`, mobile: `${BG_IK_M}/installation_mainbg_m.jpg`, mode: "cover" },
+  Branding:     { desktop: `${BG_IK}/branding_mainbg_d.jpg`,     mobile: `${BG_IK_M}/branding_mainbg_m.jpg`,     mode: "cover" },
+  Typeface:     { desktop: `${BG_IK}/typeface_mainbg_d.jpg`,     mobile: `${BG_IK_M}/typeface_mainbg_m.jpg`,     mode: "cover" },
 };
 
 const CARDS = [
@@ -201,7 +201,7 @@ export default function Home() {
 
     function positionFilterBar() {
       const rect = projectsLink.getBoundingClientRect();
-      filterBar.style.top         = `${rect.bottom}px`;
+      filterBar.style.top         = `${nav.getBoundingClientRect().bottom}px`;
       filterBar.style.left        = "0";
       filterBar.style.right       = "0";
       filterBar.style.paddingLeft = isMobile ? "13px" : `${rect.left}px`;
