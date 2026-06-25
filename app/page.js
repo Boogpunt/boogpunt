@@ -501,8 +501,7 @@ export default function Home() {
     };
     infoLink.addEventListener("click", infoLinkHandler);
 
-    const navLogoClickHandler = (e) => {
-      e.preventDefault();
+    const navLogoClickHandler = () => {
       exitIndexMode();
       hideFilterBar();
       if (panelVisible) hideFilter();
