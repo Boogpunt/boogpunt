@@ -26,15 +26,10 @@ export default function FitTitle({ children, className }) {
       el.style.width = "";
     };
 
-    const run = () => requestAnimationFrame(fit);
-    document.fonts.ready.then(run);
-    document.fonts.addEventListener("loadingdone", run);
-    const observer = new ResizeObserver(run);
+    document.fonts.ready.then(() => requestAnimationFrame(fit));
+    const observer = new ResizeObserver(() => requestAnimationFrame(fit));
     observer.observe(el.parentElement);
-    return () => {
-      observer.disconnect();
-      document.fonts.removeEventListener("loadingdone", run);
-    };
+    return () => observer.disconnect();
   }, []);
 
   return <h1 ref={ref} className={className}>{children}</h1>;
