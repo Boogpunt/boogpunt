@@ -71,7 +71,7 @@ html.main-page.overlay-open .nav-toggle { color: var(--fg); }
   display: flex;
   align-items: baseline;
   gap: 24px;
-  padding: 0 0 8px;
+  padding: 0 0 4px;
   background: transparent;
   opacity: 0;
   pointer-events: none;
@@ -251,6 +251,7 @@ html.bg-is-dark .clock-major { fill: white; }
   overflow-y: auto;
   transform: translateY(200%);
   will-change: transform;
+  transition: top 0.25s ease;
 }
 
 .filter-grid {
