@@ -211,14 +211,12 @@ export default function Home() {
 
     function hideFilterBar() {
       filterBar.classList.remove("is-visible");
-      nav.classList.remove("has-submenu");
       updatePanelTops();
     }
 
     function showFilterBar() {
       positionFilterBar();
       filterBar.classList.add("is-visible");
-      nav.classList.add("has-submenu");
       updatePanelTops();
     }
 
@@ -278,8 +276,6 @@ export default function Home() {
 
       currentCatIndex = ((currentCatIndex + dir) % CATEGORIES.length + CATEGORIES.length) % CATEGORIES.length;
       catLabelEl.textContent = CATEGORIES[currentCatIndex];
-      if (!isPortrait()) hoverBgEl.classList.remove("is-visible");
-
       if (isPortrait()) {
         const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
         if (entry) {
@@ -294,6 +290,8 @@ export default function Home() {
           delete hoverBgEl.dataset.mode;
           document.documentElement.classList.remove("bg-is-dark");
         }
+      } else {
+        hoverBgEl.classList.remove("is-visible");
       }
 
       animateToAngle(currentAngle + dir * DEG_PER_CAT);
