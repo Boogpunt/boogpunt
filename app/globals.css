@@ -36,7 +36,8 @@ html.main-page .nav,
 html.index-bg .nav {
   background: transparent;
 }
-html.main-page.overlay-open .nav {
+html.main-page.overlay-open .nav,
+html.main-page.overlay-open .nav.is-open {
   background: #ffffff;
 }
 html.main-page.overlay-open .nav-logo,
@@ -491,6 +492,7 @@ html.bg-is-dark .clock-major { fill: white; }
   letter-spacing: -0.05em;
   color: var(--fg);
   white-space: nowrap;
+  text-align: center;
   margin-bottom: 6px;
 }
 

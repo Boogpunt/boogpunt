@@ -191,7 +191,7 @@ export default function Home() {
     function updatePanelTops() {
       const navB     = nav.getBoundingClientRect().bottom;
       const panelTop = filterBar.classList.contains("is-visible")
-        ? filterBar.getBoundingClientRect().bottom + 12
+        ? navB + filterBar.getBoundingClientRect().height + 12
         : navB;
       const panelH = window.innerHeight - panelTop;
       filterPanel.style.top    = `${panelTop}px`;
@@ -308,6 +308,7 @@ export default function Home() {
     function showFilter(category) {
       activePanelCategory = category;
       document.documentElement.classList.add("overlay-open");
+      nav.style.background = "#ffffff";
       if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
       document.body.style.overflow = "hidden";
       setup();
@@ -336,7 +337,10 @@ export default function Home() {
       activePanelCategory = null;
       sessionStorage.removeItem("filterCategory");
       document.body.style.overflow = "";
-      if (!infoPanelVisible) document.documentElement.classList.remove("overlay-open");
+      if (!infoPanelVisible) {
+        document.documentElement.classList.remove("overlay-open");
+        nav.style.background = "";
+      }
       document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("is-active"));
       if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
@@ -349,6 +353,7 @@ export default function Home() {
 
     function showInfo() {
       document.documentElement.classList.add("overlay-open");
+      nav.style.background = "#ffffff";
       if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
       setup();
       if (panelVisible) hideFilter();
@@ -359,7 +364,10 @@ export default function Home() {
 
     function hideInfo() {
       infoPanelVisible = false;
-      if (!panelVisible) document.documentElement.classList.remove("overlay-open");
+      if (!panelVisible) {
+        document.documentElement.classList.remove("overlay-open");
+        nav.style.background = "";
+      }
       if (infoPanelAnim) infoPanelAnim.pause();
       infoPanelAnim = animate(infoPanel, {
         translateY: window.innerHeight,
@@ -469,6 +477,7 @@ export default function Home() {
     const navToggleHandler = navToggle ? () => {
       const isOpen = nav.classList.toggle("is-open");
       if (!isOpen) { hideFilterBar(); nav.classList.remove("in-filter-mode"); }
+      if (panelVisible || infoPanelVisible) nav.style.background = "#ffffff";
     } : null;
     if (navToggleHandler) navToggle.addEventListener("click", navToggleHandler);
 
