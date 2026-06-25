@@ -35,6 +35,16 @@ export default function KissOfLifePage() {
           <span className="caption">Film and Production.</span>
           <span className="caption">S2 Entertainments</span>
         </div>
+        <div className="project-video">
+          <iframe
+            src="https://www.youtube.com/embed/i3lqCquDMJY?si=UHCJ_4hBhmdgVpUZ&controls=0"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
       </main>
     </>
   );
