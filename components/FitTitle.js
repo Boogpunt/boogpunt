@@ -16,16 +16,17 @@ export default function FitTitle({ children, className }) {
       const containerWidth = el.parentElement.getBoundingClientRect().width;
       if (textWidth > 0 && containerWidth > 0) {
         el.style.fontSize = `${Math.floor(100 * containerWidth / textWidth)}px`;
-        range.selectNodeContents(el);
-        const actual = range.getBoundingClientRect().width;
-        if (actual > containerWidth) {
-          el.style.fontSize = `${Math.floor(parseFloat(el.style.fontSize) * containerWidth / actual)}px`;
+        for (let i = 0; i < 4; i++) {
+          range.selectNodeContents(el);
+          const w = range.getBoundingClientRect().width;
+          if (w <= containerWidth) break;
+          el.style.fontSize = `${Math.floor(parseFloat(el.style.fontSize) * containerWidth / w)}px`;
         }
       }
     };
 
     fit();
-    document.fonts.ready.then(fit);
+    document.fonts.ready.then(() => requestAnimationFrame(fit));
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);
   }, []);

@@ -10,7 +10,11 @@ export const metadata = {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/InvisibleMemory";
 
 const IMAGES = [
-  `${IK}/Invisible_Memory___Precious_Thing_1.png`,
+  `${IK}/Invisible_Memory___Precious_Thing_1.jpg`,
+  `${IK}/Invisible_Memory___Precious_Thing_2.png`,
+  `${IK}/Invisible_Memory___Precious_Thing_3.jpg`,
+  `${IK}/Invisible_Memory___Precious_Thing_4.jpg`,
+  `${IK}/Invisible_Memory___Precious_Thing_5.jpg`,
 ];
 
 export default function InvisibleMemoryPage() {

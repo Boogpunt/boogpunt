@@ -10,7 +10,9 @@ export const metadata = {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/Watching";
 
 const IMAGES = [
-  `${IK}/Watching_t.jpg`,
+  `${IK}/Watching_0.jpg`,
+  `${IK}/Watching_1.jpg`,
+  `${IK}/Watching_3.jpg`,
 ];
 
 export default function WatchingPage() {

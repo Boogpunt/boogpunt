@@ -10,7 +10,11 @@ export const metadata = {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/Minkowski";
 
 const IMAGES = [
-  `${IK}/Minkowski_t.jpg`,
+  `${IK}/Minkowski_0.jpg`,
+  `${IK}/Minkowski_1.jpg`,
+  `${IK}/Minkowski_2.jpg`,
+  `${IK}/Minkowski_3.jpg`,
+  `${IK}/Minkowski_4.jpg`,
 ];
 
 export default function MinkowskiPage() {

@@ -10,7 +10,9 @@ export const metadata = {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/Runaway";
 
 const IMAGES = [
-  `${IK}/Year_of_the_Red_Horse_1.png`,
+  `${IK}/Runaway_1.jpg`,
+  `${IK}/Runaway_2.jpg`,
+  `${IK}/Runaway_3.jpeg`,
 ];
 
 export default function RunawayPage() {

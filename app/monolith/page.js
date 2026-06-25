@@ -10,11 +10,10 @@ export const metadata = {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/Monolith";
 
 const IMAGES = [
-  `${IK}/Monolith_0.png`,
+  `${IK}/Monolith_0.jpg`,
   `${IK}/Monolith_1.jpg`,
   `${IK}/Monolith_2.jpg`,
   `${IK}/Monolith_3.jpg`,
-  `${IK}/Monolith_4.jpg`,
 ];
 
 export default function MonolithPage() {
