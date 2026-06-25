@@ -182,7 +182,7 @@ export default function NavWithFilter() {
     <>
       <nav className="nav">
         <div className="nav-row">
-          <a href="/" className="nav-logo">Boogpunt</a>
+          <a href="/" className="nav-logo" onClick={() => sessionStorage.removeItem("filterCategory")}>Boogpunt</a>
           <button className="nav-toggle" aria-label="Menu"><span className="nav-toggle-icon">+</span></button>
         </div>
         <ul className="nav-menu">
