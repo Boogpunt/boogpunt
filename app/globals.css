@@ -251,7 +251,6 @@ html.bg-is-dark .clock-major { fill: white; }
   overflow-y: auto;
   transform: translateY(200%);
   will-change: transform;
-  transition: top 0.25s ease;
 }
 
 .filter-grid {
