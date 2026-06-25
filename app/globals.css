@@ -30,15 +30,11 @@ body {
   grid-template-columns: 1fr 1fr;
   align-items: baseline;
   padding: 12px 13px;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: #ffffff;
 }
-html.index-bg .nav,
-html.main-page .nav {
+html.main-page .nav,
+html.index-bg .nav {
   background: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
 }
 
 .nav-logo {
@@ -79,9 +75,10 @@ html.main-page .nav {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: #ffffff;
+}
+html.main-page .filter-bar.is-visible {
+  background: transparent;
 }
 
 .filter-btn {
@@ -243,9 +240,7 @@ html.bg-is-dark .clock-major { fill: white; }
   position: fixed;
   left: 0; right: 0;
   z-index: 8;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: #ffffff;
   overflow-y: auto;
   transform: translateY(200%);
   will-change: transform;
@@ -471,7 +466,8 @@ html.bg-is-dark .clock-major { fill: white; }
     padding: 12px 0;
   }
   .nav.is-open .nav-menu { display: flex; }
-  .nav.is-open { background: rgba(255, 255, 255, 0.5); }
+  .nav.is-open { background: #ffffff; }
+  html.main-page .nav.is-open { background: transparent; }
 
   /* Works → inline filter mode: swap main items for filter items */
   .nav.in-filter-mode .nav-main-item { display: none; }

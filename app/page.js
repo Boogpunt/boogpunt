@@ -233,8 +233,9 @@ export default function Home() {
 
     function setup() {
       updatePanelTops();
-      if (!panelVisible)     filterPanel.style.transform = `translateY(-${window.innerHeight}px)`;
-      if (!infoPanelVisible) infoPanel.style.transform   = `translateY(-${window.innerHeight}px)`;
+      // Use window.innerHeight offset to prevent flash when mobile address bar hides/shows
+      if (!panelVisible)     filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
+      if (!infoPanelVisible) infoPanel.style.transform   = `translateY(${window.innerHeight}px)`;
       introEl.style.height = `${window.innerHeight}px`;
       spacer.style.height  = "0";
       updateLabelPos();
@@ -312,7 +313,7 @@ export default function Home() {
       if (panelVisible) {
         if (panelAnim) panelAnim.pause();
         panelAnim = animate(filterPanel, {
-          translateY: -filterPanel.clientHeight,
+          translateY: filterPanel.clientHeight,
           duration: 350,
           ease: "inExpo",
           onComplete: () => {
@@ -337,7 +338,7 @@ export default function Home() {
       if (isMobile) hideFilterBar();
       if (panelAnim) panelAnim.pause();
       panelAnim = animate(filterPanel, {
-        translateY: -window.innerHeight,
+        translateY: window.innerHeight,
         duration: 500,
         ease: "inOutExpo",
       });
@@ -356,7 +357,7 @@ export default function Home() {
       infoPanelVisible = false;
       if (infoPanelAnim) infoPanelAnim.pause();
       infoPanelAnim = animate(infoPanel, {
-        translateY: -window.innerHeight,
+        translateY: window.innerHeight,
         duration: 500,
         ease: "inOutExpo",
       });
@@ -513,6 +514,7 @@ export default function Home() {
       const isNowIndex = !introEl.classList.contains("index-mode");
       allNavLinks.forEach((l) => l.classList.remove("is-active"));
       if (isNowIndex) {
+        hoverBgEl.classList.remove("is-visible");
         indexLink.classList.add("is-active");
         introEl.classList.add("index-mode");
         document.documentElement.classList.add("index-bg");
