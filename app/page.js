@@ -117,7 +117,7 @@ const BG_IK_M = "https://ik.imagekit.io/qoon/tr:w-1000,q-88/boogpunt/bg/mobile";
 const CATEGORY_IMAGES = {
   Graphic:      { desktop: `${BG_IK}/graphic_mainbg_d.jpg`,      mobile: `${BG_IK_M}/graphic_mainbg_m.jpg`,      mode: "cover" },
   Installation: { desktop: `${BG_IK}/installation_mainbg_d.jpg`, mobile: `${BG_IK_M}/installation_mainbg_m.jpg`, mode: "cover" },
-  Branding:     { desktop: `${BG_IK}/branding_mainbg_d.jpg`,     mobile: `${BG_IK_M}/branding_mainbg_m.png`,     mode: "cover" },
+  Branding:     { desktop: `${BG_IK}/branding_mainbg_d.jpg`,     mobile: `${BG_IK_M}/branding_mainbg_m.jpg`,     mode: "cover" },
   Typeface:     { desktop: `${BG_IK}/typeface_mainbg_d.jpg`,     mobile: `${BG_IK_M}/typeface_mainbg_m.jpg`,     mode: "cover" },
 };
 
