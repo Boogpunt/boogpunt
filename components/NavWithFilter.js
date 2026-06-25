@@ -40,6 +40,7 @@ export default function NavWithFilter() {
     const spacer = document.querySelector(".filter-bar-spacer");
 
     function hideFilterBar() {
+      if (panelVisible) return;
       filterBar.classList.remove("is-visible");
       if (spacer) spacer.style.height = "0";
       updatePanelTops();
