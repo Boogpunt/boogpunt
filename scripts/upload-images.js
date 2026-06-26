@@ -22,7 +22,7 @@ const ik = new ImageKit({
   urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 });
 
-const IMAGES_DIR    = path.join(__dirname, "../../images");
+const IMAGES_DIR    = path.join(__dirname, "../images");
 const IK_BASE_FOLDER = "/boogpunt";
 
 const filterArg = process.argv[2];
