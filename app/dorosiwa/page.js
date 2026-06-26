@@ -3,8 +3,8 @@ import FitTitle from "@/components/FitTitle";
 import "../globals.css";
 
 export const metadata = {
-  title: "DOROSIWA — Boogpunt",
-  description: "DOROSIWA Brand Identity 2023",
+  title: "Dorosiwa — Boogpunt",
+  description: "Dorosiwa Brand Identity 2023",
 };
 
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/Dorosiwa";
@@ -33,7 +33,7 @@ export default function DorosiwaPage() {
       <NavWithFilter />
       <main className="project-detail">
         <header className="project-header">
-          <FitTitle className="project-title">DOROSIWA</FitTitle>
+          <FitTitle className="project-title">Dorosiwa</FitTitle>
           <div className="project-header-sub">
             <span>Client. Dorosiwa</span>
             <span>2023</span>
@@ -42,7 +42,7 @@ export default function DorosiwaPage() {
         {MEDIA.map((item, i) =>
           item.video
             ? <video key={i} className="project-detail-img" src={item.src} autoPlay muted loop playsInline />
-            : <img key={i} className="project-detail-img" src={item.src} alt={`DOROSIWA ${i}`} loading={i === 0 ? "eager" : "lazy"} />
+            : <img key={i} className="project-detail-img" src={item.src} alt={`Dorosiwa ${i}`} loading={i === 0 ? "eager" : "lazy"} />
         )}
         <div className="project-credits">
           <span className="caption">Direction.</span>
@@ -50,7 +50,7 @@ export default function DorosiwaPage() {
           <span className="caption">Design.</span>
           <span className="caption">Qoon Park</span>
           <span className="caption">Products and videos.</span>
-          <span className="caption">DOROSIWA</span>
+          <span className="caption">Dorosiwa</span>
         </div>
       </main>
     </>

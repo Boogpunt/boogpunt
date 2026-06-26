@@ -132,7 +132,7 @@ const CARDS = [
   { category: "graphic",      meta: "Break / Graphic / 2024",                                       img: `${IK}/Break/Break___Architecture_Demolition_1.jpg`,                          slug: "break" },
   { category: "branding",     meta: "SK enmove ZIC / Brand Identity / 2023",                        img: `${IK}/ZIC/ZIC_t.jpg`,                                                        slug: "zic" },
   { category: "typeface",     meta: "Kiss of Life Film Logo / Typeface / 2023",                     img: `${IK}/KissOfLife/KOF_t.png`,                                                 slug: "kiss-of-life" },
-  { category: "branding",     meta: "DOROSIWA / Branding / 2023",                                   img: `${IK}/Dorosiwa/Dorosiwa_1.png`,                                              slug: "dorosiwa" },
+  { category: "branding",     meta: "Dorosiwa / Branding / 2023",                                   img: `${IK}/Dorosiwa/Dorosiwa_1.png`,                                              slug: "dorosiwa" },
   { category: "graphic",      meta: "Broken Birds / Graphic / 2023",                                img: `${IK}/BrokenBirds/BrokenBirds_1.png`,                                        slug: "broken-birds" },
   { category: "installation", meta: "Egg Cup / Installation / 2022",                                img: `${IK}/EggCup/EggCup_1.jpg`,                                                  slug: "egg-cup" },
   { category: "installation", meta: "Monolith / Installation / 2022",                               img: `${IK}/Monolith/Monolith_t.png`,                                              slug: "monolith" },
@@ -192,7 +192,7 @@ export default function Home() {
     function updatePanelTops() {
       const navB     = nav.getBoundingClientRect().bottom;
       const panelTop = filterBar.classList.contains("is-visible")
-        ? navB + filterBar.getBoundingClientRect().height + 10
+        ? filterBar.getBoundingClientRect().bottom
         : navB;
       const panelH = window.innerHeight - panelTop;
       filterPanel.style.top    = `${panelTop}px`;
@@ -737,8 +737,8 @@ export default function Home() {
             <div className="info-entry">
               <span className="info-label">Contact</span>
               <div className="info-items">
-                <p>Qoon@boogpunt.com</p>
-                <p>@8009pt</p>
+                <p style={{ opacity: 1 }}>@8009pt</p>
+                <p style={{ opacity: 1 }}>Qoon@boogpunt.com</p>
               </div>
             </div>
             <div className="info-entry info-entry--experience">
