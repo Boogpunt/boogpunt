@@ -160,6 +160,16 @@ export default function Home() {
     const hoverBgImgs  = [...hoverBgEl.querySelectorAll("img")];
     let activeBgIdx = 0;
     function setBg(src) {
+      if (!hoverBgEl.classList.contains("is-visible")) {
+        // Container hidden: set directly on active slot, no cross-fade
+        hoverBgImgs[activeBgIdx].src = src;
+        hoverBgImgs[activeBgIdx].style.opacity = "1";
+        const inactive = hoverBgImgs[1 - activeBgIdx];
+        inactive.style.transition = "none";
+        inactive.style.opacity = "0";
+        requestAnimationFrame(() => { inactive.style.transition = ""; });
+        return;
+      }
       const next = 1 - activeBgIdx;
       hoverBgImgs[next].src = src;
       hoverBgImgs[next].style.opacity = "1";
