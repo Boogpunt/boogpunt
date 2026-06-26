@@ -120,20 +120,20 @@ const CATEGORY_IMAGES = {
 };
 
 const CARDS = [
-  { category: "typeface",     meta: "Bound in a Spiral Dance / Typeface / 2026",                    img: `${IK}/BoundInASpiralDance/bsd_t.jpg`,                                        slug: "bound-in-a-spiral-dance" },
-  { category: "installation", meta: "Who are you, When no one is watching 2 / Installation / 2026", img: `${IK}/Minkowski/Minkowski_0.jpg`,                                            slug: "minkowski" },
-  { category: "graphic",      meta: "Who are you, When no one is watching 1 / Graphic / 2026",      img: `${IK}/Watching/Watching_t.jpg`,                                              slug: "watching" },
-  { category: "typeface",     meta: "Blade / Typeface / 2026",                                      img: `${IK}/Blade/Blade_t.jpg`,                                                    slug: "blade" },
-  { category: "graphic",      meta: "Runaway / Graphic / 2026",                                     img: `${IK}/Runaway/Runaway_t.jpg`,                                                slug: "runaway" },
-  { category: "graphic",      meta: "Eyelight / Graphic / 2026",                                    img: `${IK}/Eyelight/Eyelight_t.jpg`,                                              slug: "eyelight" },
-  { category: "graphic",      meta: "Invisible Memory / Graphic / 2025",                            img: `${IK}/InvisibleMemory/Invisible_Memory___Precious_Thing_t.jpg`,               slug: "invisible-memory" },
-  { category: "graphic",      meta: "Break / Graphic / 2024",                                       img: `${IK}/Break/Break___Architecture_Demolition_1.jpg`,                          slug: "break" },
-  { category: "branding",     meta: "SK enmove ZIC / Brand Identity / 2023",                        img: `${IK}/ZIC/ZIC_0.png`,                                                        slug: "zic" },
-  { category: "typeface",     meta: "Kiss of Life Film Logo / Typeface / 2023",                     img: `${IK}/KissOfLife/KOF_t.png`,                                                 slug: "kiss-of-life" },
-  { category: "branding",     meta: "Dorosiwa / Branding / 2023",                                   img: `${IK}/Dorosiwa/Dorosiwa_1.png`,                                              slug: "dorosiwa" },
-  { category: "graphic",      meta: "Broken Birds / Graphic / 2023",                                img: `${IK}/BrokenBirds/BrokenBirds_1.png`,                                        slug: "broken-birds" },
-  { category: "installation", meta: "Egg Cup / Installation / 2022",                                img: `${IK}/EggCup/EggCup_1.jpg`,                                                  slug: "egg-cup" },
-  { category: "installation", meta: "Monolith / Installation / 2022",                               img: `${IK}/Monolith/Monolith_0.jpg`,                                              slug: "monolith" },
+  { categories: ["typeface", "graphic"],      meta: "Bound in a Spiral Dance / Typeface / 2026",                    img: `${IK}/BoundInASpiralDance/bsd_t.jpg`,                                        slug: "bound-in-a-spiral-dance" },
+  { categories: ["installation"],             meta: "Who are you, When no one is watching 2 / Installation / 2026", img: `${IK}/Minkowski/Minkowski_0.jpg`,                                            slug: "minkowski" },
+  { categories: ["graphic", "installation"],  meta: "Who are you, When no one is watching 1 / Graphic / 2026",      img: `${IK}/Watching/Watching_t.jpg`,                                              slug: "watching" },
+  { categories: ["typeface"],                 meta: "Blade / Typeface / 2026",                                      img: `${IK}/Blade/Blade_t.jpg`,                                                    slug: "blade" },
+  { categories: ["graphic"],                  meta: "Runaway / Graphic / 2026",                                     img: `${IK}/Runaway/Runaway_t.jpg`,                                                slug: "runaway" },
+  { categories: ["graphic"],                  meta: "Eyelight / Graphic / 2026",                                    img: `${IK}/Eyelight/Eyelight_t.jpg`,                                              slug: "eyelight" },
+  { categories: ["graphic"],                  meta: "Invisible Memory / Graphic / 2025",                            img: `${IK}/InvisibleMemory/Invisible_Memory___Precious_Thing_t.jpg`,               slug: "invisible-memory" },
+  { categories: ["graphic"],                  meta: "Break / Graphic / 2024",                                       img: `${IK}/Break/Break___Architecture_Demolition_1.jpg`,                          slug: "break" },
+  { categories: ["branding"],                 meta: "SK enmove ZIC / Brand Identity / 2023",                        img: `${IK}/ZIC/ZIC_0.png`,                                                        slug: "zic" },
+  { categories: ["typeface"],                 meta: "Kiss of Life Film Logo / Typeface / 2023",                     img: `${IK}/KissOfLife/KOF_t.png`,                                                 slug: "kiss-of-life" },
+  { categories: ["branding"],                 meta: "Dorosiwa / Branding / 2023",                                   img: `${IK}/Dorosiwa/Dorosiwa_1.png`,                                              slug: "dorosiwa" },
+  { categories: ["graphic"],                  meta: "Broken Birds / Graphic / 2023",                                img: `${IK}/BrokenBirds/BrokenBirds_1.png`,                                        slug: "broken-birds" },
+  { categories: ["installation"],             meta: "Egg Cup / Installation / 2022",                                img: `${IK}/EggCup/EggCup_1.jpg`,                                                  slug: "egg-cup" },
+  { categories: ["installation"],             meta: "Monolith / Installation / 2022",                               img: `${IK}/Monolith/Monolith_0.jpg`,                                              slug: "monolith" },
 ];
 
 
@@ -343,7 +343,7 @@ export default function Home() {
 
     function populateFilterGrid(category) {
       filterGrid.innerHTML = "";
-      const matching = category === "all" ? cards : cards.filter((c) => c.dataset.category === category);
+      const matching = category === "all" ? cards : cards.filter((c) => c.dataset.categories.split(",").includes(category));
       matching.forEach((card) => {
         const clone = card.cloneNode(true);
         const img = clone.querySelector(".card-img");
@@ -826,7 +826,7 @@ export default function Home() {
 
       <main className="grid" id="work">
         {CARDS.map((card, i) => (
-          <article key={i} className="card" data-category={card.category} data-slug={card.slug || ""}>
+          <article key={i} className="card" data-categories={card.categories.join(",")} data-slug={card.slug || ""}>
             <img className="card-img" src={card.img} alt={card.meta} loading="lazy" />
             <p className="card-meta">{card.meta}</p>
           </article>

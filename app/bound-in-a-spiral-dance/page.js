@@ -10,9 +10,9 @@ export const metadata = {
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/BoundInASpiralDance";
 
 const IMAGES = [
-  `${IK}/bsd_1.jpg`,
-  `${IK}/bsd_2.jpg`,
-  `${IK}/bsd_3.jpg`,
+  `${IK}/bsd_1.jpg?v=2`,
+  `${IK}/bsd_2.jpg?v=2`,
+  `${IK}/bsd_3.jpg?v=2`,
   `${IK}/bsd_4.jpg`,
   `${IK}/bsd_5.jpg`,
   `${IK}/bsd_6.jpg`,

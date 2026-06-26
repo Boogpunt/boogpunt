@@ -88,7 +88,7 @@ export default function NavWithFilter() {
     const cardEls = CARDS.map((c) => {
       const el = document.createElement("article");
       el.className = "card";
-      el.dataset.category = c.category;
+      el.dataset.categories = c.categories.join(",");
       if (c.slug) el.dataset.slug = c.slug;
       el.innerHTML = `<img class="card-img" src="${c.img}" alt="${c.meta}" loading="eager" /><p class="card-meta">${c.meta}</p>`;
       return el;
@@ -135,7 +135,7 @@ export default function NavWithFilter() {
 
     function populateFilterGrid(category) {
       filterGrid.innerHTML = "";
-      const matching = category === "all" ? cardEls : cardEls.filter(el => el.dataset.category === category);
+      const matching = category === "all" ? cardEls : cardEls.filter(el => el.dataset.categories.split(",").includes(category));
       matching.forEach(el => {
         const clone = el.cloneNode(true);
         const img = clone.querySelector(".card-img");
