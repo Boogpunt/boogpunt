@@ -170,6 +170,7 @@ export default function Home() {
     let currentAngle     = 0;   // current disc rotation in degrees
     let isAnimating      = false;
     let snapRafId        = null;
+    let isHoveringDisc   = false;
     let cooldown         = false;
     let cooldownTimer    = null;
     let typingInterval   = null;
@@ -287,6 +288,8 @@ export default function Home() {
           delete hoverBgEl.dataset.mode;
           document.documentElement.classList.remove("bg-is-dark");
         }
+      } else if (isHoveringDisc) {
+        onLabelEnter();
       } else {
         hoverBgEl.classList.remove("is-visible");
       }
@@ -438,6 +441,7 @@ export default function Home() {
     // Category label hover → dissolve in background image + auto-invert text on dark bg
     const onLabelEnter = () => {
       if (introEl.classList.contains("index-mode")) return;
+      isHoveringDisc = true;
       const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
       if (entry) {
         const bgSrc = isPortrait() ? entry.mobile : entry.desktop;
@@ -450,6 +454,7 @@ export default function Home() {
       }
     };
     const onLabelLeave = () => {
+      isHoveringDisc = false;
       if (isPortrait()) return;
       hoverBgEl.classList.remove("is-visible");
       delete hoverBgEl.dataset.mode;
