@@ -293,9 +293,19 @@ export default function Home() {
 
     function populateFilterGrid(category) {
       filterGrid.innerHTML = "";
-      const matching =
-        category === "all" ? cards : cards.filter((c) => c.dataset.category === category);
-      matching.forEach((card) => filterGrid.appendChild(card.cloneNode(true)));
+      const matching = category === "all" ? cards : cards.filter((c) => c.dataset.category === category);
+      matching.forEach((card) => {
+        const clone = card.cloneNode(true);
+        filterGrid.appendChild(clone);
+        const img = clone.querySelector(".card-img");
+        const applySpan = () => {
+          if (img.naturalWidth && img.naturalHeight) {
+            clone.style.gridColumn = img.naturalWidth / img.naturalHeight > 1.4 ? "span 2" : "";
+          }
+        };
+        if (img.complete && img.naturalWidth > 0) applySpan();
+        else img.addEventListener("load", applySpan, { once: true });
+      });
     }
 
     function showFilter(category) {
