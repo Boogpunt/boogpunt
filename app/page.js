@@ -179,6 +179,7 @@ export default function Home() {
     let isAnimating      = false;
     let snapRafId        = null;
     let isHoveringDisc   = false;
+    let autoRotateTimer  = null;
     let cooldown         = false;
     let cooldownTimer    = null;
     let typingInterval   = null;
@@ -643,6 +644,7 @@ export default function Home() {
     const wheelHandler = (e) => {
       if (panelVisible || infoPanelVisible) return;
       e.preventDefault();
+      resetAutoRotate();
       if (isAnimating || cooldown) return;
       if (introEl.classList.contains("index-mode")) return;
       advanceCategory(e.deltaY > 0 ? 1 : -1);
@@ -660,8 +662,18 @@ export default function Home() {
     const touchEndHandler = isMobile ? (e) => {
       const delta = touchStartY - e.changedTouches[0].clientY;
       if (Math.abs(delta) < 30) return;
+      resetAutoRotate();
       advanceCategory(delta > 0 ? 1 : -1);
     } : null;
+
+    function startAutoRotate() {
+      if (autoRotateTimer) clearInterval(autoRotateTimer);
+      autoRotateTimer = setInterval(() => {
+        if (isHoveringDisc) return;
+        advanceCategory(1);
+      }, 3000);
+    }
+    function resetAutoRotate() { startAutoRotate(); }
 
     const showPortraitBg = () => {
       const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
@@ -694,6 +706,7 @@ export default function Home() {
     }
     const savedCat = sessionStorage.getItem("filterCategory");
     if (savedCat) { sessionStorage.removeItem("filterCategory"); showFilter(savedCat); }
+    startAutoRotate();
     window.addEventListener("resize", resizeHandler);
     if (isMobile) {
       document.addEventListener("touchstart", touchStartHandler, { passive: true });
@@ -739,6 +752,7 @@ export default function Home() {
       navLinkHandlers.forEach(({ link, handler }) => link.removeEventListener("click", handler));
       if (snapRafId) cancelAnimationFrame(snapRafId);
       if (cooldownTimer) clearTimeout(cooldownTimer);
+      if (autoRotateTimer) clearInterval(autoRotateTimer);
       if (panelAnim) panelAnim.pause();
       if (infoPanelAnim) infoPanelAnim.pause();
     };
