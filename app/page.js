@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { animate } from "animejs";
+import { INDEX_LINES, ALL_INDEX_ITEMS } from "@/lib/data";
 
 const CATEGORIES = ["Graphic", "Installation", "Branding", "Typeface"];
 const DEG_PER_CAT = 90; // degrees per category (4 categories × 90° = full circle)
@@ -61,12 +62,6 @@ function getImageBrightness(src) {
 const INDEX_OUTER_R = 195;
 const INDEX_SPACING = 11; // radial gap between arcs (SVG user units)
 
-const INDEX_LINES = [
-  "Who are you when no one is watching | Ghent bookfair | Outland publishing book fair | Bounding in a spiral dance | Korea cultural centre UK | Gaeun Lee symbol | Socialed credentials",
-  "Fabrika for across RCA | Yunseok Jang web | Blade typeface | Como clinic | Alice monde wedding | Hanel hair salon | Leadvault luggage | Xray 21 radiology | Josun hotel and resort",
-  "The miraculous flight | enmove ZIC | Powerplants dialogue 01 | Kiss of Life logotype | 1ha web and motion | Brooklyn museum appearal",
-  "Dorosiwa | Mother offline | Egg cup ceramics | Park's club popup store | Monolith NFT display",
-];
 
 // Compute arc end-point at 8 o'clock (240° clockwise from 12, i.e. 150° from +x axis)
 function arcPath(r) {
@@ -138,7 +133,6 @@ const CARDS = [
   { category: "installation", meta: "Monolith / Installation / 2022",                               img: `${IK}/Monolith/Monolith_t.png`,                                              slug: "monolith" },
 ];
 
-const ALL_INDEX_ITEMS = INDEX_LINES.flatMap(line => line.split(" | "));
 
 export default function Home() {
   useEffect(() => {

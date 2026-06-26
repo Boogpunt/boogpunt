@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { animate } from "animejs";
-import { CARDS } from "@/lib/data";
+import { CARDS, ALL_INDEX_ITEMS } from "@/lib/data";
 
 export default function NavWithFilter() {
   useEffect(() => {
@@ -10,14 +10,18 @@ export default function NavWithFilter() {
     const filterBar    = document.querySelector(".filter-bar");
     const filterPanel  = document.querySelector(".filter-panel");
     const filterGrid   = document.querySelector(".filter-grid");
+    const infoPanel    = document.querySelector(".info-panel");
     const projectsLink = document.querySelector('.nav-link[data-menu="works"]');
+    const infoLink     = document.querySelector('.nav-link[data-menu="about"]');
     if (!nav || !filterBar || !filterPanel || !projectsLink) return;
 
     const isMobile    = window.matchMedia("(hover: none)").matches;
     const allNavLinks = [...document.querySelectorAll(".nav-link")];
 
-    let panelAnim    = null;
-    let panelVisible = false;
+    let panelAnim         = null;
+    let infoPanelAnim     = null;
+    let panelVisible      = false;
+    let infoPanelVisible  = false;
 
     function updatePanelTops() {
       const navB     = nav.getBoundingClientRect().bottom;
@@ -27,6 +31,34 @@ export default function NavWithFilter() {
       const panelH = window.innerHeight - panelTop;
       filterPanel.style.top    = `${panelTop}px`;
       filterPanel.style.height = `${panelH}px`;
+      if (infoPanel) {
+        infoPanel.style.top    = `${navB}px`;
+        infoPanel.style.height = `${window.innerHeight - navB}px`;
+      }
+    }
+
+    function showInfo() {
+      if (!infoPanel) return;
+      document.documentElement.classList.add("overlay-open");
+      nav.style.background = "#ffffff";
+      if (isMobile) { nav.classList.remove("is-open"); nav.classList.remove("in-filter-mode"); hideFilterBar(); }
+      if (panelVisible) hideFilter();
+      infoPanelVisible = true;
+      infoLink?.classList.add("is-active");
+      if (infoPanelAnim) infoPanelAnim.pause();
+      infoPanelAnim = animate(infoPanel, { translateY: 0, duration: 700, ease: "outExpo" });
+    }
+
+    function hideInfo() {
+      if (!infoPanel) return;
+      infoPanelVisible = false;
+      infoLink?.classList.remove("is-active");
+      if (!panelVisible) {
+        document.documentElement.classList.remove("overlay-open");
+        nav.style.background = "";
+      }
+      if (infoPanelAnim) infoPanelAnim.pause();
+      infoPanelAnim = animate(infoPanel, { translateY: window.innerHeight, duration: 500, ease: "inOutExpo" });
     }
 
     function positionFilterBar() {
@@ -160,8 +192,16 @@ export default function NavWithFilter() {
     const resizeH = () => updatePanelTops();
     window.addEventListener("resize", resizeH);
 
+    const infoLinkH = infoLink ? (e) => {
+      e.preventDefault();
+      if (infoLink.classList.contains("is-active") && infoPanelVisible) hideInfo();
+      else showInfo();
+    } : null;
+    if (infoLinkH) infoLink.addEventListener("click", infoLinkH);
+
     updatePanelTops();
     filterPanel.style.transform = `translateY(${window.innerHeight}px)`;
+    if (infoPanel) infoPanel.style.transform = `translateY(${window.innerHeight}px)`;
 
     return () => {
       document.body.style.overflow = "";
@@ -176,8 +216,10 @@ export default function NavWithFilter() {
       if (mobileWorksH) projectsLink.removeEventListener("click", mobileWorksH);
       navFilterBtnHandlers.forEach(({ btn, handler }) => btn.removeEventListener("click", handler));
       if (navToggleH && navToggle) navToggle.removeEventListener("click", navToggleH);
+      if (infoLinkH) infoLink.removeEventListener("click", infoLinkH);
       window.removeEventListener("resize", resizeH);
       if (panelAnim) panelAnim.pause();
+      if (infoPanelAnim) infoPanelAnim.pause();
     };
   }, []);
 
@@ -191,7 +233,7 @@ export default function NavWithFilter() {
         <ul className="nav-menu">
           <li className="nav-main-item"><a href="/" className="nav-link is-active" data-menu="works">Works</a></li>
           <li className="nav-main-item"><a href="/" className="nav-link">Index</a></li>
-          <li className="nav-main-item"><a href="/" className="nav-link" data-menu="about">About</a></li>
+          <li className="nav-main-item"><a href="#" className="nav-link" data-menu="about">About</a></li>
           <li className="nav-main-item"><a href="mailto:qoon@boogpunt.com" className="nav-link" target="_blank" rel="noopener noreferrer">Contact</a></li>
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="all">All</button></li>
           <li className="nav-filter-item"><button className="nav-link nav-filter-btn" data-filter="branding">Branding</button></li>
@@ -214,6 +256,48 @@ export default function NavWithFilter() {
       </div>
 
       <div className="filter-bar-spacer" />
+
+      <div className="info-panel">
+        <div className="info-inner">
+          <div className="info-bio">
+            <h2 className="info-title">Boogpunt Studio, in Superposition Across Various Fields of Visual Communication</h2>
+            <p className="info-body">Qoon is a brand and graphic designer based in London and Seoul. Drawing from his experience across industrial design, brand design, graphic design, interior design, installation, and photography, his practice focuses on building systems that translate physical structure, context, and perception into diverse forms of visual language.</p>
+            <p className="info-body">During his MA at the Royal College of Art, he explores new materialist theory, particularly the concept of superposition, and develops it into visual systems. His work investigates how complex physical and scientific ideas can be translated into more intuitive and accessible visual structures.</p>
+            <p className="info-body">Based on this, he approaches design not as a fixed outcome, but as an interaction that shifts, adapts, and unfolds across different environments.</p>
+          </div>
+          <div className="info-table">
+            <div className="info-entry">
+              <span className="info-label">Contact</span>
+              <div className="info-items">
+                <p style={{ opacity: 1 }}>@8009pt</p>
+                <p style={{ opacity: 1 }}>Qoon@boogpunt.com</p>
+              </div>
+            </div>
+            <div className="info-entry info-entry--experience">
+              <span className="info-label">Experience</span>
+              <div className="info-items">
+                <p>COV STUDIO. Lead Graphic Designer. 2024–2025</p>
+                <p>SAM PARTNERS. Brand Designer. 2022–2024</p>
+                <p>MOTHER. Graphic Designer. 2022</p>
+              </div>
+            </div>
+            <div className="info-entry">
+              <span className="info-label">Education</span>
+              <div className="info-items">
+                <p>Royal College of Art. MA Visual Communication</p>
+                <p>De Haagse Hogeschool. CMD Exchanged Students</p>
+                <p>University of Seoul. BA Product Design</p>
+              </div>
+            </div>
+            <div className="info-entry info-entry--projects">
+              <span className="info-label">Client</span>
+              <div className="info-items">
+                {ALL_INDEX_ITEMS.map((item, i) => <p key={i}>{item}</p>)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
