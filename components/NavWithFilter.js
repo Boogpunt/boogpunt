@@ -106,10 +106,8 @@ export default function NavWithFilter() {
       // First pass: set widths and move offscreen to measure heights
       cards.forEach(card => {
         const img = card.querySelector(".card-img");
-        const loaded = img.complete && img.naturalWidth > 0;
-        const ratio = loaded ? img.naturalWidth / img.naturalHeight : null;
-        card._span = (ratio !== null && ratio > 1.4 && numCols >= 2) ? 2 : 1;
-        const w = card._span === 2 ? unit * 2 + gap : unit;
+        card._span = 1;
+        const w = unit;
         card.style.cssText = `position:absolute;width:${w}px;top:-9999px;left:0;`;
       });
 
