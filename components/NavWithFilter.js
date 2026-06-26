@@ -100,7 +100,7 @@ export default function NavWithFilter() {
       const gap = 8;
       const padX = 8;
       const containerW = filterGrid.clientWidth - padX * 2;
-      const numCols = window.innerWidth > 640 ? 3 : 2;
+      const numCols = window.innerWidth > 640 ? 4 : 2;
       const unit = (containerW - gap * (numCols - 1)) / numCols;
 
       // First pass: set widths and move offscreen to measure heights
