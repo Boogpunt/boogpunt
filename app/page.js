@@ -101,6 +101,9 @@ function DiscSVG() {
           </text>
         ))}
       </g>
+
+      {/* Hover zone — transparent circle covers entire tick area */}
+      <circle className="disc-hover-zone" cx="250" cy="250" r="220" fill="transparent" />
     </svg>
   );
 }
@@ -458,17 +461,15 @@ export default function Home() {
       showFilter(CATEGORIES[currentCatIndex].toLowerCase());
     };
 
-    if (!isMobile) {
-      catLabelEl.addEventListener("mouseenter", onLabelEnter);
-      catLabelEl.addEventListener("mouseleave", onLabelLeave);
-    }
     catLabelEl.addEventListener("click", onLabelClick);
 
-    const majorTickEls = !isMobile ? [...document.querySelectorAll(".clock-major-group")] : [];
-    majorTickEls.forEach(g => {
-      g.addEventListener("mouseenter", onLabelEnter);
-      g.addEventListener("mouseleave", onLabelLeave);
-    });
+    const majorTickEls = [];
+    const discHoverZone = document.querySelector(".disc-hover-zone");
+    if (!isMobile && discHoverZone) {
+      discHoverZone.addEventListener("mouseenter", onLabelEnter);
+      discHoverZone.addEventListener("mouseleave", onLabelLeave);
+      discHoverZone.addEventListener("click", onLabelClick);
+    }
 
     // Desktop: hover Works to show filter bar
     let worksEnterHandler = null;
@@ -700,15 +701,12 @@ export default function Home() {
       } else {
         window.removeEventListener("wheel", wheelHandler);
       }
-      if (!isMobile) {
-        catLabelEl.removeEventListener("mouseenter", onLabelEnter);
-        catLabelEl.removeEventListener("mouseleave", onLabelLeave);
-      }
       catLabelEl.removeEventListener("click", onLabelClick);
-      majorTickEls.forEach(g => {
-        g.removeEventListener("mouseenter", onLabelEnter);
-        g.removeEventListener("mouseleave", onLabelLeave);
-      });
+      if (!isMobile && discHoverZone) {
+        discHoverZone.removeEventListener("mouseenter", onLabelEnter);
+        discHoverZone.removeEventListener("mouseleave", onLabelLeave);
+        discHoverZone.removeEventListener("click", onLabelClick);
+      }
       if (!isMobile) {
         if (worksEnterHandler)     projectsLink.removeEventListener("mouseenter", worksEnterHandler);
         if (worksLeaveHandler)     projectsLink.removeEventListener("mouseleave", worksLeaveHandler);

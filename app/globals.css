@@ -237,9 +237,14 @@ html.bg-is-dark .clock-major { fill: white; }
   transition: opacity 0.3s ease, color 0.4s ease;
   z-index: 6;
 }
+.disc-hover-zone { cursor: pointer; }
 .disc-label.is-visible {
   opacity: 1;
   pointer-events: auto;
+}
+/* Desktop: disc-hover-zone handles all events; catLabel is visual only */
+@media (hover: hover) {
+  .disc-label.is-visible { pointer-events: none; }
 }
 
 /* ─── FILTER PANEL (category overlay curtain) ─── */
