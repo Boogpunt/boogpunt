@@ -1,5 +1,6 @@
 import "./globals.css";
 import ImageKitProvider from "@/components/ImageKitProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
   title: "BOOGPUNT",
@@ -15,6 +16,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <ImageKitProvider>{children}</ImageKitProvider>
+        <Analytics />
       </body>
     </html>
   );

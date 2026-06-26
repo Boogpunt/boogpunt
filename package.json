@@ -12,6 +12,7 @@
   "dependencies": {
     "@imagekit/nodejs": "^7.7.0",
     "@imagekit/react": "^5.0.2",
+    "@vercel/analytics": "^2.0.1",
     "animejs": "^4.4.1",
     "next": "16.2.7",
     "react": "19.2.4",
