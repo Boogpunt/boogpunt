@@ -157,7 +157,15 @@ export default function Home() {
     const linesGroupEl = document.querySelector(".clock-lines-group");
     const catLabelEl   = document.querySelector(".disc-label--cat");
     const hoverBgEl    = document.querySelector(".hover-bg");
-    const hoverBgImg   = hoverBgEl.querySelector("img");
+    const hoverBgImgs  = [...hoverBgEl.querySelectorAll("img")];
+    let activeBgIdx = 0;
+    function setBg(src) {
+      const next = 1 - activeBgIdx;
+      hoverBgImgs[next].src = src;
+      hoverBgImgs[next].style.opacity = "1";
+      hoverBgImgs[activeBgIdx].style.opacity = "0";
+      activeBgIdx = next;
+    }
 
     const isMobile   = window.matchMedia("(hover: none)").matches;
     const isPortrait = () => window.matchMedia("(orientation: portrait)").matches;
@@ -277,7 +285,7 @@ export default function Home() {
       if (isPortrait()) {
         const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
         if (entry) {
-          hoverBgImg.src = entry.mobile;
+          setBg(entry.mobile);
           hoverBgEl.dataset.mode = entry.mode;
           hoverBgEl.classList.add("is-visible");
           getImageBrightness(entry.mobile).then((b) => {
@@ -445,7 +453,7 @@ export default function Home() {
       const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
       if (entry) {
         const bgSrc = isPortrait() ? entry.mobile : entry.desktop;
-        hoverBgImg.src = bgSrc;
+        setBg(bgSrc);
         hoverBgEl.dataset.mode = entry.mode;
         hoverBgEl.classList.add("is-visible");
         getImageBrightness(bgSrc).then((b) => {
@@ -658,7 +666,7 @@ export default function Home() {
     const showPortraitBg = () => {
       const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
       if (entry) {
-        hoverBgImg.src = entry.mobile;
+        setBg(entry.mobile);
         hoverBgEl.dataset.mode = entry.mode;
         hoverBgEl.classList.add("is-visible");
         getImageBrightness(entry.mobile).then((b) => {
@@ -765,7 +773,7 @@ export default function Home() {
       </div>
 
       <div className="intro">
-        <div className="hover-bg"><img alt="" /></div>
+        <div className="hover-bg"><img alt="" /><img alt="" style={{opacity:0}} /></div>
         <div className="intro-disc"><DiscSVG /></div>
         <div className="disc-label disc-label--cat">{CATEGORIES[0]}</div>
       </div>
