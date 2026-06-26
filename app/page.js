@@ -268,6 +268,7 @@ export default function Home() {
           currentAngle = target;
           isAnimating  = false;
           snapRafId    = null;
+          catLabelEl.textContent = CATEGORIES[currentCatIndex];
           catLabelEl.classList.add("is-visible");
           cooldownTimer = setTimeout(() => { cooldown = false; cooldownTimer = null; }, 250);
         }
@@ -282,7 +283,6 @@ export default function Home() {
       if (introEl.classList.contains("index-mode")) return;
 
       currentCatIndex = ((currentCatIndex + dir) % CATEGORIES.length + CATEGORIES.length) % CATEGORIES.length;
-      catLabelEl.textContent = CATEGORIES[currentCatIndex];
       if (isPortrait()) {
         const entry = CATEGORY_IMAGES[CATEGORIES[currentCatIndex]];
         if (entry) {
