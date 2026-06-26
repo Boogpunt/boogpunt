@@ -90,25 +90,65 @@ export default function NavWithFilter() {
       el.className = "card";
       el.dataset.category = c.category;
       if (c.slug) el.dataset.slug = c.slug;
-      el.innerHTML = `<img class="card-img" src="${c.img}" alt="${c.meta}" loading="lazy" /><p class="card-meta">${c.meta}</p>`;
+      el.innerHTML = `<img class="card-img" src="${c.img}" alt="${c.meta}" loading="eager" /><p class="card-meta">${c.meta}</p>`;
       return el;
     });
+
+    function layoutMasonry() {
+      const cards = [...filterGrid.children];
+      if (!cards.length) return;
+      const gap = 8;
+      const padX = 8;
+      const containerW = filterGrid.clientWidth - padX * 2;
+      const numCols = window.innerWidth > 640 ? 3 : 2;
+      const unit = (containerW - gap * (numCols - 1)) / numCols;
+
+      // First pass: set widths and move offscreen to measure heights
+      cards.forEach(card => {
+        const img = card.querySelector(".card-img");
+        const loaded = img.complete && img.naturalWidth > 0;
+        const ratio = loaded ? img.naturalWidth / img.naturalHeight : null;
+        card._span = (ratio !== null && ratio > 1.4 && numCols >= 2) ? 2 : 1;
+        const w = card._span === 2 ? unit * 2 + gap : unit;
+        card.style.cssText = `position:absolute;width:${w}px;top:-9999px;left:0;`;
+      });
+
+      // Measure actual rendered heights (after width is set)
+      const heights = cards.map(c => c.getBoundingClientRect().height);
+
+      // Second pass: place into shortest column
+      const colH = new Array(numCols).fill(0);
+      cards.forEach((card, i) => {
+        const span = card._span || 1;
+        let bestCol = 0, bestH = Infinity;
+        for (let c = 0; c <= numCols - span; c++) {
+          const h = Math.max(...colH.slice(c, c + span));
+          if (h < bestH) { bestH = h; bestCol = c; }
+        }
+        const x = padX + bestCol * (unit + gap);
+        const y = bestH > 0 ? bestH + gap : 0;
+        card.style.left = `${x}px`;
+        card.style.top  = `${y}px`;
+        const h = heights[i] || unit * 0.75;
+        for (let c = bestCol; c < bestCol + span; c++) colH[c] = y + h;
+      });
+
+      filterGrid.style.height = `${Math.max(...colH) + 30}px`;
+    }
 
     function populateFilterGrid(category) {
       filterGrid.innerHTML = "";
       const matching = category === "all" ? cardEls : cardEls.filter(el => el.dataset.category === category);
       matching.forEach(el => {
         const clone = el.cloneNode(true);
-        filterGrid.appendChild(clone);
         const img = clone.querySelector(".card-img");
-        const applySpan = () => {
-          if (img.naturalWidth && img.naturalHeight) {
-            clone.style.gridColumn = img.naturalWidth / img.naturalHeight > 1.4 ? "span 2" : "";
-          }
-        };
-        if (img.complete && img.naturalWidth > 0) applySpan();
-        else img.addEventListener("load", applySpan, { once: true });
+        img.loading = "eager";
+        if (!img.complete || !img.naturalWidth) {
+          img.addEventListener("load", layoutMasonry, { once: true });
+        }
+        filterGrid.appendChild(clone);
       });
+      layoutMasonry();
     }
 
     function showFilter(category) {
@@ -200,7 +240,7 @@ export default function NavWithFilter() {
     } : null;
     if (navToggleH) navToggle.addEventListener("click", navToggleH);
 
-    const resizeH = () => updatePanelTops();
+    const resizeH = () => { updatePanelTops(); if (panelVisible) layoutMasonry(); };
     window.addEventListener("resize", resizeH);
 
     const infoLinkH = infoLink ? (e) => {

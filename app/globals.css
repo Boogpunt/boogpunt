@@ -255,11 +255,7 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 .filter-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--p);
-  padding: 0 var(--p) 30px;
-  align-items: start;
+  position: relative;
 }
 
 
@@ -448,7 +444,6 @@ html.bg-is-dark .clock-major { fill: white; }
   .nav.in-filter-mode .nav-filter-item { display: list-item; }
 
   .filter-bar { flex-wrap: wrap; gap: 16px; }
-  .filter-grid { grid-template-columns: repeat(2, 1fr); }
 
   .info-inner {
     grid-template-columns: 1fr;
@@ -528,7 +523,6 @@ html.bg-is-dark .clock-major { fill: white; }
 .project-video iframe { width: 100%; height: 100%; display: block; }
 
 @media (max-width: 640px) {
-  .filter-grid { grid-template-columns: repeat(2, 1fr); }
   .project-detail {
     padding-top: 50px;
   }

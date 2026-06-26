@@ -291,21 +291,58 @@ export default function Home() {
       animateToAngle(currentAngle + dir * DEG_PER_CAT);
     }
 
+    function layoutMasonry() {
+      const gridCards = [...filterGrid.children];
+      if (!gridCards.length) return;
+      const gap = 8;
+      const padX = 8;
+      const containerW = filterGrid.clientWidth - padX * 2;
+      const numCols = window.innerWidth > 640 ? 3 : 2;
+      const unit = (containerW - gap * (numCols - 1)) / numCols;
+
+      gridCards.forEach(card => {
+        const img = card.querySelector(".card-img");
+        const loaded = img.complete && img.naturalWidth > 0;
+        const ratio = loaded ? img.naturalWidth / img.naturalHeight : null;
+        card._span = (ratio !== null && ratio > 1.4 && numCols >= 2) ? 2 : 1;
+        const w = card._span === 2 ? unit * 2 + gap : unit;
+        card.style.cssText = `position:absolute;width:${w}px;top:-9999px;left:0;`;
+      });
+
+      const heights = gridCards.map(c => c.getBoundingClientRect().height);
+
+      const colH = new Array(numCols).fill(0);
+      gridCards.forEach((card, i) => {
+        const span = card._span || 1;
+        let bestCol = 0, bestH = Infinity;
+        for (let c = 0; c <= numCols - span; c++) {
+          const h = Math.max(...colH.slice(c, c + span));
+          if (h < bestH) { bestH = h; bestCol = c; }
+        }
+        const x = padX + bestCol * (unit + gap);
+        const y = bestH > 0 ? bestH + gap : 0;
+        card.style.left = `${x}px`;
+        card.style.top  = `${y}px`;
+        const h = heights[i] || unit * 0.75;
+        for (let c = bestCol; c < bestCol + span; c++) colH[c] = y + h;
+      });
+
+      filterGrid.style.height = `${Math.max(...colH) + 30}px`;
+    }
+
     function populateFilterGrid(category) {
       filterGrid.innerHTML = "";
       const matching = category === "all" ? cards : cards.filter((c) => c.dataset.category === category);
       matching.forEach((card) => {
         const clone = card.cloneNode(true);
-        filterGrid.appendChild(clone);
         const img = clone.querySelector(".card-img");
-        const applySpan = () => {
-          if (img.naturalWidth && img.naturalHeight) {
-            clone.style.gridColumn = img.naturalWidth / img.naturalHeight > 1.4 ? "span 2" : "";
-          }
-        };
-        if (img.complete && img.naturalWidth > 0) applySpan();
-        else img.addEventListener("load", applySpan, { once: true });
+        img.loading = "eager";
+        if (!img.complete || !img.naturalWidth) {
+          img.addEventListener("load", layoutMasonry, { once: true });
+        }
+        filterGrid.appendChild(clone);
       });
+      layoutMasonry();
     }
 
     function showFilter(category) {
@@ -623,6 +660,7 @@ export default function Home() {
       setup();
       if (isPortrait()) showPortraitBg();
       else { hoverBgEl.classList.remove("is-visible"); delete hoverBgEl.dataset.mode; document.documentElement.classList.remove("bg-is-dark"); }
+      if (panelVisible) layoutMasonry();
     };
 
     setup();
