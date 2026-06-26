@@ -11,7 +11,7 @@ const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/Eyelight";
 
 const IMAGES = [
   `${IK}/Eyelight_1.jpg`,
-  `${IK}/Eyelight_2.jpg`,
+  `${IK}/Eyelight_2.jpg?v=2`,
   `${IK}/Eyelight_3.jpg`,
 ];
 
