@@ -709,7 +709,7 @@ export default function Home() {
     if (isPortrait()) {
       const initEntry = CATEGORY_IMAGES[CATEGORIES[0]];
       if (initEntry) {
-        hoverBgImg.src = initEntry.mobile;
+        setBg(initEntry.mobile);
         hoverBgEl.dataset.mode = initEntry.mode;
         hoverBgEl.classList.add("is-visible");
       }
