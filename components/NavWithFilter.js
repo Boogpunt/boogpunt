@@ -105,9 +105,8 @@ export default function NavWithFilter() {
 
       // First pass: set widths and move offscreen to measure heights
       cards.forEach(card => {
-        const img = card.querySelector(".card-img");
-        card._span = 1;
-        const w = unit;
+        const span = card._span || 1;
+        const w = span === 2 ? unit * 2 + gap : unit;
         card.style.cssText = `position:absolute;width:${w}px;top:-9999px;left:0;`;
       });
 
@@ -141,9 +140,16 @@ export default function NavWithFilter() {
         const clone = el.cloneNode(true);
         const img = clone.querySelector(".card-img");
         img.loading = "eager";
-        if (!img.complete || !img.naturalWidth) {
-          img.addEventListener("load", layoutMasonry, { once: true });
-        }
+        clone._span = 1;
+        const assignSpan = () => {
+          if (img.naturalWidth && img.naturalHeight) {
+            const isLandscape = img.naturalWidth / img.naturalHeight > 1.4;
+            clone._span = (isLandscape && Math.random() < 0.5) ? 2 : 1;
+          }
+          layoutMasonry();
+        };
+        if (img.complete && img.naturalWidth > 0) assignSpan();
+        else img.addEventListener("load", assignSpan, { once: true });
         filterGrid.appendChild(clone);
       });
       layoutMasonry();
