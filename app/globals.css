@@ -352,9 +352,6 @@ html.bg-is-dark .clock-major { fill: white; }
   padding: 6px 13px 6px 0;
   gap: 0 16px;
 }
-.info-entry--experience .info-items p {
-  margin-bottom: 1.1em;
-}
 
 .info-label {
   font-size: 16px;
@@ -364,7 +361,7 @@ html.bg-is-dark .clock-major { fill: white; }
   color: var(--fg);
 }
 
-.info-items p {
+.info-items p, .info-items a {
   font-size: 16px;
   font-weight: 700;
   line-height: 1.1;
@@ -372,6 +369,14 @@ html.bg-is-dark .clock-major { fill: white; }
   color: var(--fg);
   opacity: 0.35;
   margin-bottom: 4px;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+.info-items p:hover, .info-items a:hover {
+  opacity: 1;
+}
+.info-items a:hover {
+  text-decoration: underline;
 }
 
 .info-entry--projects {
