@@ -319,6 +319,7 @@ html.bg-is-dark .clock-major { fill: white; }
 
 .info-bio {
   padding: 20px 13px 40px;
+  padding-right: 10%;
 }
 
 .info-title {
