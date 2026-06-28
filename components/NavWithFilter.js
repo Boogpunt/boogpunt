@@ -324,8 +324,8 @@ export default function NavWithFilter() {
             <div className="info-entry">
               <span className="info-label">Contact</span>
               <div className="info-items">
-                <p><a href="https://www.instagram.com/8009pt/" target="_blank" rel="noopener noreferrer">@8009pt</a></p>
-                <p><a href="mailto:Qoon@boogpunt.com">Qoon@boogpunt.com</a></p>
+                <a href="https://www.instagram.com/8009pt/" target="_blank" rel="noopener noreferrer">@8009pt</a>
+                <a href="mailto:qoon@boogpunt.com">qoon@boogpunt.com</a>
               </div>
             </div>
             <div className="info-entry info-entry--experience">

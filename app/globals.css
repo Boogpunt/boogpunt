@@ -362,6 +362,7 @@ html.bg-is-dark .clock-major { fill: white; }
 }
 
 .info-items p, .info-items a {
+  display: block;
   font-size: 16px;
   font-weight: 700;
   line-height: 1.1;
