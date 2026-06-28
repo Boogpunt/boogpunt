@@ -322,12 +322,6 @@ export default function NavWithFilter() {
           </div>
           <div className="info-table">
             <div className="info-entry">
-              <span className="info-label"></span>
-              <div className="info-items">
-                <p className="info-desc">Qoon is a brand and graphic designer based in London and Seoul. Drawing from his experience across industrial design, brand design, graphic design, interior design, installation, and photography, his practice focuses on building systems that translate physical structure, context, and perception into diverse forms of visual language.</p>
-              </div>
-            </div>
-            <div className="info-entry">
               <span className="info-label">Contact</span>
               <div className="info-items">
                 <p style={{ opacity: 1 }}>@8009pt</p>
