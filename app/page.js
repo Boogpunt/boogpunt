@@ -196,14 +196,22 @@ export default function Home() {
     let rotRafId         = null;
 
     const INDEX_SLUG_MAP = {
-      "Who are you when no one is watching": "/watching",
+      "Who are you when no one is watching 4": "/watching-4",
+      "Who are you when no one is watching 2": "/minkowski",
+      "Who are you when no one is watching 1": "/watching",
       "Bounding in a spiral dance": "/bound-in-a-spiral-dance",
+      "Fabrika for across RCA": "/fabrika",
       "Blade typeface": "/blade",
       "SK enmove ZIC": "/zic",
       "Kiss of Life logotype": "/kiss-of-life",
+      "Runaway": "/runaway",
+      "Eyelight": "/eyelight",
+      "Break": "/break",
       "Dorosiwa": "/dorosiwa",
       "Egg cup ceramics": "/egg-cup",
       "Monolith NFT display": "/monolith",
+      "Broken Birds": "/broken-birds",
+      "Invisible Memory": "/invisible-memory",
     };
 
     function buildIndexLinks(textPaths) {
