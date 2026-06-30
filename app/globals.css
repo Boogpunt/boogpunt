@@ -372,15 +372,12 @@ html.bg-is-dark .clock-major { fill: white; }
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--fg);
-  opacity: 0.35;
   margin-bottom: 4px;
   text-decoration: none;
   transition: opacity 0.15s ease;
 }
-.info-items p:hover, .info-items a:hover {
-  opacity: 1;
-}
 .info-items a:hover {
+  opacity: 0.5;
   text-decoration: underline;
 }
 
