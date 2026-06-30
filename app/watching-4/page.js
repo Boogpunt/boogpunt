@@ -4,7 +4,7 @@ import "../globals.css";
 
 export const metadata = {
   title: "Who are you, When no one is watching 4 — Boogpunt",
-  description: "Who are you, When no one is watching 4 / Installation / 2026",
+  description: "Who are you, When no one is watching 4 / Graphic / 2026",
 };
 
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/FortuneOrigami";

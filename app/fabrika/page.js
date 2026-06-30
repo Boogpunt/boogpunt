@@ -4,7 +4,7 @@ import "../globals.css";
 
 export const metadata = {
   title: "Fabrika — Boogpunt",
-  description: "Fabrika 2026",
+  description: "Fabrika / Installation / 2026",
 };
 
 const IK = "https://ik.imagekit.io/qoon/tr:w-1920,q-90/boogpunt/Fabrika";
