@@ -195,6 +195,40 @@ export default function Home() {
     let typingInterval   = null;
     let rotRafId         = null;
 
+    const INDEX_SLUG_MAP = {
+      "Who are you when no one is watching": "/watching",
+      "Bounding in a spiral dance": "/bound-in-a-spiral-dance",
+      "Blade typeface": "/blade",
+      "enmove ZIC": "/zic",
+      "Kiss of Life logotype": "/kiss-of-life",
+      "Dorosiwa": "/dorosiwa",
+      "Egg cup ceramics": "/egg-cup",
+      "Monolith NFT display": "/monolith",
+    };
+
+    function buildIndexLinks(textPaths) {
+      const NS = "http://www.w3.org/2000/svg";
+      textPaths.forEach((tp, i) => {
+        const items = INDEX_LINES[i].split(" | ");
+        tp.textContent = "";
+        items.forEach((item, j) => {
+          if (j > 0) {
+            const sep = document.createElementNS(NS, "tspan");
+            sep.textContent = " | ";
+            tp.appendChild(sep);
+          }
+          const tspan = document.createElementNS(NS, "tspan");
+          tspan.textContent = item;
+          const slug = INDEX_SLUG_MAP[item];
+          if (slug) {
+            tspan.classList.add("index-link");
+            tspan.addEventListener("click", () => { window.location.href = slug; });
+          }
+          tp.appendChild(tspan);
+        });
+      });
+    }
+
     function updateLabelPos() {
       if (!discEl || !catLabelEl) return;
       const rect  = discEl.getBoundingClientRect();
@@ -631,7 +665,7 @@ export default function Home() {
         typingInterval = setInterval(() => {
           ci++;
           textPaths.forEach((el, i) => { el.textContent = INDEX_LINES[i].slice(0, ci); });
-          if (ci >= maxLen) { clearInterval(typingInterval); typingInterval = null; }
+          if (ci >= maxLen) { clearInterval(typingInterval); typingInterval = null; buildIndexLinks(textPaths); }
         }, 6);
       } else {
         exitIndexMode();

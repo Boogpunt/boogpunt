@@ -191,6 +191,9 @@ html.index-bg .clock-major { fill: white; }
   transition: opacity 0.45s ease;
 }
 .intro.index-mode .index-group { opacity: 1; }
+.intro.index-mode .index-link { pointer-events: auto; cursor: pointer; }
+.index-link { transition: opacity 0.2s; }
+.index-link:hover { opacity: 0.5; }
 
 .index-text {
   font-weight: 400;
