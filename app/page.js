@@ -893,9 +893,29 @@ export default function Home() {
               </div>
             </div>
             <div className="info-entry info-entry--projects">
-              <span className="info-label">Client</span>
+              <span className="info-label">Client Project</span>
               <div className="info-items">
-                {ALL_INDEX_ITEMS.map((item, i) => <p key={i}>{item}</p>)}
+                {[
+                  "Anna Peasonen",
+                  "Korea Cultural Centre UK",
+                  "Gaeun Lee",
+                  "Yunseok Jang",
+                  "Socialed",
+                  "Como Clinic",
+                  "Alice Monde",
+                  "Hanel",
+                  "Leadvault",
+                  "Xray21",
+                  "Josun Hotel and Resort",
+                  "Rainbow Cube",
+                  "SK enmove ZIC",
+                  "Seoul National University Powerplant",
+                  "S2 Entertainment",
+                  "1ha",
+                  "Hago L&F",
+                  "Dorosiwa",
+                  "Park's Club",
+                ].map((item, i) => <p key={i}>{item}</p>)}
               </div>
             </div>
           </div>
