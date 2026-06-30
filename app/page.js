@@ -892,8 +892,8 @@ export default function Home() {
 
       <main className="grid" id="work">
         {CARDS.map((card, i) => (
-          <article key={i} className="card" data-categories={card.categories.join(",")} data-slug={card.slug || ""}>
-            <img className="card-img" src={card.img} alt={card.meta} loading="lazy" />
+          <article key={card.slug} className="card" data-categories={card.categories.join(",")} data-slug={card.slug || ""}>
+            <img className="card-img" src={card.img} alt={card.meta} loading={i === 0 ? "eager" : "lazy"} />
             <p className="card-meta">{card.meta}</p>
           </article>
         ))}
