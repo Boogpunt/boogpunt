@@ -151,7 +151,6 @@ export default function Home() {
     const infoLink     = document.querySelector('.nav-link[data-menu="about"]');
     const indexLink    = document.getElementById("nav-index");
     const navLogo      = document.querySelector(".nav-logo");
-    const cards        = [...document.querySelectorAll(".grid .card")];
     const allNavLinks  = [...document.querySelectorAll(".nav-link")];
     const discEl       = document.querySelector(".intro-disc");
     const linesGroupEl = document.querySelector(".clock-lines-group");
@@ -396,22 +395,33 @@ export default function Home() {
 
     function populateFilterGrid(category) {
       filterGrid.innerHTML = "";
-      const matching = category === "all" ? cards : cards.filter((c) => c.dataset.categories.split(",").includes(category));
-      matching.forEach((card) => {
-        const clone = card.cloneNode(true);
-        const img = clone.querySelector(".card-img");
+      const matching = category === "all" ? CARDS : CARDS.filter(c => c.categories.includes(category));
+      matching.forEach((cardData) => {
+        const article = document.createElement("article");
+        article.className = "card";
+        article.dataset.categories = cardData.categories.join(",");
+        article.dataset.slug = cardData.slug;
+        const img = document.createElement("img");
+        img.className = "card-img";
+        img.src = cardData.img;
+        img.alt = cardData.meta;
         img.loading = "eager";
-        clone._span = 1;
+        const p = document.createElement("p");
+        p.className = "card-meta";
+        p.textContent = cardData.meta;
+        article.appendChild(img);
+        article.appendChild(p);
+        article._span = 1;
         const assignSpan = () => {
           if (img.naturalWidth && img.naturalHeight) {
             const isLandscape = img.naturalWidth / img.naturalHeight > 1.4;
-            clone._span = (isLandscape && Math.random() < 0.5) ? 2 : 1;
+            article._span = (isLandscape && Math.random() < 0.5) ? 2 : 1;
           }
           layoutMasonry();
         };
         if (img.complete && img.naturalWidth > 0) assignSpan();
         else img.addEventListener("load", assignSpan, { once: true });
-        filterGrid.appendChild(clone);
+        filterGrid.appendChild(article);
       });
       layoutMasonry();
     }
