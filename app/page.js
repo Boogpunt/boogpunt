@@ -199,7 +199,7 @@ export default function Home() {
       "Who are you when no one is watching": "/watching",
       "Bounding in a spiral dance": "/bound-in-a-spiral-dance",
       "Blade typeface": "/blade",
-      "enmove ZIC": "/zic",
+      "SK enmove ZIC": "/zic",
       "Kiss of Life logotype": "/kiss-of-life",
       "Dorosiwa": "/dorosiwa",
       "Egg cup ceramics": "/egg-cup",
