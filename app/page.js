@@ -909,7 +909,7 @@ export default function Home() {
                   { name: "Second wear",                       desc: "second hands platform branding" },
                   { name: "Samsung DS FWD",                    desc: "conference branding" },
                   { name: "Mother offline",                    desc: "cafe brand renewal",                       gap: 1 },
-                  { name: "Anna pesonen poster",               desc: "RCA sculpture final show poster design",   gap: 2 },
+                  { name: "Anna pesonen poster",               desc: "RCA sculpture final show poster design",   gap: 1 },
                   { name: "Blade typeface",                    desc: "typeface design" },
                   { name: "Socialed",                          desc: "brand creds" },
                   { name: "Korean cultural centre UK",         desc: "brand renewal" },
