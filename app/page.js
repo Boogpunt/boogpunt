@@ -896,26 +896,33 @@ export default function Home() {
               <span className="info-label">Client Project</span>
               <div className="info-items">
                 {[
-                  "Anna Peasonen",
-                  "Korea Cultural Centre UK",
-                  "Gaeun Lee",
-                  "Yunseok Jang",
-                  "Socialed",
-                  "Como Clinic",
-                  "Alice Monde",
-                  "Hanel",
-                  "Leadvault",
-                  "Xray21",
-                  "Josun Hotel and Resort",
-                  "Rainbow Cube",
-                  "SK enmove ZIC",
-                  "Seoul National University Powerplant",
-                  "S2 Entertainment",
-                  "1ha",
-                  "Hago L&F",
-                  "Dorosiwa",
-                  "Park's Club",
-                ].map((item, i) => <p key={i}>{item}</p>)}
+                  { name: "Como clinic",                       desc: "branding" },
+                  { name: "Double Lovers",                     desc: "interior concept proposal" },
+                  { name: "Inneat",                            desc: "hair salon graphic design" },
+                  { name: "Xenia clinic",                      desc: "3D visual direction" },
+                  { name: "Alice monde",                       desc: "wedding venue branding" },
+                  { name: "Hanel",                             desc: "hair salon branding and visual direction" },
+                  { name: "Daymean",                           desc: "hair salon graphic design" },
+                  { name: "Leadvault",                         desc: "luggage branding" },
+                  { name: "Josun hotel and resort",            desc: "residency branding",                       gap: 1 },
+                  { name: "SK enmove zic",                     desc: "lubricants branding" },
+                  { name: "Second wear",                       desc: "second hands platform branding" },
+                  { name: "Samsung DS FWD",                    desc: "conference branding" },
+                  { name: "Mother offline",                    desc: "cafe brand renewal",                       gap: 1 },
+                  { name: "Anna pesonen poster",               desc: "RCA sculpture final show poster design",   gap: 2 },
+                  { name: "Blade typeface",                    desc: "typeface design" },
+                  { name: "Socialed",                          desc: "brand creds" },
+                  { name: "Korean cultural centre UK",         desc: "brand renewal" },
+                  { name: "Xray 21",                           desc: "diagnostic radiology branding" },
+                  { name: "Demolition explore: Break",         desc: "campaign design and direction" },
+                  { name: "Broken bird",                       desc: "exhibition graphic design" },
+                  { name: "Kiss of life",                      desc: "k-pop artist brand film logotype" },
+                  { name: "Monolith",                          desc: "multimedia object design" },
+                ].map((item, i) => (
+                  <p key={i} style={item.gap ? { marginTop: `${item.gap * 1.1}em` } : undefined}>
+                    {item.name} <span className="client-desc">{item.desc}</span>
+                  </p>
+                ))}
               </div>
             </div>
           </div>

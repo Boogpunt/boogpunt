@@ -372,13 +372,16 @@ html.bg-is-dark .clock-major { fill: white; }
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--fg);
-  margin-bottom: 4px;
+  margin-bottom: 0;
   text-decoration: none;
   transition: opacity 0.15s ease;
 }
 .info-items a:hover {
   opacity: 0.5;
   text-decoration: underline;
+}
+.client-desc {
+  opacity: 0.35;
 }
 
 .info-entry--projects {
