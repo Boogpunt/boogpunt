@@ -197,7 +197,6 @@ html.index-bg .clock-major { fill: white; }
 .index-link:hover { opacity: 0.5; }
 
 .index-text {
-  font-size: 14px;
   font-weight: 400;
   letter-spacing: -0.02em;
   fill: var(--fg);
