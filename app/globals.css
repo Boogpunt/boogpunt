@@ -288,7 +288,7 @@ html.bg-is-dark .clock-major { fill: white; }
 .caption,
 .card-meta {
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--fg);
